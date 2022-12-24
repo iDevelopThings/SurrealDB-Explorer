@@ -1,0 +1,7 @@
+{
+  "scripts": {
+    "start:frontend": "wails dev",
+    "start:backend": "wails dev -noreload -debounce 1000",
+    "build:go": "wails build"
+  }
+}
