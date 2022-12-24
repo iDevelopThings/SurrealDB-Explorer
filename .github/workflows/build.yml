@@ -17,8 +17,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set Version
-        run: echo ::set-env name=VERSION::$(git rev-parse --short HEAD)
+#      - name: Set Version
+#        run: echo ::set-env name=VERSION::$(git rev-parse --short HEAD)
 
       - name: setup node
         uses: actions/setup-node@v2
