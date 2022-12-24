@@ -81,5 +81,5 @@ jobs:
           prerelease: true
           title: "Development Build"
           files: |
-            ./surreal_explorer_mac.zip      
+            ./surreal_explorer_mac.zip
             ./surreal_explorer_windows.zip
