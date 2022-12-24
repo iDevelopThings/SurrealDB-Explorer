@@ -35,7 +35,7 @@ jobs:
       - name: zip macos artifact
         if: matrix.os == 'macos-latest'
         run: |
-          zip surreal_explorer.zip surrealdb_explorer.dmg
+          zip ./surreal_explorer.zip ./build/bin/surrealdb_explorer.app
 
       - name: upload artifact macOS
         uses: actions/upload-artifact@v2
@@ -47,7 +47,7 @@ jobs:
       - name: zip macos artifact
         if: matrix.os == 'windows-latest'
         run: |
-          Compress-Archive -Path .\build\surrealdb_explorer* -DestinationPath .\surreal_explorer.zip
+          Compress-Archive -Path .\build\bin\surrealdb_explorer* -DestinationPath .\surreal_explorer.zip
 
       - name: upload artifact windows
         uses: actions/upload-artifact@v2
