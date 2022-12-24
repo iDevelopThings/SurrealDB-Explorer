@@ -44,7 +44,7 @@ jobs:
           path: surreal_explorer.zip
         if: matrix.os == 'macos-latest'
 
-      - name: zip macos artifact
+      - name: zip windows artifact
         if: matrix.os == 'windows-latest'
         run: |
           Compress-Archive -Path .\build\bin\surrealdb_explorer* -DestinationPath .\surreal_explorer.zip

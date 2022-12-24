@@ -1,6 +1,6 @@
 {
   "$schema": "https://wails.io/schemas/config.v2.json",
-  "name": "SurrealDB Explorer",
+  "name": "surrealdb_explorer",
   "outputfilename": "surrealdb_explorer",
   "frontend:install": "npm install",
   "frontend:build": "npm run build",
