@@ -24,6 +24,18 @@ jobs:
       - name: Build Wails app
         run: |
           wails build
+
+      - name: Create release
+        uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          prerelease: true
+          draft: true
+          automatic_release_tag: "latest"
+          files: |
+            build/bin/SurrealDB Explorer.app
+            build/bin/SurrealDB Explorer.exe
+            
       - name: upload artifacts macOS
         if: matrix.platform == 'macos-latest'
         uses: actions/upload-artifact@v2
@@ -36,15 +48,5 @@ jobs:
         with:
           name: wails-binaries-windows
           path: build/bin/*
-      - name: Create release
-        uses: "marvinpinto/action-automatic-releases@latest"
-        with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          prerelease: true
-          draft: true
-          automatic_release_tag: "latest"
-          files: |
-            LICENSE.txt
-            build/bin/*
 
 
