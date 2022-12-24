@@ -1,48 +1,105 @@
 name: Wails build
 
-on: [push, pull_request]
+on: [ push, pull_request ]
 
 jobs:
   package:
     strategy:
       matrix:
-        platform: [windows-latest, macos-latest]
-        go-version: [1.19]
-    runs-on: ${{ matrix.platform }}
+        go-version: [ 1.19 ]
+        os: [ macos-latest, windows-latest ]
+    runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v3
       - name: Install Go
         uses: actions/setup-go@v2
         with:
           go-version: ${{ matrix.go-version }}
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set Version
+        run: echo ::set-env name=VERSION::$(git rev-parse --short HEAD)
+
       - name: setup node
         uses: actions/setup-node@v2
         with:
           node-version: 14
+
       - name: Get Wails
         run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
+
       - name: Build Wails app
         run: |
           wails build
-      - name: upload artifacts macOS
-        if: matrix.platform == 'macos-latest'
-        uses: actions/upload-artifact@v2
-        with:
-          name: wails-binaries-macos
-          path: build/bin/*
-      - name: upload artifacts windows
-        if: matrix.platform == 'windows-latest'
-        uses: actions/upload-artifact@v2
-        with:
-          name: wails-binaries-windows
-          path: build/bin/*
-      - name: Create release
-        uses: "marvinpinto/action-automatic-releases@latest"
-        with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          prerelease: true
-          files: |
-            LICENSE.txt
-            build/bin/*
 
+      - name: zip macos artifact
+        if: matrix.os == 'macos-latest'
+        run: |
+          zip surreal_explorer.zip surrealdb_explorer.dmg
+
+      - name: upload artifact macOS
+        uses: actions/upload-artifact@v2
+        with:
+          name: surreal_explorer-macOS
+          path: surreal_explorer.zip
+        if: matrix.os == 'macos-latest'
+
+      - name: zip macos artifact
+        if: matrix.os == 'windows-latest'
+        run: |
+          Compress-Archive -Path .\build\surrealdb_explorer* -DestinationPath .\surreal_explorer.zip
+
+      - name: upload artifact windows
+        uses: actions/upload-artifact@v2
+        with:
+          name: surreal_explorer-windows
+          path: surreal_explorer.zip
+        if: matrix.os == 'windows-latest'
+
+  release:
+    runs-on: ubuntu-latest
+    needs: package
+    steps:
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref }}
+          draft: true
+          prerelease: true
+
+      - name: Download macOS package
+        uses: actions/download-artifact@v1
+        with:
+          name: surreal_explorer-macOS
+
+      - name: Upload macOS package to release
+        id: upload-macOS-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./surreal_explorer-macOS/surreal_explorer.zip
+          asset_name: surreal_explorer_${{ github.ref }}_macOS.zip
+          asset_content_type: application/octet-stream
+
+      - name: Download windows package
+        uses: actions/download-artifact@v1
+        with:
+          name: surreal_explorer-windows
+
+      - name: Upload Windows package to release
+        id: upload-windows-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./surreal_explorer-windows/surreal_explorer.zip
+          asset_name: surreal_explorer_${{ github.ref }}_windows_x86_64.zip
+          asset_content_type: application/octet-stream
 
