@@ -35,25 +35,25 @@ jobs:
       - name: zip macos artifact
         if: matrix.os == 'macos-latest'
         run: |
-          zip -r ./surreal_explorer.zip ./build/bin
+          zip -r ./surreal_explorer_mac.zip ./build/bin
 
       - name: upload artifact macOS
         uses: actions/upload-artifact@v2
         with:
           name: surreal_explorer-macOS
-          path: surreal_explorer.zip
+          path: surreal_explorer_mac.zip
         if: matrix.os == 'macos-latest'
 
       - name: zip windows artifact
         if: matrix.os == 'windows-latest'
         run: |
-          Compress-Archive -Path .\build\bin\surrealdb_explorer* -DestinationPath .\surreal_explorer.zip
+          Compress-Archive -Path .\build\bin\surrealdb_explorer* -DestinationPath .\surreal_explorer_windows.zip
 
       - name: upload artifact windows
         uses: actions/upload-artifact@v2
         with:
           name: surreal_explorer-windows
-          path: surreal_explorer.zip
+          path: surreal_explorer_windows.zip
         if: matrix.os == 'windows-latest'
 
   release:
@@ -81,5 +81,5 @@ jobs:
           prerelease: true
           title: "Development Build"
           files: |
-            ./surreal_explorer-macOS.zip      
-            ./surreal_explorer-windows.zip
+            ./surreal_explorer_mac.zip      
+            ./surreal_explorer_windows.zip
