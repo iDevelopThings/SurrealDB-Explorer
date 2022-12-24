@@ -40,7 +40,7 @@ jobs:
       - name: upload artifact macOS
         uses: actions/upload-artifact@v2
         with:
-          name: surreal_explorer-macOS
+          name: surreal_explorer_mac
           path: surreal_explorer_mac.zip
         if: matrix.os == 'macos-latest'
 
@@ -52,7 +52,7 @@ jobs:
       - name: upload artifact windows
         uses: actions/upload-artifact@v2
         with:
-          name: surreal_explorer-windows
+          name: surreal_explorer_windows
           path: surreal_explorer_windows.zip
         if: matrix.os == 'windows-latest'
 
@@ -63,12 +63,12 @@ jobs:
       - name: Download macOS package
         uses: actions/download-artifact@v3
         with:
-          name: surreal_explorer-macOS
+          name: surreal_explorer_mac
 
       - name: Download windows package
         uses: actions/download-artifact@v3
         with:
-          name: surreal_explorer-windows
+          name: surreal_explorer_windows
 
       - name: Display structure of downloaded files
         run: ls -R
