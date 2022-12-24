@@ -70,6 +70,9 @@ jobs:
         with:
           name: surreal_explorer-windows
 
+      - name: Display structure of downloaded files
+        run: ls -R
+
       - name: Create Release
         uses: "marvinpinto/action-automatic-releases@latest"
         with:
@@ -78,5 +81,5 @@ jobs:
           prerelease: true
           title: "Development Build"
           files: |
-            ./surreal_explorer-macOS/surreal_explorer.zip      
-            ./surreal_explorer-windows/surreal_explorer.zip
+            ./surreal_explorer-macOS.zip      
+            ./surreal_explorer-windows.zip
