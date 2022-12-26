@@ -1,7 +1,12 @@
 name: Wails build
 
-on: [ push, pull_request ]
+#on: [ push, pull_request ]
 
+on:
+  push:
+    tags:
+      - "v*"
+      -
 jobs:
   package:
     strategy:
