@@ -82,9 +82,7 @@ jobs:
         uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "latest"
           prerelease: true
-          title: "Development Build"
           files: |
             ./surreal_explorer_mac.zip
             ./surreal_explorer_windows.zip
