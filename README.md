@@ -1,7 +1,6 @@
 
 <div align="center" dir="auto">
     <img src="repository/text-logo.png"/>
-    <h1>SurrealDB Explorer</h1>
 </div>
 
 ## Description
