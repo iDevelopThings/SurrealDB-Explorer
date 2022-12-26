@@ -1,5 +1,5 @@
 
-<div align="center" dir="auto">
+<div align="center" dir="auto" style="width:100%; max-width: 250px;">
     <img src="repository/icon.png" style="width:100%; max-width: 250px;"/>
     <h1>SurrealDB Explorer</h1>
 </div>
