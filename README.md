@@ -1,4 +1,9 @@
 
+<div align="center" dir="auto">
+    <img src="repository/icon.png" style="width:100%; max-width: 250px;"/>
+    <h1>SurrealDB Explorer</h1>
+</div>
+
 ## Description
 
 SurrealDB Explorer is a simple database viewer/editor for SurrealDB. It's a nice temp solution for a desktop application until the official version is released.
