@@ -35,7 +35,8 @@ jobs:
       - name: zip macos artifact
         if: matrix.os == 'macos-latest'
         run: |
-          zip -r ./surreal_explorer_mac.zip ./build/bin
+          cd ./build/bin
+          zip -r ./../../surreal_explorer_mac.zip ./SurrealDB\ Explorer.app
 
       - name: upload artifact macOS
         uses: actions/upload-artifact@v2
