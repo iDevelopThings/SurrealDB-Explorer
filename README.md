@@ -1,6 +1,6 @@
 
-<div align="center" dir="auto" style="width:100%; max-width: 250px;">
-    <img src="repository/text-logo.png" style="width:100%; max-width: 250px;"/>
+<div align="center" dir="auto">
+    <img src="repository/text-logo.png"/>
     <h1>SurrealDB Explorer</h1>
 </div>
 
