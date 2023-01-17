@@ -1,4 +1,4 @@
-import Surreal from "surrealdb.js";
+import Surreal from "@idevelopthings/surrealdb-client-ts";
 
 type QResult<T> = {
 	result: T,

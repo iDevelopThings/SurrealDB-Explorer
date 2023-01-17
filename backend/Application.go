@@ -12,6 +12,7 @@ import (
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 	"wails_vue/backend/Config"
 	"wails_vue/backend/FileStore"
+	"wails_vue/backend/Util"
 )
 
 type AppContext struct {
@@ -21,6 +22,8 @@ type AppContext struct {
 var Assets embed.FS
 var AppInstance *App
 var Container *container.ContainerInstance
+
+var Logger *Util.FileLogger
 
 func BootApplication(
 	app *App,
@@ -36,6 +39,8 @@ func BootApplication(
 		Connections: connections,
 		Queries:     queriesList,
 	}
+
+	Logger = Util.NewFileLogger(FileStore.Stores.GetAppDirFilePath("log.txt"))
 
 	menu := menu2.NewMenu()
 
@@ -55,10 +60,21 @@ func BootApplication(
 		runtime.WindowExecJS(app.ctx, "window.resetZoom()")
 	})
 
+	/*environment := runtime.Environment(app.ctx)
+	if environment.BuildType == "production" {
+		Logger = logger.NewFileLogger(FileStore.Stores.GetAppDirFilePath("log.txt"))
+	} else {
+		Logger = logger.NewDefaultLogger()
+	}*/
+
+	Logger.Debug("Log dir is: " + Logger.GetFilePath())
+
 	wailsApplication := application.NewWithOptions(&options.App{
 		Title:  appSettings.Title,
 		Width:  1024,
 		Height: 768,
+
+		Logger: Logger,
 
 		Menu: menu,
 
@@ -125,4 +141,3 @@ func (a *App) shutdown(window *Config.Window) {
 func (a *App) GetAllConfig() *AllConfig {
 	return a.Config
 }
-

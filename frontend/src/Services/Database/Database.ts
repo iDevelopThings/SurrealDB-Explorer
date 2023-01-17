@@ -1,4 +1,4 @@
-import Surreal, {type RootAuth} from "surrealdb.js";
+import Surreal, {type RootAuth} from "@idevelopthings/surrealdb-client-ts";
 import {reactive, type UnwrapNestedRefs} from "vue";
 import {QueryResult} from "./QueryResult";
 import {type SurrealDbConfig} from "surrealdb.schema";
@@ -25,21 +25,33 @@ class Database {
 		return this.state.connected;
 	}
 
-	async connect(config: SurrealDbConfig) {
+	connect(config: SurrealDbConfig) {
 		if (this.connected) {
 			return;
 		}
 
 		this.state.config = config;
 
-		try {
-			await this.database.connect(`${this.state.config.host}/rpc`);
-			await this.database.signin(this.state.config as RootAuth);
-			await this.database.use(this.state.config.namespace, this.state.config.database);
-			this.state.connected = true;
-		} catch (error) {
-			console.error(error);
-		}
+		return new Promise((resolve, reject) => {
+			const closeHandle = (error) => {
+				console.error("Socket connection errored.");
+				this.disconnect();
+				reject(error);
+			};
+
+			this.database.once("close", closeHandle);
+
+			this.database.connect(`${this.state.config.host}/rpc`)
+				.then(() => this.database.signin(this.state.config as RootAuth))
+				.then(() => this.database.use(this.state.config.namespace, this.state.config.database))
+				.then(() => {
+					this.state.connected = true;
+
+					this.database.off("close", closeHandle);
+
+					resolve(true);
+				});
+		});
 	}
 
 	async query<T = any>(
@@ -94,7 +106,8 @@ class Database {
 	public disconnect(): void {
 		this.state.connected = false;
 		this.state.config    = null;
-		this.database.close();
+		if (!this.database.ws.closed)
+			this.database.close();
 	}
 }
 

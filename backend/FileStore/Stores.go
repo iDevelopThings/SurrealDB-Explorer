@@ -4,7 +4,9 @@ import (
 	"context"
 	"fmt"
 	container "github.com/Envuso/go-ioc-container"
+	"github.com/vrischmann/userdir"
 	"github.com/wailsapp/wails/v2/pkg/runtime"
+	"path"
 	"reflect"
 )
 
@@ -30,6 +32,13 @@ func NewStores(appDirName string) *StoresManager {
 	}
 
 	return Stores
+}
+
+func (s *StoresManager) GetAppDir() string {
+	return path.Join(userdir.GetConfigHome(), s.appDirName)
+}
+func (s *StoresManager) GetAppDirFilePath(filePath string) string {
+	return path.Join(userdir.GetConfigHome(), s.appDirName, filePath)
 }
 
 func DefineStore[T any](name string) *T {

@@ -42,9 +42,7 @@ class ConnectionStore extends Store<ConnectionStore, IConnectionStore>() {
 				namespace : connection.namespace,
 			}, "INFO FOR KV;");
 
-			console.log(response);
-
-			return response.length > 0;
+			return response !== undefined;
 		} catch (e) {
 			console.error(e);
 			return false;
@@ -52,10 +50,10 @@ class ConnectionStore extends Store<ConnectionStore, IConnectionStore>() {
 	}
 
 	public addConnection = AsyncFunc<[Config.Connection]>(async (handler, connection: Config.Connection) => {
-		if (!(await this.validateConnection(connection))) {
-			handler.error("Invalid connection");
-			return;
-		}
+//		if (!(await this.validateConnection(connection))) {
+//			handler.error("Invalid connection");
+//			return;
+//		}
 
 		this.state.connections.connections.push(
 			await Add(new Config.Connection(connection))
@@ -89,29 +87,38 @@ class ConnectionStore extends Store<ConnectionStore, IConnectionStore>() {
 	}
 
 	async connect(connection: Config.Connection) {
-		console.log((connection as any)?.store);
-
 		this.state.connecting = connection.id;
 
 		if (this.state.current) {
 			await this.disconnect();
 		}
 
-		const config       = {
+		const config = {
 			host      : connection.host,
 			user      : connection.user,
 			pass      : connection.pass,
 			namespace : connection.namespace,
 			database  : connection.database,
 		};
+
+		try {
+			await db.connect(config);
+		} catch (e) {
+			console.error("Failed to connect to db: ", e);
+			this.state.connecting = null;
+			return false;
+		}
+
 		this.state.current = connection;
 
-		await db.connect(config);
 		SurrealSchema.init(config).config = config;
 		await schemaStore.loadSchema(config);
 		await SetCurrent(connection.id);
 
+
 		this.state.connecting = null;
+
+		return true;
 	}
 
 }
