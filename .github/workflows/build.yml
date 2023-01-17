@@ -11,7 +11,7 @@ jobs:
     strategy:
       matrix:
         go-version: [ 1.19 ]
-        os: [ macos-latest, windows-latest, ubuntu-latest ]
+        os: [ macos-latest, windows-latest]
     runs-on: ${{ matrix.os }}
     steps:
       - name: Install Go
@@ -58,23 +58,6 @@ jobs:
           name: surreal_explorer_windows
           path: surreal_explorer_windows.zip
 
-      - name: ensure ubuntu zip installed
-        if: matrix.os == 'ubuntu-latest'
-        run: |
-          sudo apt-get install zip
-
-      - name: zip ubuntu artifact
-        if: matrix.os == 'ubuntu-latest'
-        run: |
-          zip -r ./../../surreal_explorer_ubuntu.zip ./surrealdb_explorer
-
-      - name: upload artifact ubuntu
-        if: matrix.os == 'ubuntu-latest'
-        uses: actions/upload-artifact@v2
-        with:
-          name: surreal_explorer_ubuntu
-          path: surreal_explorer_ubuntu.zip
-
   release:
     runs-on: ubuntu-latest
     needs: package
@@ -89,11 +72,6 @@ jobs:
         with:
           name: surreal_explorer_windows
 
-      - name: Download ubuntu package
-        uses: actions/download-artifact@v3
-        with:
-          name: surreal_explorer_ubuntu
-
       - name: Display structure of downloaded files
         run: ls -R
 
@@ -105,4 +83,3 @@ jobs:
           files: |
             ./surreal_explorer_mac.zip
             ./surreal_explorer_windows.zip
-            ./surreal_explorer_ubuntu.zip
