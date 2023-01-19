@@ -120,8 +120,13 @@ class ConnectionStore extends Store<ConnectionStore, IConnectionStore>() {
 
 		this.state.current = connection;
 
-		SurrealSchema.init(config).config = config;
-		await schemaStore.loadSchema(config);
+		try {
+			SurrealSchema.init(config).config = config;
+			await schemaStore.loadSchema(config);
+		} catch (e) {
+			console.error("Failed to load schema: ", e);
+		}
+
 		await SetCurrent(connection.id);
 
 

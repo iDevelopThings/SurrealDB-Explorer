@@ -32,6 +32,7 @@ class SchemaStore extends Store<SchemaStore, ISchemaStore>() {
 			deleteOriginalNestedObjectFields : true,
 			handleNestedObjects              : true,
 		});
+
 		this.$tables  = Object.values(this.$schema.tables);
 		this.$loading = false;
 	}

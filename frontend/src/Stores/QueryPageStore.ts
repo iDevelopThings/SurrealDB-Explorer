@@ -4,10 +4,13 @@ import {Editor} from "../Services/Monaco/Editor";
 import {type Ref, nextTick} from "vue";
 import {LocalStorage} from "typesafe-local-storage";
 import {type EventSubscriptionContract, modal} from "vue-frontend-utils";
+import {QueryResult} from "../Services/Database/QueryResult";
 
 export type QueryRunResult = {
 	error?: string;
 	result?: any;
+
+	queryResult: QueryResult
 }
 
 interface IQueryPageStore {
@@ -16,6 +19,8 @@ interface IQueryPageStore {
 	expandResultPanel: boolean;
 
 	result: QueryRunResult;
+
+	viewRawResponse: boolean;
 }
 
 class QueryPageStore extends Store<QueryPageStore, IQueryPageStore>() {
@@ -29,9 +34,11 @@ class QueryPageStore extends Store<QueryPageStore, IQueryPageStore>() {
 		return {
 			running           : false,
 			expandResultPanel : false,
+			viewRawResponse   : false,
 			result            : {
-				error  : undefined,
-				result : undefined
+				error       : undefined,
+				result      : undefined,
+				queryResult : undefined,
 			}
 		};
 	}
@@ -63,13 +70,15 @@ class QueryPageStore extends Store<QueryPageStore, IQueryPageStore>() {
 			const result = await db.query(content, {});
 
 			this.$result = {
-				error  : result.errorFormatted,
-				result : result.get
+				error       : result.errorFormatted,
+				result      : result.get,
+				queryResult : result,
 			};
 		} catch (e) {
 			this.$result = {
-				error  : e.message,
-				result : undefined
+				error       : e.message,
+				result      : undefined,
+				queryResult : undefined,
 			};
 		}
 
@@ -126,7 +135,17 @@ class QueryPageStore extends Store<QueryPageStore, IQueryPageStore>() {
 		return this.state.result.error;
 	}
 
+	toggleRawResponse() {
+		this.$viewRawResponse = !this.$viewRawResponse;
+	}
+
 	get resultValue() {
+		if (this.$result.queryResult) {
+			if (this.$viewRawResponse || !this.$result.queryResult.isSelect) {
+				return this.$result.queryResult.rawResult;
+			}
+		}
+
 		return this.state.result.result;
 	}
 

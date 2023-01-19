@@ -9,6 +9,13 @@
 			>
 				Queries
 			</SimpleButton>
+			<SimpleButton
+				@click="$queryPage.toggleRawResponse()"
+				:icon="$queryPage.$viewRawResponse ? EyeIcon : EyeSlashIcon"
+				class="text-white font-semibold py-1.5 px-2 rounded disabled:opacity-40 disabled:cursor-not-allowed"
+			>
+				Toggle Raw Response
+			</SimpleButton>
 		</div>
 
 		<div class="flex flex-row items-center space-x-4">
@@ -37,7 +44,7 @@
 
 <script setup lang="ts">
 import SimpleButton from "../../Components/SimpleButton.vue";
-import {PlayIcon, CircleStackIcon} from "@heroicons/vue/24/outline";
+import {PlayIcon, CircleStackIcon, EyeIcon, EyeSlashIcon} from "@heroicons/vue/24/outline";
 
 </script>
 

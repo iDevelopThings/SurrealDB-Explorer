@@ -106,4 +106,12 @@ export class QueryResult<T = any> {
 			}
 		}
 	}
+
+	get isSelect() {
+		return this._query.toUpperCase().startsWith("SELECT");
+	}
+
+	get rawResult() {
+		return this._result;
+	}
 }

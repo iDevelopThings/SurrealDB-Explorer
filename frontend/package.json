@@ -18,7 +18,7 @@
     "json-editor-vue": "^0.10.5",
     "monaco-editor": "^0.34.1",
     "shiki": "^0.12.1",
-    "surrealdb.schema": "^0.0.4",
+    "surrealdb.schema": "^0.0.5",
     "tailwind-merge": "^1.8.0",
     "typesafe-local-storage": "^0.0.7",
     "vanilla-jsoneditor": "^0.11.5",
