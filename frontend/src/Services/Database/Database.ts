@@ -9,6 +9,11 @@ interface IDatabaseState {
 	config: SurrealDbConfig;
 }
 
+export class ConnectionResult {
+	connected: boolean;
+	error: string;
+}
+
 class Database {
 	private state: UnwrapNestedRefs<IDatabaseState>;
 
@@ -25,14 +30,17 @@ class Database {
 		return this.state.connected;
 	}
 
-	connect(config: SurrealDbConfig) {
+	connect(config: SurrealDbConfig) : Promise<ConnectionResult> {
 		if (this.connected) {
 			return;
 		}
 
 		this.state.config = config;
 
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
+
+			const result = new ConnectionResult();
+
 			const closeHandle = (error) => {
 				console.error("Socket connection errored.");
 				this.disconnect();
@@ -41,16 +49,25 @@ class Database {
 
 			this.database.once("close", closeHandle);
 
-			this.database.connect(`${this.state.config.host}/rpc`)
-				.then(() => this.database.signin(this.state.config as RootAuth))
-				.then(() => this.database.use(this.state.config.namespace, this.state.config.database))
-				.then(() => {
-					this.state.connected = true;
+			await this.database.connect(`${this.state.config.host}/rpc`);
 
-					this.database.off("close", closeHandle);
+			try {
+				await this.database.signin(this.state.config as RootAuth);
+			} catch (error) {
+				result.connected = false;
+				result.error     = error.message;
+			}
 
-					resolve(true);
-				});
+			if (!result.error) {
+				await this.database.use(this.state.config.namespace, this.state.config.database);
+
+				this.state.connected = true;
+
+				this.database.off("close", closeHandle);
+			}
+
+
+			resolve(result);
 		});
 	}
 

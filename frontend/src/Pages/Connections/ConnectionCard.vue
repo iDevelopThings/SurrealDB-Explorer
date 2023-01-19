@@ -1,8 +1,11 @@
 <template>
 	<div class="flex flex-col w-full bg-main-800 rounded overflow-hidden shadow">
 
-		<div class="flex flex-row items-center justify-center bg-red-500 px-3 py-1.5" v-if="connectionError">
-			<p class="text-white font-semibold tracking-wide">{{ connectionError }}</p>
+		<div class="flex flex-row items-center justify-center bg-red-500 space-x-2 px-3 py-1.5" v-if="connectionError">
+			<p class="text-white text-xs font-semibold tracking-wide">
+				Failed to connect:
+			</p>
+			<p class="text-white text-sm font-semibold tracking-wide">{{ connectionError }}</p>
 		</div>
 
 		<div class="p-6 flex flex-row justify-between w-full">
@@ -105,11 +108,12 @@ async function connect() {
 		clearConnectionError();
 	}
 
-	if (await connectionStore.connect(props.connection)) {
+	const result = await connectionStore.connect(props.connection);
+	if(result) {
 		return;
 	}
 
-	connectionError.value = "Failed to connect to rpc socket";
+	connectionError.value = connectionStore.$connectionResult.error || "RPC Connection failed";
 
 	timeout = setTimeout(() => {
 		connectionError.value = null;

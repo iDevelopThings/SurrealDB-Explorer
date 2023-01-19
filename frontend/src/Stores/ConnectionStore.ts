@@ -2,7 +2,7 @@ import {Store, StoreManager} from "@idevelopthings/vue-class-stores/vue";
 import {Config} from "../../wailsjs/go/models";
 import {Add, SetCurrent} from "../../wailsjs/go/Config/Connections";
 import {AsyncFunc} from "../Services/AsyncProcessor";
-import db from "../Services/Database/Database";
+import db, {ConnectionResult} from "../Services/Database/Database";
 import {schemaStore} from "./SchemaStore";
 import {SurrealSchema} from "surrealdb.schema";
 
@@ -13,6 +13,7 @@ interface IConnectionStore {
 	connections: Config.Connections;
 	current?: Config.Connection;
 	connecting: string;
+	connectionResult: ConnectionResult | null;
 }
 
 class ConnectionStore extends Store<ConnectionStore, IConnectionStore>() {
@@ -24,6 +25,8 @@ class ConnectionStore extends Store<ConnectionStore, IConnectionStore>() {
 
 			current    : null,
 			connecting : null,
+
+			connectionResult : null,
 		};
 	}
 
@@ -101,8 +104,14 @@ class ConnectionStore extends Store<ConnectionStore, IConnectionStore>() {
 			database  : connection.database,
 		};
 
+
 		try {
-			await db.connect(config);
+			this.state.connectionResult = await db.connect(config);
+
+			if (this.state.connectionResult.error) {
+				this.state.connecting = null;
+				return false;
+			}
 		} catch (e) {
 			console.error("Failed to connect to db: ", e);
 			this.state.connecting = null;
