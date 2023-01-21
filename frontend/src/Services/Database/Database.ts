@@ -1,74 +1,75 @@
-import Surreal, {type RootAuth} from "@idevelopthings/surrealdb-client-ts";
+import {Surreal, ConnectionFlowResult} from "@idevelopthings/surrealdb-client-ts";
 import {reactive, type UnwrapNestedRefs} from "vue";
 import {QueryResult} from "./QueryResult";
 import {type SurrealDbConfig} from "surrealdb.schema";
 import {Thing} from "./Thing";
+import {Config} from "../../../wailsjs/go/models";
+import {defineEvent, event} from "vue-frontend-utils";
 
 interface IDatabaseState {
-	connected: boolean;
-	config: SurrealDbConfig;
+	connection: Config.Connection;
+
+	status: ConnectionFlowResult | null;
 }
 
-export class ConnectionResult {
-	connected: boolean;
-	error: string;
-}
+export const onLostConnection = defineEvent<any>("database:lost-connection");
+export const onReconnected    = defineEvent<number>("database:reconnected");
+export const onDisconnect     = defineEvent<Config.Connection>("database:disconnected");
+
+//export const onReconnectAttempt = defineEvent<number>("database:reconnect-attempt");
+
 
 class Database {
-	private state: UnwrapNestedRefs<IDatabaseState>;
+	public state: UnwrapNestedRefs<IDatabaseState>;
 
 	private database: Surreal = Surreal.Instance;
 
 	constructor() {
 		this.state = reactive<IDatabaseState>({
-			connected : false,
-			config    : null,
+			connection : null,
+			status     : new ConnectionFlowResult(),
 		});
 	}
 
-	get connected() {
-		return this.state.connected;
-	}
+	async connect(connection: Config.Connection): Promise<ConnectionFlowResult> {
+		if (this.database.isConnected()) {
+			if (this.state.connection?.id === connection.id) {
+				return;
+			}
 
-	connect(config: SurrealDbConfig) : Promise<ConnectionResult> {
-		if (this.connected) {
-			return;
+			this.disconnect();
 		}
 
-		this.state.config = config;
+		this.state.connection = connection;
 
-		return new Promise(async (resolve, reject) => {
-
-			const result = new ConnectionResult();
-
-			const closeHandle = (error) => {
-				console.error("Socket connection errored.");
-				this.disconnect();
-				reject(error);
-			};
-
-			this.database.once("close", closeHandle);
-
-			await this.database.connect(`${this.state.config.host}/rpc`);
-
-			try {
-				await this.database.signin(this.state.config as RootAuth);
-			} catch (error) {
-				result.connected = false;
-				result.error     = error.message;
+		this.database.configure({
+			host : connection.host,
+			auth : {
+				user : connection.user,
+				pass : connection.pass,
+			},
+			use  : {
+				db : connection.database,
+				ns : connection.namespace
 			}
-
-			if (!result.error) {
-				await this.database.use(this.state.config.namespace, this.state.config.database);
-
-				this.state.connected = true;
-
-				this.database.off("close", closeHandle);
-			}
-
-
-			resolve(result);
 		});
+
+		this.database.setReconnectPolicy({
+			autoReconnect        : true,
+			maxReconnectAttempts : 10,
+			reconnectInterval    : 1000,
+			maxReconnectInterval : 5000,
+		});
+
+		this.database.onConnectionEnd(() => this.onDisconnect());
+		this.database.onLostConnection(() => onLostConnection.invoke());
+		this.database.onReconnected((attempts) => onReconnected.invoke(attempts));
+
+		this.state.status = await this.database.startConnectionFlow();
+
+		console.log(this.state.status);
+
+		return this.state.status as ConnectionFlowResult;
 	}
 
 	async query<T = any>(
@@ -121,11 +122,24 @@ class Database {
 	}
 
 	public disconnect(): void {
-		this.state.connected = false;
-		this.state.config    = null;
-		if (!this.database.ws.closed)
-			this.database.close();
+		this.database.onConnectionEnd(null);
+
+		onDisconnect.invoke(this.state.connection);
+
+		this.state.connection = null;
+		this.database.close();
 	}
+
+	public onDisconnect() {
+		this.disconnect();
+
+		console.log("lost connection to db?");
+	}
+
+	public get status(): ConnectionFlowResult | null {
+		return this.state.status as ConnectionFlowResult;
+	}
+
 }
 
 export {Database};

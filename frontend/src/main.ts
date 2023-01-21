@@ -7,6 +7,9 @@ import JsonViewer from "./Services/JsonViewer";
 import "./Styles/app.css";
 import "./Modals";
 import "./Window";
+import {Logger} from "./Stores/Logger";
+
+Logger.log("Starting app");
 
 StoreManager.config({disableDevtoolsMutationWatcher : true});
 

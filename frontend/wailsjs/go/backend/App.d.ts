@@ -3,3 +3,17 @@
 import {backend} from '../models';
 
 export function GetAllConfig():Promise<backend.AllConfig>;
+
+export function IsLinux():Promise<boolean>;
+
+export function IsMac():Promise<boolean>;
+
+export function IsWindows():Promise<boolean>;
+
+export function OpenAppDataPath():Promise<void>;
+
+export function OpenDirectory(arg1:string):Promise<void>;
+
+export function OpenFile(arg1:string):Promise<void>;
+
+export function OpenLogFile():Promise<void>;

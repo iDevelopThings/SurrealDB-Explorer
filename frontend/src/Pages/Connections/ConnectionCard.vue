@@ -1,5 +1,8 @@
 <template>
-	<div class="flex flex-col w-full bg-main-800 rounded overflow-hidden shadow">
+	<div
+		class="flex flex-col w-full bg-main-800 rounded overflow-hidden shadow"
+		:class="[connection?.highlight ? 'border-l-4 border-blue-500' : '']"
+	>
 
 		<div class="flex flex-row items-center justify-center bg-red-500 space-x-2 px-3 py-1.5" v-if="connectionError">
 			<p class="text-white text-xs font-semibold tracking-wide">
@@ -76,6 +79,7 @@ import {ConfirmedAsyncFunc} from "../../Services/AsyncProcessor";
 import {connectionStore} from "../../Stores/ConnectionStore";
 import {Remove} from "../../../wailsjs/go/Config/Connections";
 import {ref} from "vue";
+import db from "../../Services/Database/Database";
 
 const props = defineProps<{
 	connection: Config.Connection
@@ -95,25 +99,15 @@ const remove = ConfirmedAsyncFunc<[Config.Connection]>(async (handler, connectio
 
 let timeout = null;
 
-function clearConnectionError() {
+async function connect() {
 	if (timeout) {
 		clearTimeout(timeout);
 		timeout = null;
 	}
-	connectionError.value = null;
-}
 
-async function connect() {
-	if (timeout) {
-		clearConnectionError();
-	}
+	await connectionStore.connect(props.connection);
 
-	const result = await connectionStore.connect(props.connection);
-	if(result) {
-		return;
-	}
-
-	connectionError.value = connectionStore.$connectionResult.error || "RPC Connection failed";
+	connectionError.value = db.status.error as string;
 
 	timeout = setTimeout(() => {
 		connectionError.value = null;

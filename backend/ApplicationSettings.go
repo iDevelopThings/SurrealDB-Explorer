@@ -1,6 +1,7 @@
 package backend
 
 import (
+	_ "embed"
 	"wails_vue/backend/Config"
 	"wails_vue/backend/FileStore"
 )
@@ -12,6 +13,8 @@ type ApplicationSettings struct {
 	// The lower cased name used for directories and such
 	// "surrealdb_explorer"
 	Name string `json:"name"`
+
+	Icon []byte `json:"icon"`
 }
 
 func NewApplicationSettings() *ApplicationSettings {

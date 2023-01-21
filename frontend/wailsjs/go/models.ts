@@ -130,6 +130,7 @@ export namespace backend {
 	export class ApplicationSettings {
 	    title: string;
 	    name: string;
+	    icon: number[];
 	
 	    static createFrom(source: any = {}) {
 	        return new ApplicationSettings(source);
@@ -139,6 +140,7 @@ export namespace backend {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.title = source["title"];
 	        this.name = source["name"];
+	        this.icon = source["icon"];
 	    }
 	}
 	export class AllConfig {

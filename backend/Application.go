@@ -5,11 +5,12 @@ import (
 	"embed"
 	"github.com/Envuso/go-ioc-container"
 	"github.com/wailsapp/wails/v2/pkg/application"
-	menu2 "github.com/wailsapp/wails/v2/pkg/menu"
-	"github.com/wailsapp/wails/v2/pkg/menu/keys"
 	"github.com/wailsapp/wails/v2/pkg/options"
 	"github.com/wailsapp/wails/v2/pkg/options/assetserver"
+	"github.com/wailsapp/wails/v2/pkg/options/mac"
 	"github.com/wailsapp/wails/v2/pkg/runtime"
+	"os/exec"
+	goRuntime "runtime"
 	"wails_vue/backend/Config"
 	"wails_vue/backend/FileStore"
 	"wails_vue/backend/Util"
@@ -31,6 +32,7 @@ func BootApplication(
 	windowSettings *Config.Window,
 	connections *Config.Connections,
 	queriesList *Config.QueriesList,
+	menuBuilder *ApplicationMenuBuilder,
 ) {
 
 	app.Config = &AllConfig{
@@ -42,31 +44,6 @@ func BootApplication(
 
 	Logger = Util.NewFileLogger(FileStore.Stores.GetAppDirFilePath("log.txt"))
 
-	menu := menu2.NewMenu()
-
-	menu.AddSubmenu(appSettings.Title)
-
-	viewMenu := menu.AddSubmenu("View")
-
-	viewMenu.AddText("Zoom In", keys.Combo("+", keys.CmdOrCtrlKey, keys.ShiftKey), func(cb *menu2.CallbackData) {
-		runtime.WindowExecJS(app.ctx, "window.zoomIn()")
-	})
-
-	viewMenu.AddText("Zoom Out", keys.CmdOrCtrl("-"), func(cb *menu2.CallbackData) {
-		runtime.WindowExecJS(app.ctx, "window.zoomOut()")
-	})
-
-	viewMenu.AddText("Reset Zoom", keys.Combo("-", keys.CmdOrCtrlKey, keys.OptionOrAltKey), func(cb *menu2.CallbackData) {
-		runtime.WindowExecJS(app.ctx, "window.resetZoom()")
-	})
-
-	/*environment := runtime.Environment(app.ctx)
-	if environment.BuildType == "production" {
-		Logger = logger.NewFileLogger(FileStore.Stores.GetAppDirFilePath("log.txt"))
-	} else {
-		Logger = logger.NewDefaultLogger()
-	}*/
-
 	Logger.Debug("Log dir is: " + Logger.GetFilePath())
 
 	wailsApplication := application.NewWithOptions(&options.App{
@@ -76,25 +53,29 @@ func BootApplication(
 
 		Logger: Logger,
 
-		Menu: menu,
+		Menu: menuBuilder.Build(app),
 
 		AssetServer: &assetserver.Options{
 			Assets: Assets,
 		},
+
 		BackgroundColour: &options.RGBA{R: 27, G: 38, B: 54, A: 1},
 
 		OnStartup: func(ctx context.Context) {
 			app.ctx = ctx
+			menuBuilder.Ctx = ctx
 
 			FileStore.SetContext(ctx)
 
 			Container.Instance(&AppContext{Ctx: ctx})
 			Container.Call(app.startup)
 		},
-		OnShutdown: func(ctx context.Context) {
+		OnBeforeClose: func(ctx context.Context) bool {
 			app.ctx = ctx
 			Container.Instance(&AppContext{Ctx: ctx})
 			Container.Call(app.shutdown)
+
+			return false
 		},
 
 		Bind: []interface{}{
@@ -102,6 +83,15 @@ func BootApplication(
 			windowSettings,
 			connections,
 			queriesList,
+		},
+
+		Mac: &mac.Options{
+			//TitleBar: mac.TitleBarHiddenInset(),
+			About: &mac.AboutInfo{
+				Title:   appSettings.Title,
+				Icon:    appSettings.Icon,
+				Message: "OpenSource SurrealDB Client",
+			},
 		},
 	})
 
@@ -114,8 +104,7 @@ func BootApplication(
 
 // App struct
 type App struct {
-	ctx context.Context
-
+	ctx    context.Context
 	Config *AllConfig `json:"config"`
 }
 
@@ -140,4 +129,64 @@ func (a *App) shutdown(window *Config.Window) {
 
 func (a *App) GetAllConfig() *AllConfig {
 	return a.Config
+}
+
+func (a *App) IsMac() bool {
+	//goland:noinspection GoBoolExpressions
+	return goRuntime.GOOS == "darwin"
+}
+
+func (a *App) IsWindows() bool {
+	//goland:noinspection GoBoolExpressions
+	return goRuntime.GOOS == "windows"
+}
+
+func (a *App) IsLinux() bool {
+	//goland:noinspection GoBoolExpressions
+	return goRuntime.GOOS == "linux"
+}
+
+func (a *App) OpenDirectory(path string) {
+	var cmd *exec.Cmd
+	if a.IsWindows() {
+		cmd = exec.Command(`explorer`, `/select,`, path)
+	} else if a.IsMac() {
+		cmd = exec.Command(`open`, path)
+	} else {
+		cmd = exec.Command(`xdg-open`, path)
+	}
+
+	runtime.LogDebugf(a.ctx, "Opening Directory: %s, CMD: %s", path, cmd.String())
+
+	err := cmd.Run()
+	if err != nil {
+		runtime.LogError(a.ctx, err.Error())
+	}
+}
+
+func (a *App) OpenAppDataPath() {
+	a.OpenDirectory(FileStore.Stores.GetAppDir())
+}
+
+func (a *App) OpenFile(path string) {
+	var cmd *exec.Cmd
+	if a.IsWindows() {
+		cmd = exec.Command(`start`, path)
+	} else if a.IsMac() {
+		cmd = exec.Command(`open`, "-t", path)
+	} else {
+		cmd = exec.Command(`xdg-open`, path)
+	}
+
+	runtime.LogDebugf(a.ctx, "Opening File: %s, CMD: %s", path, cmd.String())
+
+	err := cmd.Run()
+	if err != nil {
+		runtime.LogError(a.ctx, err.Error())
+	}
+
+}
+
+func (a *App) OpenLogFile() {
+	a.OpenFile(Logger.GetFilePath())
 }

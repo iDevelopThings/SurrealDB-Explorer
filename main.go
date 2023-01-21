@@ -9,12 +9,23 @@ import (
 //go:embed all:frontend/dist
 var assets embed.FS
 
+//go:embed build/appicon.png
+var icon []byte
+
 func main() {
 
 	backend.Assets = assets
 
 	backend.Container = container.Container
-	backend.Container.Singleton(backend.NewApplicationSettings)
+
+	backend.Container.Singleton(func() *backend.ApplicationSettings {
+		settings := backend.NewApplicationSettings()
+		settings.Icon = icon
+
+		return settings
+	})
+
+	backend.Container.Singleton(backend.NewApplicationMenuBuilder)
 
 	backend.AppInstance = backend.NewApp()
 

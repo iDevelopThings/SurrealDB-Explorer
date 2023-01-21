@@ -4,12 +4,14 @@ import vue from "@vitejs/plugin-vue";
 import {ClassStoresPlugin} from "@idevelopthings/vue-class-stores/vite";
 import {VueFrontendUtils} from "vue-frontend-utils/vite";
 import resolveConfig from "tailwindcss/resolveConfig";
+import {readFileSync} from "fs";
 //@ts-ignore
 import * as monacoEditorPlugin from "vite-plugin-monaco-editor";
 //@ts-ignore
 import * as fs from "fs";
 
-// https://vitejs.dev/config/
+const {version} = JSON.parse(readFileSync("./package.json", "utf8"));
+
 export default defineConfig({
 	plugins : [
 		ClassStoresPlugin({
@@ -71,4 +73,7 @@ export const colors = ${JSON.stringify(colors, null, 2)};
 			"@" : "/src",
 		},
 	},
+	define  : {
+		"import.meta.env.APP_VERSION" : `"${version}"`,
+	}
 });

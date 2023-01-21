@@ -26,10 +26,10 @@ export const saveQuery = useAsyncHandler(async (name: string) => {
 	return query;
 });
 
-export const loadSavedQueries = useMemoizedAsyncHandler(async (connectionId: string) => {
+export const loadSavedQueries = useAsyncHandler(async (connectionId: string) => {
 	const query = await GetQueries(connectionId);
 
-	queryPanel.setSavedQueries(query);
+	queryPanel.setSavedQueries(query || []);
 
 	return query;
 });
@@ -55,7 +55,8 @@ class QueriesPanelStore extends Store<QueriesPanelStore, IQueriesPanelStore>() {
 	}
 
 	setSavedQueries(queries: Array<Config.Query>) {
-		// Sort queries by id str (newest first)
+		// Sort queries by id str (the newest first)
+
 		this.state.list.saved = queries.sort((a, b) => b.id.localeCompare(a.id));
 	}
 

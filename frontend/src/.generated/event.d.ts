@@ -11,6 +11,9 @@ declare module "vue-frontend-utils" {
 			"modal:queries:save:close": { type: string; },
 
 			"editor:run": { content: string; },
+			"database:lost-connection": any,
+			"database:reconnected": number,
+			"database:disconnected": Connection,
 
 	}
 

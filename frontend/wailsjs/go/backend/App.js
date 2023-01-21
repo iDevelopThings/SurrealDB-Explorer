@@ -5,3 +5,31 @@
 export function GetAllConfig() {
   return window['go']['backend']['App']['GetAllConfig']();
 }
+
+export function IsLinux() {
+  return window['go']['backend']['App']['IsLinux']();
+}
+
+export function IsMac() {
+  return window['go']['backend']['App']['IsMac']();
+}
+
+export function IsWindows() {
+  return window['go']['backend']['App']['IsWindows']();
+}
+
+export function OpenAppDataPath() {
+  return window['go']['backend']['App']['OpenAppDataPath']();
+}
+
+export function OpenDirectory(arg1) {
+  return window['go']['backend']['App']['OpenDirectory'](arg1);
+}
+
+export function OpenFile(arg1) {
+  return window['go']['backend']['App']['OpenFile'](arg1);
+}
+
+export function OpenLogFile() {
+  return window['go']['backend']['App']['OpenLogFile']();
+}

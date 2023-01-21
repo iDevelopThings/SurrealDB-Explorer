@@ -1,11 +1,20 @@
-import {Store, StoreManager} from "@idevelopthings/vue-class-stores/vue";
+import {Store, StoreManager, Computed, OnInit} from "@idevelopthings/vue-class-stores/vue";
 import {Config} from "../../wailsjs/go/models";
 import {Add, SetCurrent} from "../../wailsjs/go/Config/Connections";
 import {AsyncFunc} from "../Services/AsyncProcessor";
-import db, {ConnectionResult} from "../Services/Database/Database";
+import db, {onLostConnection, onDisconnect, onReconnected} from "../Services/Database/Database";
 import {schemaStore} from "./SchemaStore";
 import {SurrealSchema} from "surrealdb.schema";
 
+
+
+export enum ConnectionStatus {
+	Disconnected = "Disconnected",
+	Failed       = "Failed",
+	Connecting   = "Connecting",
+	Connected    = "Connected",
+	Reconnecting = "Reconnecting",
+}
 
 interface IConnectionStore {
 	loading: boolean;
@@ -13,8 +22,10 @@ interface IConnectionStore {
 	connections: Config.Connections;
 	current?: Config.Connection;
 	connecting: string;
-	connectionResult: ConnectionResult | null;
+	status: ConnectionStatus;
+	addPanelExpanded: boolean;
 }
+
 
 class ConnectionStore extends Store<ConnectionStore, IConnectionStore>() {
 
@@ -22,45 +33,34 @@ class ConnectionStore extends Store<ConnectionStore, IConnectionStore>() {
 		return {
 			loading     : false,
 			connections : null,
+			current     : null,
+			connecting  : null,
+			status      : ConnectionStatus.Disconnected,
 
-			current    : null,
-			connecting : null,
-
-			connectionResult : null,
+			addPanelExpanded : false,
 		};
 	}
 
+	@OnInit
+	private onInit() {
+		onLostConnection.subscribe(() => this.onLostConnection());
+		onDisconnect.subscribe((connection) => this.onDisconnect(connection));
+		onReconnected.subscribe((attempts) => this.onReconnected(attempts));
+	}
+
 	get connections(): Config.Connection[] {
+		if (!this.state.connections) return [];
+
 		return this.state.connections.connections;
 	}
 
-	private async validateConnection(connection: Config.Connection): Promise<boolean> {
-
-		try {
-			const response = await db.httpRequest<any[]>({
-				host      : connection.host,
-				user      : connection.user,
-				pass      : connection.pass,
-				database  : connection.database,
-				namespace : connection.namespace,
-			}, "INFO FOR KV;");
-
-			return response !== undefined;
-		} catch (e) {
-			console.error(e);
-			return false;
-		}
-	}
-
 	public addConnection = AsyncFunc<[Config.Connection]>(async (handler, connection: Config.Connection) => {
-//		if (!(await this.validateConnection(connection))) {
-//			handler.error("Invalid connection");
-//			return;
-//		}
+		const addedConnection = await Add(new Config.Connection(connection));
 
-		this.state.connections.connections.push(
-			await Add(new Config.Connection(connection))
-		);
+		(addedConnection as any).highlight = true;
+
+
+		this.state.connections.connections.push(addedConnection);
 
 		connection.name      = "";
 		connection.host      = "";
@@ -68,6 +68,8 @@ class ConnectionStore extends Store<ConnectionStore, IConnectionStore>() {
 		connection.pass      = "";
 		connection.database  = "";
 		connection.namespace = "";
+
+		this.state.addPanelExpanded = false;
 	});
 
 	get current() {
@@ -83,6 +85,7 @@ class ConnectionStore extends Store<ConnectionStore, IConnectionStore>() {
 			connection : this.state.current
 		});
 
+		this.state.status  = ConnectionStatus.Disconnected;
 		this.state.current = null;
 
 		await SetCurrent(null);
@@ -90,49 +93,83 @@ class ConnectionStore extends Store<ConnectionStore, IConnectionStore>() {
 	}
 
 	async connect(connection: Config.Connection) {
-		this.state.connecting = connection.id;
-
 		if (this.state.current) {
 			await this.disconnect();
 		}
+		this.state.status = ConnectionStatus.Connecting;
 
-		const config = {
-			host      : connection.host,
-			user      : connection.user,
-			pass      : connection.pass,
-			namespace : connection.namespace,
-			database  : connection.database,
-		};
-
+		this.state.connecting = connection.id;
 
 		try {
-			this.state.connectionResult = await db.connect(config);
+			const result = await db.connect(connection);
 
-			if (this.state.connectionResult.error) {
+			if (result.didFail()) {
+				this.state.status     = ConnectionStatus.Failed;
 				this.state.connecting = null;
 				return false;
 			}
 		} catch (e) {
 			console.error("Failed to connect to db: ", e);
+			this.state.status     = ConnectionStatus.Failed;
 			this.state.connecting = null;
 			return false;
 		}
 
-		this.state.current = connection;
+		this.state.current    = connection;
+		this.state.connecting = null;
+		this.state.status     = ConnectionStatus.Connected;
 
+		await SetCurrent(connection.id);
+
+		await this.loadConnectionSchema();
+
+		return true;
+	}
+
+	private async loadConnectionSchema() {
 		try {
-			SurrealSchema.init(config).config = config;
+			const config = {
+				host      : this.state.current.host,
+				user      : this.state.current.user,
+				pass      : this.state.current.pass,
+				namespace : this.state.current.namespace,
+				database  : this.state.current.database,
+			};
+			SurrealSchema.init(config);
 			await schemaStore.loadSchema(config);
 		} catch (e) {
 			console.error("Failed to load schema: ", e);
 		}
+	}
 
-		await SetCurrent(connection.id);
+	private async onDisconnect(connection: Config.Connection) {
+		console.log("Database disconnected: ", "is current: ", connection?.id === this.state.current?.id, connection);
 
-
+		this.state.current    = null;
 		this.state.connecting = null;
+		this.state.status     = ConnectionStatus.Disconnected;
 
-		return true;
+		await SetCurrent(null);
+	}
+
+	private onLostConnection(): any {
+		this.state.status = ConnectionStatus.Reconnecting;
+		console.log("> Lost connection to database");
+	}
+
+	private onReconnected(attempts: number): any {
+		this.state.status = ConnectionStatus.Connected;
+
+		console.log("> Reconnected after ", attempts, " attempts");
+	}
+
+	@Computed
+	public get connectResult() {
+		return db.state.status;
+	}
+
+	public get status() {
+		return this.state.status;
 	}
 
 }

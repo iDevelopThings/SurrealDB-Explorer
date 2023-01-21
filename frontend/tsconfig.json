@@ -28,7 +28,8 @@
     "src/**/*.vue",
     "src/Stores/Generated/StoreLoader.ts",
     "src/Stores/Generated/stores.d.ts",
-    "src/.generated/modal.d.ts"
+    "src/.generated/modal.d.ts",
+    "src/.generated/event.d.ts"
   ],
   "references": [
     {

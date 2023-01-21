@@ -5,6 +5,11 @@
 			<Spinner class="w-6 h-6" />
 		</div>
 		<template v-else>
+			<div v-if="!$queriesPanel.saved?.length">
+				<p class="text-main-200 font-semibold text-lg text-center">No saved queries</p>
+				<p class="text-main-300 mt-2 text-sm text-center">Write a query on the right, and hit <strong>Save Query</strong>, then it'll be here for future use!</p>
+			</div>
+
 			<div
 				v-for="query in $queriesPanel.saved"
 				class="bg-main-700 rounded shadow relative"

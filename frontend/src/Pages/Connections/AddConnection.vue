@@ -2,18 +2,18 @@
 	<div class="flex flex-col space-y-4 bg-main-800 rounded shadow overflow-hidden">
 		<div
 			class="cursor-pointer p-6 flex flex-row items-center justify-between select-none"
-			:class="[addExpanded ? 'border-b border-b-main-500' : '']"
-			@click="addExpanded = !addExpanded"
+			:class="[$connection.$addPanelExpanded ? 'border-b border-b-main-500' : '']"
+			@click="$connection.$addPanelExpanded = !$connection.$addPanelExpanded"
 		>
 			<p class="text-2xl text-main-200">
 				Add Connection
 			</p>
 
-			<ChevronDownIcon class="w-6 text-main-200 transition " :class="[addExpanded ? 'rotate-180': '']" />
+			<ChevronDownIcon class="w-6 text-main-200 transition " :class="[$connection.$addPanelExpanded ? 'rotate-180': '']" />
 		</div>
 
 		<form
-			v-if="addExpanded"
+			v-if="$connection.$addPanelExpanded"
 			class="flex flex-col space-y-4 bg-main-800 rounded shadow p-6"
 			@submit.prevent="$connection.addConnection.invoke(tempConnection)"
 		>
@@ -26,30 +26,30 @@
 
 			<div class="input-group">
 				<label for="name">Name</label>
-				<input required id="name" type="text" v-model="tempConnection.name" placeholder="Name" />
+				<input autocomplete="false" required id="name" type="text" v-model="tempConnection.name" placeholder="Name" />
 			</div>
 			<div class="input-group">
 				<label for="host">Host</label>
-				<input required id="host" type="url" v-model="tempConnection.host" placeholder="Host" />
+				<input autocomplete="false" required id="host" type="url" v-model="tempConnection.host" placeholder="Host" />
 			</div>
 			<div class="flex flex-row w-full space-x-6">
 				<div class="input-group flex-1">
 					<label for="user">User</label>
-					<input required id="user" type="text" v-model="tempConnection.user" placeholder="User" />
+					<input autocomplete="false" required id="user" type="text" v-model="tempConnection.user" placeholder="User" />
 				</div>
 				<div class="input-group flex-1">
 					<label for="pass">Password</label>
-					<input required id="pass" type="text" v-model="tempConnection.pass" placeholder="Password" />
+					<input autocomplete="false" required id="pass" type="text" v-model="tempConnection.pass" placeholder="Password" />
 				</div>
 			</div>
 			<div class="flex flex-row w-full space-x-6">
 				<div class="input-group flex-1">
 					<label for="database">Database</label>
-					<input required id="database" type="text" v-model="tempConnection.database" placeholder="Database" />
+					<input autocomplete="false" required id="database" type="text" v-model="tempConnection.database" placeholder="Database" />
 				</div>
 				<div class="input-group flex-1">
 					<label for="namespace">Namespace</label>
-					<input required id="namespace" type="text" v-model="tempConnection.namespace" placeholder="Namespace" />
+					<input autocomplete="false" required id="namespace" type="text" v-model="tempConnection.namespace" placeholder="Namespace" />
 				</div>
 			</div>
 
