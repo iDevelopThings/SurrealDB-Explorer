@@ -32,7 +32,7 @@ export const addKeyBinding    = (
 	editor._standaloneKeybindingService.addDynamicKeybinding(id, newKeyBinding, () => action.run(), undefined);
 };
 
-export type EditorTypes = "query";
+export type EditorTypes = "query" | "create-entry" | "update-entry";
 
 export class EditorManager {
 
@@ -46,13 +46,11 @@ export class EditorManager {
 
 	public content = ref<string>("");
 
+	constructor(type: EditorTypes) {
+		this.currentType = type;
+	}
 
-	public async setup() {
-
-
-		this.onRun    = defineEvent<{ content: string }>("editor:run");
-		this.onChange = defineEvent<{ content: string }>("editor:change");
-
+	public static async configureEditor() {
 		monaco.editor.defineTheme("base", {
 			base    : "vs-dark",
 			inherit : true,
@@ -147,6 +145,11 @@ export class EditorManager {
 		});
 	}
 
+	public setup() {
+		this.onRun    = defineEvent<{ content: string }>("editor:run:" + this.currentType);
+		this.onChange = defineEvent<{ content: string }>("editor:change:" + this.currentType);
+	}
+
 	public get defaultOptions(): editor.IStandaloneEditorConstructionOptions {
 		return {
 			language             : "surreal",
@@ -167,12 +170,20 @@ export class EditorManager {
 		};
 	}
 
-	public init(el: HTMLElement, type: EditorTypes = "query") {
+	public init(el: HTMLElement, initialContent: string = "") {
+		const editorOptions = this.defaultOptions;
+		if (this.currentType === "create-entry") {
+			editorOptions.language = "json";
+		}
 
-		this.currentType = type;
-		this.current     = editor.create(el, this.defaultOptions);
+		if (this.current) {
+			this.current.dispose();
+		}
 
-		this.content.value = "";
+		this.current = editor.create(el, editorOptions);
+
+		this.content.value = initialContent;
+		this.current.setValue(this.content.value);
 
 		this.monacoEvents.onChange = this.current.getModel().onDidChangeContent((event) => {
 			this.content.value = this.current.getValue();
@@ -183,13 +194,38 @@ export class EditorManager {
 		this.setActions();
 	}
 
-	public setActions() {
-		this.current.addAction({
-			id          : "run",
-			label       : "Run",
-			keybindings : [monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter],
-			run         : () => this.onRun.invoke({content : this.current.getValue()})
+	public initForTable(table: string, el: HTMLElement, initialContent: string = "") {
+		if (this.currentType === "query") return;
+
+		const schema = {
+			$schema : "http://json-schema.org/draft-07/schema#",
+			...schemaStore.jsonSchemaResult.tableSchemas[table]
+		};
+
+		monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
+			enableSchemaRequest : false,
+			validate            : true,
+			schemas             : [
+				//@ts-ignore
+				{
+					fileMatch : ["*"],
+					schema    : schema,
+				}
+			]
 		});
+
+		this.init(el, initialContent);
+	}
+
+	private setActions() {
+		if (this.currentType === "query") {
+			this.current.addAction({
+				id          : "run",
+				label       : "Run",
+				keybindings : [monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter],
+				run         : () => this.onRun.invoke({content : this.current.getValue()})
+			});
+		}
 
 		updateKeyBinding(this.current, "editor.action.commentLine", monaco.KeyMod.CtrlCmd | monaco.KeyCode.Slash);
 		updateKeyBinding(this.current, "editor.action.blockComment", monaco.KeyMod.CtrlCmd | monaco.KeyMod.Shift | monaco.KeyCode.Slash);
@@ -220,4 +256,8 @@ export class EditorManager {
 	}
 }
 
-export const Editor = new EditorManager();
+export const Editor = new EditorManager("query");
+
+export const EditEntryEditor = new EditorManager("update-entry");
+
+export const CreateEntryEditor = new EditorManager("create-entry");

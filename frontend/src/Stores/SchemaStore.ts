@@ -1,5 +1,6 @@
 import {Store, OnInit, AfterAll, Computed} from "@idevelopthings/vue-class-stores/vue";
-import {SurrealSchema, Schema, SchemaTable, type SurrealDbConfig} from "surrealdb.schema";
+import {SurrealSchema, Schema, SchemaTable, type SurrealDbConfig, type JsonSchema} from "surrealdb.schema";
+import {languages} from "monaco-editor";
 
 
 interface ISchemaStore {
@@ -11,12 +12,14 @@ interface ISchemaStore {
 
 class SchemaStore extends Store<SchemaStore, ISchemaStore>() {
 
+	public jsonSchemaResult: JsonSchema;
+	public jsonSchema: languages.json.DiagnosticsOptions["schemas"] = null;
+
 	get state(): ISchemaStore {
 		return {
 			loading       : true,
 			surrealSchema : null,
 			schema        : {} as Schema,
-
 			tables : [],
 		};
 	}
@@ -27,11 +30,34 @@ class SchemaStore extends Store<SchemaStore, ISchemaStore>() {
 
 		const sschema = SurrealSchema.init(config);
 
-		this.$schema  = await sschema.getSchema({
+		this.$schema = await sschema.getSchema({
 			generateId                       : true,
 			deleteOriginalNestedObjectFields : true,
 			handleNestedObjects              : true,
+			removeArrayChildren              : true,
 		});
+
+		if (!this.jsonSchemaResult) {
+			this.jsonSchemaResult = await sschema.getJsonSchema();
+
+			const schemas = [];
+			if (this.jsonSchemaResult) {
+				for (let $defsKey in this.jsonSchemaResult.schema.$defs) {
+
+					const schemaClone = {...this.jsonSchemaResult.schema.$defs[$defsKey] as any};
+					delete schemaClone.$id;
+
+					schemas.push({
+						uri       : `json-schema://${$defsKey}`,
+						fileMatch : ["*"],
+						schema    : schemaClone,
+					});
+				}
+			}
+
+			this.jsonSchema = schemas;
+
+		}
 
 		this.$tables  = Object.values(this.$schema.tables);
 		this.$loading = false;
