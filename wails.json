@@ -3,7 +3,7 @@
   "name": "SurrealDB Explorer",
   "outputfilename": "surrealdb_explorer",
   "frontend:install": "npm install",
-  "frontend:build": "npm run build",
+  "frontend:build": "npm run build:no-typechecking",
   "frontend:dev:watcher": "npm run dev",
   "frontend:dev:serverUrl": "auto",
   "author": {

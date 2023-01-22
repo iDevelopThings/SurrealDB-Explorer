@@ -1,8 +1,16 @@
 import {SchemaTable, SchemaField} from "surrealdb.schema";
 import {reactive} from "vue";
-import db from "../Services/Database/Database";
-import {Thing} from "../Services/Database/Thing";
-import {AsyncHandler, Async} from "../Services/AsyncProcessor";
+import db from "../Database/Database";
+import {Thing, thing} from "../Database/Thing";
+import {AsyncHandler, Async} from "../AsyncProcessor";
+import {QueryResult} from "../Database/QueryResult";
+import type {EventBusKey} from "@vueuse/core";
+import {useEventBus} from "@vueuse/core";
+import {TableFilters} from "@/Services/TableViewer/TableFilters";
+
+export const tablesOnErrorKey: EventBusKey<{ name: string, error: IErrorMessageSections }> = Symbol("eventBus:tables:error");
+
+export const tablesErrorBus = useEventBus(tablesOnErrorKey);
 
 export type EntryViewerInfo = {
 	id: Thing | null;
@@ -10,11 +18,7 @@ export type EntryViewerInfo = {
 	open: boolean;
 	loading: boolean;
 }
-export type TableFilter = {
-	field: string,
-	operator: string,
-	value: any,
-}
+
 export type TableSelectionData = {
 	ids: Thing[],
 	isSelecting: boolean,
@@ -34,15 +38,15 @@ export class TableViewer {
 
 	public loadedMeta: boolean = false;
 
-	public entries: any[];
+	private _entries = reactive({
+		values : [],
+	});
 
-	public inputFilter: TableFilter = {
-		field    : "id",
-		operator : "=",
-		value    : "",
-	};
-	public filters: TableFilter[]   = [];
-	public showFilters: boolean     = false;
+	public get entries() {
+		return this._entries.values;
+	}
+
+	public filters: TableFilters = new TableFilters();
 
 	public entryViewer: EntryViewerInfo = {
 		id      : null,
@@ -51,12 +55,14 @@ export class TableViewer {
 		loading : false,
 	};
 
-	private loadOptions: LoadEntriesOptions;
+	public loadOptions: LoadEntriesOptions;
 
 	public selection: TableSelectionData = {
 		ids         : [],
 		isSelecting : false
 	};
+
+	public lastQueryResult: QueryResult<any> = null;
 
 	constructor(table: SchemaTable) {
 		this.schema       = table;
@@ -64,8 +70,8 @@ export class TableViewer {
 		this.fields       = this.sortFields(table.getFields());
 	}
 
-	public deleteProcessor: AsyncHandler = Async(() => {
-		return this.deleteItems();
+	public deleteProcessor: AsyncHandler = Async((id?: any) => {
+		return this.deleteItems(id);
 	});
 
 	public static create(table: SchemaTable) {
@@ -116,8 +122,6 @@ export class TableViewer {
 			}
 
 		}
-
-
 
 		if (typeof value === "object") {
 			if (Array.isArray(value)) {
@@ -170,34 +174,34 @@ export class TableViewer {
 
 		const offset = (this.page - 1) * options.perPageLimit;
 
-		let querySegments = [
-			`SELECT * FROM ${this.schema.name}`,
-		];
-		if (this.filters.length) {
-			querySegments.push(`WHERE ${this.filters.map(f => `${f.field} ${f.operator} ${f.value}`).join(" AND ")}`);
+		let querySegments = [`SELECT * FROM ${this.schema.name}`,];
+
+		if (this.filters.has()) {
+			querySegments.push(this.filters.getQuery());
 		}
 
-		if (offset > 0) {
-			querySegments.push(`START ${offset}`);
+		querySegments.push(`LIMIT ${options.perPageLimit}`);
+		querySegments.push(`START ${offset || 0}`);
+
+		const result = await db.query<any>(querySegments.join(" ") + ";");
+
+		this.lastQueryResult = result;
+
+		if (result.failed) {
+			tablesErrorBus.emit({name : this.schema.name, error : this.errorMessageSections});
+
+			this.loading = false;
+			return;
 		}
-
-		querySegments.push(`LIMIT ${options.perPageLimit};`);
-
-		const query = querySegments.join(" ");
-		/*let query         = `SELECT * FROM ${this.schema.name} LIMIT ${options.perPageLimit}`;
-		if (offset > 0) {
-			query += ` START ${offset}`;
-		}*/
-
-		const result = await db.query<any>(query);
-		let entries  = result.get;
 
 		// We need to recursively iterate over all records, and check for fields which are
 		// records, if they're a record, we'll change the value to `new Thing(value)`
 
-		entries = entries.map(entry => this.processEntry(entry));
+		this._entries.values = result.get.map(entry => this.processEntry(entry));
 
-		this.entries = entries;
+		if (!this._entries.values?.length) {
+			tablesErrorBus.emit({name : this.schema.name, error : this.errorMessageSections});
+		}
 
 		this.loading = false;
 	}
@@ -238,7 +242,7 @@ export class TableViewer {
 	openEntryViewer(id: Thing) {
 		this.entryViewer.id = id;
 
-		const item = this.entries?.find(e => e.id === id.toString());
+		const item = this._entries.values?.find(e => e.id === id.toString());
 		if (item) {
 			this.entryViewer.value = item;
 			this.entryViewer.open  = true;
@@ -261,33 +265,36 @@ export class TableViewer {
 
 	}
 
-	public addFilter() {
-		this.filters.push(this.inputFilter);
-		this.inputFilter = {
-			field    : "",
-			operator : "=",
-			value    : "",
-		};
-
-		this.refresh();
-	}
-
-	public removeFilter(idx) {
-		this.filters.splice(idx, 1);
-
-		if (this.filters.length) {
-			this.refresh();
-		}
-	}
-
 	public async createNewEntry(value: any) {
 		const result = await db.create(this.schema.name, value);
 
-		console.log("Result > ", result);
-
-		this.entries.unshift(this.processEntry(result));
+		this._entries.values.unshift(this.processEntry(result));
 
 		return result;
+	}
+
+	public async updateEntry(id, jsonData: any) {
+		const result = await db.updateSingle(id, jsonData);
+		if (!result) {
+			return;
+		}
+
+		const thingId = thing(id);
+
+		const updated = await db.query(`SELECT * FROM type::thing('${thingId.table}', '${thingId.id}') LIMIT 1;`);
+
+		if (updated.failed) {
+			console.error("Failed to update entry: ", updated.error);
+			return;
+		}
+
+		const entry = this._entries.values.find(e => e.id === id);
+
+		if (entry) {
+			Object.assign(entry, this.processEntry(updated.first));
+		}
+
+		return entry;
 	}
 
 	get isSelecting() {
@@ -308,16 +315,18 @@ export class TableViewer {
 		return this.selection.ids.includes(item.id);
 	}
 
-	public async deleteItems(id?: any) {
-		const ids = [];
+	public async deleteItems(singleId?: any) {
+		let ids = [];
 
-		if (this.selection.isSelecting && !id) {
+		if (this.selection.isSelecting && !singleId) {
 			ids.push(...this.selection.ids);
 		} else {
-			ids.push(id);
+			ids.push(singleId);
 		}
 
 		if (!ids.length) return;
+
+		ids = ids.map(id => id.toString());
 
 		let query = [];
 		for (const id of ids) {
@@ -331,7 +340,7 @@ export class TableViewer {
 			return;
 		}
 
-		this.entries = this.entries.filter(e => !ids.includes(e.id));
+		this._entries.values = this._entries.values.filter(e => !ids.includes(e.id.toString()));
 
 		if (this.selection.isSelecting)
 			this.toggleSelecting();
@@ -352,6 +361,57 @@ export class TableViewer {
 		}
 		this.selection.ids.push(item.id);
 	}
+
+	public get shouldShowError() {
+		if (this.loading) return false;
+		if (!this.lastQueryResult) return false;
+
+		return this.lastQueryResult?.failed || !this._entries.values?.length;
+	}
+
+	public get errorMessageSections(): IErrorMessageSections {
+		const sections: IErrorMessageSections = {
+			hasError : false,
+			title    : undefined,
+			message  : undefined,
+		};
+
+		if (!this.shouldShowError) return sections;
+
+		sections.hasError = true;
+
+		if (this.lastQueryResult?.failed && this.lastQueryResult?.errorFormatted) {
+			sections.title   = "Query Failure";
+			sections.message = this.lastQueryResult?.errorFormatted;
+		} else if (!this._entries.values?.length) {
+			sections.title = "No Results";
+
+			if (this.filters.hasAnyFilters()) {
+				if (this.filters.invalidSegmentCount() > 0) {
+					sections.title   = "Invalid Filter";
+					sections.message = "Please double check your filter values, strings need to be wrapped in quotes.";
+				} else {
+					sections.message = "No results found for the current filter.";
+				}
+			} else {
+				sections.message = "No results found.";
+			}
+		} else {
+			sections.title   = "Unknown Error";
+			sections.message = "An unknown error occurred. If this continues, please create an issue on the github repo.";
+		}
+
+		return sections;
+	}
+
+
+}
+
+export type IErrorMessageSections = {
+	hasError: boolean;
+
+	title: string;
+	message: string;
 }
 
 

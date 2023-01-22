@@ -6,9 +6,9 @@
 </template>
 
 <script setup lang="ts">
-import {ConnectionStatus} from "../../Stores/ConnectionStore";
 import {computed} from "vue";
-import Spinner from "../Spinner.vue";
+import Spinner from "../../Spinner.vue";
+import {ConnectionStatus} from "../../../Stores/ConnectionStore";
 
 const props = defineProps<{
 	status: ConnectionStatus;

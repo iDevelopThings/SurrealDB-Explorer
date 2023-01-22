@@ -1,24 +1,25 @@
 import {Store, On} from "@idevelopthings/vue-class-stores/vue";
 import {SchemaTable, SchemaField} from "surrealdb.schema";
 import {schemaStore} from "./SchemaStore";
-import {Thing} from "../Services/Database/Thing";
-import {TableViewer} from "./TableViewer";
+import {Thing} from "@/Services/Database/Thing";
+import {TableViewer, type IErrorMessageSections} from "@/Services/TableViewer/TableViewer";
 import {Config} from "../../wailsjs/go/models";
 import db from "../Services/Database/Database";
-import {QueryResult} from "../Services/Database/QueryResult";
-import {AsyncFunc, AsyncHandlerFunction} from "../Services/AsyncProcessor";
+import {AsyncFunc, AsyncHandlerFunction} from "@/Services/AsyncProcessor";
+import type { EventBusKey } from '@vueuse/core'
 
+export const tablesOnErrorKey: EventBusKey<IErrorMessageSections> = Symbol('eventBus:tables');
+
+export interface ViewTableProps {
+	name: string,
+	id?: Thing
+}
 
 interface ITableStore {
 	loading: boolean;
 	perPageLimit: number;
 	tables: { [key: string]: TableViewer };
 	current: string;
-}
-
-export interface ViewTableProps {
-	name: string,
-	id?: Thing
 }
 
 class TableStore extends Store<TableStore, ITableStore>() {
@@ -33,13 +34,12 @@ class TableStore extends Store<TableStore, ITableStore>() {
 	}
 
 	public tryLoad(params: ViewTableProps) {
-
 		const tableName = params.name as string;
 		const entryId   = params.id;
 
 		if (this.state.loading) return;
 
-		this.load(schemaStore.$schema.getTable(tableName), entryId);
+		return this.load(schemaStore.$schema.getTable(tableName), entryId);
 	}
 
 	public createViewer(tableName: string) {
@@ -62,6 +62,8 @@ class TableStore extends Store<TableStore, ITableStore>() {
 		});
 
 		this.state.loading = false;
+
+		return viewer;
 	}
 
 	@On("connection:disconnect")
@@ -99,7 +101,6 @@ class TableStore extends Store<TableStore, ITableStore>() {
 		return entry[field.name];
 	}
 
-
 	public sortEntryFields(entry: any) {
 		const sortedKeys = Object.keys(entry).sort((a, b) => {
 			if (a === "id") return -1;
@@ -131,7 +132,6 @@ class TableStore extends Store<TableStore, ITableStore>() {
 		viewer.openEntryViewer(id);
 	}
 
-
 	runQuery<T>(query: string, vars?: { [key: string]: any }): AsyncHandlerFunction<(query:string, vars: {[key:string]:any}) => T> {
 		return AsyncFunc(async (handler, query: string, vars?: { [key: string]: any }) => {
 			const result = await db.query<T>(query, vars);
@@ -140,6 +140,10 @@ class TableStore extends Store<TableStore, ITableStore>() {
 
 			return result;
 		});
+	}
+
+	public hasTables() {
+		return Object.keys(this.state.tables).length > 0;
 	}
 }
 

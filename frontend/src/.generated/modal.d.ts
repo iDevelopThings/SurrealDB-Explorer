@@ -5,15 +5,19 @@ declare module "vue-frontend-utils" {
 
 	interface ModalDefinitions {
 			"table:create-entry": { table: TableViewer; },
+			"table:edit-entry": { table: TableViewer; item: any; },
 			"queries:panel": { type: string; },
 			"queries:save": { type: string; },
+			"updates:info": { info: UpdateInformation; },
 
 	}
 
 	interface ModalVars {
 			createEntryModal: ModalDefinitions["table:create-entry"],
+			editEntryModal: ModalDefinitions["table:edit-entry"],
 			queriesPanelModal: ModalDefinitions["queries:panel"],
 			saveQueryModal: ModalDefinitions["queries:save"],
+			updateModal: ModalDefinitions["updates:info"],
 
 	}	
 

@@ -67,8 +67,6 @@ class Database {
 
 		this.state.status = await this.database.startConnectionFlow();
 
-		console.log(this.state.status);
-
 		return this.state.status as ConnectionFlowResult;
 	}
 
@@ -82,6 +80,11 @@ class Database {
 	public async updateSingle<T = any>(thing: string, data: Partial<T>): Promise<T> {
 		const response = await this.database.update(thing, data as any);
 		return response || undefined;
+	}
+
+	public async getSingle<T = any>(thing: string): Promise<T> {
+		const response = await this.database.select<T>(thing);
+		return response[0] || undefined;
 	}
 
 	public async changeSingle<T extends Record<string, unknown> = any>(thing: string, data: Partial<T>): Promise<T> {

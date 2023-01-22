@@ -17,6 +17,11 @@ export class Thing<T extends string = any> {
 	constructor(table: string, id: string);
 	constructor(table: string, id?: string) {
 		if (arguments.length === 1) {
+
+			if (arguments[0] instanceof Thing) {
+				return arguments[0];
+			}
+
 			const [tbl, id] = table.split(":");
 			this._table     = tbl;
 			this._id        = id;
@@ -40,6 +45,10 @@ export class Thing<T extends string = any> {
 	}
 
 	toString(): `${ThingTable<T>}:${ThingId<T>}` | string {
+		return this.value;
+	}
+
+	toJSON() {
 		return this.value;
 	}
 

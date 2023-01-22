@@ -6,6 +6,10 @@ export function GetAllConfig() {
   return window['go']['backend']['App']['GetAllConfig']();
 }
 
+export function GetCurrentVersion() {
+  return window['go']['backend']['App']['GetCurrentVersion']();
+}
+
 export function IsLinux() {
   return window['go']['backend']['App']['IsLinux']();
 }
@@ -32,4 +36,8 @@ export function OpenFile(arg1) {
 
 export function OpenLogFile() {
   return window['go']['backend']['App']['OpenLogFile']();
+}
+
+export function UpdateCheck() {
+  return window['go']['backend']['App']['UpdateCheck']();
 }

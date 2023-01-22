@@ -1,0 +1,37 @@
+Arguments: 
+  /Users/sam/.nvm/versions/node/v19.0.0/bin/node /opt/homebrew/Cellar/yarn/1.22.19/libexec/bin/yarn.js config get npmScopes --json
+
+PATH: 
+  /Users/sam/.gvm/bin:/Users/sam/.nvm/versions/node/v19.0.0/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/share/dotnet:~/.dotnet/tools:/Library/Apple/usr/bin:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/Users/sam/.cargo/bin:/Users/sam/.composer/vendor/bin:/Users/sam/.composer/vendor/bin:/Users/sam/Code/json-to-php/builds:/Users/sam/zsh-scripts/jb_scripts:/Users/sam/flutter/bin:/Users/sam/go/bin:/Users/sam/.bin
+
+Yarn version: 
+  1.22.19
+
+Node version: 
+  19.0.0
+
+Platform: 
+  darwin arm64
+
+Trace: 
+  SyntaxError: /Users/sam/Code/Testing/SurrealDbExplorer/scripts/package.json: Expected property name or '}' in JSON at position 72
+      at JSON.parse (<anonymous>)
+      at /opt/homebrew/Cellar/yarn/1.22.19/libexec/lib/cli.js:1629:59
+      at Generator.next (<anonymous>)
+      at step (/opt/homebrew/Cellar/yarn/1.22.19/libexec/lib/cli.js:310:30)
+      at /opt/homebrew/Cellar/yarn/1.22.19/libexec/lib/cli.js:321:13
+
+npm manifest: 
+  {
+    "name": "$name$",
+    "version": "$version$",
+    "dependencies": {
+      $END$
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

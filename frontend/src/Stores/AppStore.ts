@@ -4,14 +4,16 @@ import {backend} from "../../wailsjs/go/models";
 import {connectionStore} from "./ConnectionStore";
 import {Theme} from "../Services/Theme";
 import {GetAllConfig} from "../../wailsjs/go/backend/App";
-import {Editor} from "../Services/Monaco/Editor";
+import {Editor, EditEntryEditor, CreateEntryEditor, EditorManager} from "../Services/Monaco/Editor";
 import {type Ref, watch, computed, type ComputedRef} from "vue";
 import {useElementSize} from "@vueuse/core";
 import {type WatchStopHandle} from "@vue/runtime-core";
-import StatusBar from "../Components/Layout/StatusBar.vue";
+import {Updater} from "../Services/Updater/Updater";
+import StatusBar from "../Components/StatusBar/StatusBar.vue";
 
 
 interface IAppStore {
+	updater: Updater;
 	appConfig: backend.AllConfig;
 
 	pageWatcher: {
@@ -28,6 +30,8 @@ class AppStore extends Store<AppStore, IAppStore>() {
 		return {
 			appConfig : null,
 
+			updater : null,
+
 			pageWatcher : {
 				height  : 0,
 				watcher : null,
@@ -40,7 +44,14 @@ class AppStore extends Store<AppStore, IAppStore>() {
 	@OnInit
 	async init() {
 		Theme.load();
-		await Editor.setup();
+
+		await EditorManager.configureEditor();
+
+		Editor.setup();
+		EditEntryEditor.setup();
+		CreateEntryEditor.setup();
+
+		this.state.updater = await Updater.init();
 
 		await this.loadConfig();
 	}
@@ -60,20 +71,18 @@ class AppStore extends Store<AppStore, IAppStore>() {
 	}
 
 
-	public setupPageWatcher(pageWrapper: Ref<HTMLElement | null>, statusBar: Ref<typeof StatusBar>): void {
-		/*if (!pageWrapper && this.state.pageWatcher.watcher) {
-			this.state.pageWatcher.watcher();
-			this.state.pageWatcher.watcher = null;
-			return;
-		}*/
+	public setupPageWatcher(
+		pageWrapper: Ref<HTMLElement | null>,
+		statusBar: Ref<typeof StatusBar>,
+	): void {
 
 		if (this.$pageWatcher.watcher) {
 			console.error("Page watcher already setup", this.$pageWatcher.watcher, pageWrapper);
 			return;
 		}
 
-		const statusBarSize   = useElementSize(statusBar.value?.$el);
 		const pageWrapperSize = useElementSize(pageWrapper);
+		const statusBarSize   = useElementSize(statusBar.value?.$el);
 
 		this.pageHeight = computed(() => {
 			if (!pageWrapper.value) {
@@ -83,11 +92,9 @@ class AppStore extends Store<AppStore, IAppStore>() {
 			return pageWrapperSize.height.value - statusBarSize.height.value;
 		});
 
-//		this.$pageWatcher.watcher = watch(pageWrapperSize.height, (size) => {
-//			this.$pageWatcher.height = size;
-//		});
-
 	}
+
+
 }
 
 export const app = new AppStore();

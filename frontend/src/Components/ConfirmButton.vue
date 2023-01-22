@@ -13,10 +13,13 @@
 			:loading="loading"
 		>
 			<template #icon>
-				<Spinner class="w-4 h-4 mr-2" v-if="loading" />
+				<component :is="confirmIcon" class="w-4 h-4" v-if="confirmIcon && !loading" />
+				<Spinner class="w-4 h-4" v-if="loading" />
 			</template>
 
-			{{ message }}
+			<template v-if="message && message.trim()">
+				<span class="ml-2">{{ message }}</span>
+			</template>
 		</SimpleButton>
 	</div>
 
@@ -24,14 +27,15 @@
 </template>
 
 <script setup lang="ts">
-import {ref, useSlots} from "vue";
+import {ref, useSlots, type Component} from "vue";
 import SimpleButton from "./SimpleButton.vue";
 import {Spinner} from "vue-frontend-utils";
 
 const props = withDefaults(defineProps<{
 	message?: string,
 	action: (...args: any) => any,
-	confirmClasses?: string
+	confirmClasses?: string,
+	confirmIcon?: Component
 }>(), {
 	message : "Click again to confirm"
 });

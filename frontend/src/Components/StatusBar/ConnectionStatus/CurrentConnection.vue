@@ -51,5 +51,5 @@
 <script setup lang="ts">
 
 import ConnectionStatusDot from "./ConnectionStatusDot.vue";
-import {ConnectionStatus} from "../../Stores/ConnectionStore";
+import {ConnectionStatus} from "../../../Stores/ConnectionStore";
 </script>

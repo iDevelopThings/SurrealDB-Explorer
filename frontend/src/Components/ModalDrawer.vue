@@ -1,6 +1,6 @@
 <script lang="ts">
 
-import {defineComponent, h} from "vue";
+import {defineComponent, h, reactive} from "vue";
 import {ModalManager} from "vue-frontend-utils";
 
 export default defineComponent({
@@ -20,7 +20,7 @@ export default defineComponent({
 
 			const comp = h(modalComp, {
 				key   : modal.getTrigger(),
-				modal : modal,
+				modal : reactive(modal),
 				//name   : data.name,
 				//isOpen : data.isOpen,
 				...extraProps,

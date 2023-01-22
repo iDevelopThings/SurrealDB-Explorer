@@ -3,12 +3,11 @@ import {defineConfig} from "vite";
 import vue from "@vitejs/plugin-vue";
 import {ClassStoresPlugin} from "@idevelopthings/vue-class-stores/vite";
 import {VueFrontendUtils} from "vue-frontend-utils/vite";
-import resolveConfig from "tailwindcss/resolveConfig";
+//@ts-ignore
+import * as fs from "fs";
 import {readFileSync} from "fs";
 //@ts-ignore
 import * as monacoEditorPlugin from "vite-plugin-monaco-editor";
-//@ts-ignore
-import * as fs from "fs";
 
 const {version} = JSON.parse(readFileSync("./package.json", "utf8"));
 
@@ -30,10 +29,8 @@ export default defineConfig({
 
 		{
 			name : "frontend-vite-plugin",
-
 			async configResolved(config) {
-
-				const conf = resolveConfig(await import("./tailwind.config.cjs"));
+				/*const conf = resolveConfig(await import("./tailwind.config.cjs"));
 
 				function flattenObject(ob) {
 					var toReturn = {};
@@ -63,14 +60,15 @@ export type ColorKeys = ${Object.keys(colors).map(c => `'${c}'`).join(" | ")};
 export const colors = ${JSON.stringify(colors, null, 2)};
 				`;
 
-				await fs.promises.writeFile("./src/.generated/Colors.ts", file);
+				await fs.promises.writeFile("./src/.generated/Colors.ts", file);*/
 			}
 
 		} as Plugin,
 	],
 	resolve : {
 		alias : {
-			"@" : "/src",
+			"@"   : "/src",
+			"vue" : "vue/dist/vue.esm-bundler",
 		},
 	},
 	define  : {

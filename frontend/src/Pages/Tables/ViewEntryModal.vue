@@ -64,7 +64,7 @@ import {Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot} from 
 import {XMarkIcon} from "@heroicons/vue/24/outline";
 import {tableStore} from "../../Stores/TableStore.js";
 import JsonViewer from "../../Services/JsonViewer/Components/json-viewer.vue";
-import {TableViewer} from "../../Stores/TableViewer";
+import {TableViewer} from "../../Services/TableViewer/TableViewer";
 import Spinner from "../../Components/Spinner.vue";
 
 const props = defineProps<{

@@ -1,6 +1,18 @@
 name: Wails build
 
-#on: [ push, pull_request ]
+#  - name: Set output
+#    id: vars
+#    run: echo "tag=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
+#  - name: Check output
+#    env:
+#      RELEASE_VERSION: ${{ steps.vars.outputs.tag }}
+#    run: |
+#      echo Release version: $RELEASE_VERSION
+#      echo ${{ steps.vars.outputs.tag }}
+#      touch ./../../.env
+#      echo "APP_VERSION=$RELEASE_VERSION" >> ./frontend/.env
+#      touch ./../../frontend/.env
+#      echo "VITE_APP_VERSION=$RELEASE_VERSION" >> ./frontend/.env
 
 on:
   push:

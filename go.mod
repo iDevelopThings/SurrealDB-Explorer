@@ -4,14 +4,18 @@ go 1.18
 
 require (
 	github.com/Envuso/go-ioc-container v0.0.5
-	github.com/google/uuid v1.1.2
+	github.com/Masterminds/semver v1.5.0
+	github.com/google/uuid v1.2.0
+	github.com/octoper/go-ray v0.1.5
 	github.com/vrischmann/userdir v0.0.0-20151206171402-20f291cebd68
 	github.com/wailsapp/wails/v2 v2.2.0
 )
 
 require (
 	github.com/bep/debounce v1.2.1 // indirect
+	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/go-ole/go-ole v1.2.6 // indirect
+	github.com/gomarkdown/markdown v0.0.0-20210208175418-bda154fe17d8 // indirect
 	github.com/imdario/mergo v0.3.12 // indirect
 	github.com/jchv/go-winloader v0.0.0-20210711035445-715c2860da7e // indirect
 	github.com/labstack/echo/v4 v4.9.0 // indirect
