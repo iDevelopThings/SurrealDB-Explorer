@@ -4,11 +4,12 @@ const loggerSymbol = Symbol("Logger");
 class LoggerInstance {
 
 	private originalMethods = {
-		error: console.error,
-		info: console.info,
-		log: console.log,
-		trace: console.trace,
-		warn: console.warn,
+		debug : console.debug,
+		error : console.error,
+		info  : console.info,
+		log   : console.log,
+		trace : console.trace,
+		warn  : console.warn,
 	}
 
 	constructor() {
@@ -26,6 +27,11 @@ class LoggerInstance {
 	public error(...data: any[]) {
 		this.originalMethods.error(...arguments);
 		LogError(data.join(" "));
+	}
+
+	public debug(...data: any[]) {
+		this.originalMethods.debug(...arguments);
+		LogDebug(data.join(" "));
 	}
 
 	public info(...data: any[]) {
