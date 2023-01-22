@@ -2,6 +2,7 @@ package backend
 
 import (
 	_ "embed"
+	"github.com/Masterminds/semver"
 	"wails_vue/backend/Config"
 	"wails_vue/backend/FileStore"
 )
@@ -14,13 +15,16 @@ type ApplicationSettings struct {
 	// "surrealdb_explorer"
 	Name string `json:"name"`
 
-	Icon []byte `json:"icon"`
+	Icon []byte `json:"-"`
+
+	Version *semver.Version `json:"version"`
 }
 
 func NewApplicationSettings() *ApplicationSettings {
 	settings := &ApplicationSettings{
-		Title: "SurrealDB Explorer",
-		Name:  "surrealdb_explorer",
+		Title:   "SurrealDB Explorer",
+		Name:    "surrealdb_explorer",
+		Version: semver.MustParse("0.0.9"),
 	}
 
 	FileStore.NewStores(settings.Name)

@@ -5,6 +5,7 @@ import (
 	"embed"
 	"github.com/Envuso/go-ioc-container"
 	"github.com/wailsapp/wails/v2/pkg/application"
+	"github.com/wailsapp/wails/v2/pkg/logger"
 	"github.com/wailsapp/wails/v2/pkg/options"
 	"github.com/wailsapp/wails/v2/pkg/options/assetserver"
 	"github.com/wailsapp/wails/v2/pkg/options/mac"
@@ -13,6 +14,7 @@ import (
 	goRuntime "runtime"
 	"wails_vue/backend/Config"
 	"wails_vue/backend/FileStore"
+	"wails_vue/backend/Updater"
 	"wails_vue/backend/Util"
 )
 
@@ -51,7 +53,8 @@ func BootApplication(
 		Width:  1024,
 		Height: 768,
 
-		Logger: Logger,
+		Logger:             Logger,
+		LogLevelProduction: logger.TRACE,
 
 		Menu: menuBuilder.Build(app),
 
@@ -106,13 +109,18 @@ func BootApplication(
 type App struct {
 	ctx    context.Context
 	Config *AllConfig `json:"config"`
+
+	Updater *Updater.AppUpdater
 }
 
 func NewApp() *App {
 	return &App{}
 }
 
-func (a *App) startup(window *Config.Window) {
+func (a *App) startup(window *Config.Window, appSettings *ApplicationSettings) {
+	a.Updater = Updater.NewAppUpdater(a.ctx, appSettings.Version)
+	a.Updater.RunUpdateChecker()
+
 	if window.CanSetDimensions() {
 		runtime.WindowSetSize(a.ctx, window.Width, window.Height)
 	}
@@ -189,4 +197,16 @@ func (a *App) OpenFile(path string) {
 
 func (a *App) OpenLogFile() {
 	a.OpenFile(Logger.GetFilePath())
+}
+
+func (a *App) GetCurrentVersion() string {
+	return a.Updater.CurrentVersion.String()
+}
+
+func (a *App) UpdateCheck() *Updater.UpdateInfo {
+	if a.Updater.IsUpdateAvailable() {
+		return a.Updater.LatestVersion
+	}
+
+	return nil
 }
