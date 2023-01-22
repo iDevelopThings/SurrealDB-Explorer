@@ -7,7 +7,11 @@
 		</span>
 		</div>
 
-		<button @click="$modals.show('updates:info')" class="bg-main-400 flex flex-row items-center px-2 py-0.5 space-x-1 ">
+		<button
+			v-if="$app.$updater.hasUpdateAvailable"
+			@click="$modals.show('updates:info')"
+			class="bg-main-400 flex flex-row items-center px-2 py-0.5 space-x-1 "
+		>
 			<span class="font-semibold text-xs text-white">
 				Update Available
 			</span>

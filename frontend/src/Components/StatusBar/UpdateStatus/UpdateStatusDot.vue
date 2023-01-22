@@ -4,10 +4,14 @@
 
 <script setup lang="ts">
 import {computed} from "vue";
-import {app} from "../../../Stores/AppStore";
+import {app} from "@/Stores/AppStore";
 
 const dotBg = computed(() => {
 	const update = app.$updater.info;
+
+	if (!update) {
+		return "bg-green-500";
+	}
 
 	if (update.version.major > app.$updater.currentVersion.major) {
 		return "bg-red-500";

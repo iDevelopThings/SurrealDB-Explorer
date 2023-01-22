@@ -61,6 +61,14 @@ export class Updater {
 		this.state.hide = value;
 	}
 
+	get hasUpdateAvailable() {
+		if(!this.state.info) {
+			return false;
+		}
+
+		return this.state.info.version.compare(this.state.current) === 1;
+	}
+
 	get currentVersion() {
 		return this.state.current;
 	}
