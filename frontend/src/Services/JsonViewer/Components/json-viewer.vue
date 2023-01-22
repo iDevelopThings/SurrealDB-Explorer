@@ -1,12 +1,17 @@
 <template>
 	<div :class="jvClass">
-		<div v-if="copyable" :class="`jv-tooltip ${copyText.align || 'right'}`">
-        <span ref="clip" class="jv-button" :class="{ copied }">
-        <slot name="copy" :copied="copied">
-          {{ copied ? copyText.copiedText : copyText.copyText }}
-        </slot>
-      </span>
+		<div :class="`jv-tooltip right flex flex-row items-center`">
+			<div v-if="copyable" :class="`jv-tooltip`">
+		        <span ref="clip" class="jv-button" :class="{ copied }">
+			        <slot name="copy" :copied="copied">
+			          {{ copied ? copyText.copiedText : copyText.copyText }}
+			        </slot>
+		        </span>
+			</div>
+
+			<slot name="actions" />
 		</div>
+
 		<div class="jv-code" :class="{ open: expandCode, boxed }">
 			<json-box ref="jsonBox" :value="value" :sort="sort" :preview-mode="previewMode" />
 		</div>
