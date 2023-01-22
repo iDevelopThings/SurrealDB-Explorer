@@ -8,13 +8,25 @@ type QResult<T> = {
 	error?: Error,
 }
 
+type QuerySpeedTypes = "slow" | "med" | "fast";
+
 type QResults<T> = QResult<T>[];
+
+const intervals: [string, (t: number) => number][] = [
+	["µs", t => t / 1000],
+	["ms", t => t],
+	["s", t => t * 1000],
+	["m", t => t * 60000],
+];
 
 export class QueryResult<T = any> {
 	private _query: string;
 	private _params: any;
 
 	private _result: QResults<T>;
+
+	private _itemCount: number = 0;
+	private _time: { unit: any; timeMs: number, formatted: string, speedType: QuerySpeedTypes };
 
 	private _item: T;
 	private _items: T[];
@@ -23,20 +35,44 @@ export class QueryResult<T = any> {
 	private _failed: boolean = false;
 	private _error: Error    = null;
 
+	private _timeout: any = null;
+
+	public static timeoutInterval = 10000;
+
 	constructor(query: string, params: any) {
 		this._query  = query;
 		this._params = params;
 	}
 
 	async execute() {
-		try {
-			this._result = await Surreal.Instance.query(this._query, this._params);
 
-			this.processResult();
-		} catch (error) {
-			this._error  = error;
-			this._failed = true;
-		}
+		await new Promise(async (resolve, reject) => {
+			let handled = false;
+
+			this._timeout = setTimeout(() => {
+				this._failed = true;
+				this._error  = new Error("Query timed out.");
+
+				handled = true;
+				resolve(false);
+			}, QueryResult.timeoutInterval);
+
+			try {
+				this._result = await Surreal.Instance.query(this._query, this._params);
+
+				clearTimeout(this._timeout);
+
+				if (handled) {
+					return;
+				}
+				this.processResult();
+			} catch (error) {
+				this._error  = error;
+				this._failed = true;
+			}
+
+			resolve(true);
+		});
 
 		return this;
 	}
@@ -100,10 +136,14 @@ export class QueryResult<T = any> {
 
 		if (result.status === "OK") {
 			if (result.result instanceof Array) {
-				this._items = result.result;
+				this._items     = result.result;
+				this._itemCount = result.result.length;
 			} else {
-				this._item = result.result;
+				this._item      = result.result;
+				this._itemCount = 1;
 			}
+
+			this.processTimeTaken(result.time);
 		}
 	}
 
@@ -113,5 +153,57 @@ export class QueryResult<T = any> {
 
 	get rawResult() {
 		return this._result;
+	}
+
+	get itemCount() {
+		return this._itemCount;
+	}
+
+	get timeTaken() {
+		return this._time?.formatted;
+	}
+
+	get isSlow() {
+		return this._time?.speedType === "slow";
+	}
+
+	get isMedium() {
+		return this._time?.speedType === "med";
+	}
+
+	get isFast() {
+		return this._time?.speedType === "fast";
+	}
+
+	private processTimeTaken(time: string): void {
+		if (!time) return undefined;
+
+		let timeMs = 0;
+		let unit   = null;
+		let speedType: QuerySpeedTypes;
+
+		for (const [u, convert] of intervals) {
+			if (time.endsWith(u)) {
+				unit   = u;
+				timeMs = convert(parseFloat(time.slice(0, -u.length)));
+				break;
+			}
+		}
+
+		if (timeMs > 2000) {
+			speedType = "slow";
+		} else if (timeMs > 1000 && timeMs <= 2000) {
+			speedType = "med";
+		} else {
+			speedType = "fast";
+		}
+
+
+		this._time = {
+			timeMs,
+			unit,
+			speedType,
+			formatted : parseFloat(time.replace(unit, "")).toFixed(2) + " " + unit
+		};
 	}
 }
