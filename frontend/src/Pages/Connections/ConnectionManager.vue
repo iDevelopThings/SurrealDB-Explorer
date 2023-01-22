@@ -1,8 +1,8 @@
 <template>
-
-	<div class="flex flex-col space-y-6 py-8">
-
-
+	<div
+		class="space-y-6 py-8 flex flex-col w-full h-full relative overflow-y-hidden"
+		:style="{maxHeight: $app.pageHeight + 'px'}"
+	>
 		<AddConnection />
 
 		<p class="text-2xl text-main-200">
