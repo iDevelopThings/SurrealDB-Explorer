@@ -2,6 +2,7 @@
   "scripts": {
     "start:frontend": "wails dev",
     "start:backend": "wails dev -noreload -debounce 1000",
-    "build:go": "wails build"
+    "build:go": "wails build",
+    "frontend" : "cd frontend && npm run dev"
   }
 }
