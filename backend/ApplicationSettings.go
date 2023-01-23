@@ -24,7 +24,7 @@ func NewApplicationSettings() *ApplicationSettings {
 	settings := &ApplicationSettings{
 		Title:   "SurrealDB Explorer",
 		Name:    "surrealdb_explorer",
-		Version: semver.MustParse("0.0.9"),
+		Version: semver.MustParse("0.0.11"),
 	}
 
 	FileStore.NewStores(settings.Name)
