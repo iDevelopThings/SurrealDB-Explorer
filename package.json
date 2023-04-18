@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "start:frontend": "wails dev",
+    "start:frontend": "CGO_ENABLED=\"1\";CGO_LDFLAGS=-framework UniformTypeIdentifiers; wails dev -tags desktop,production,debug",
     "start:backend": "wails dev -noreload -debounce 1000",
     "build:go": "wails build"
   }

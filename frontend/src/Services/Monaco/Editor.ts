@@ -7,6 +7,7 @@ import {defineEvent, type RegisteredEvent} from "vue-frontend-utils";
 import {ref} from "vue";
 
 import {CommandsRegistry} from "monaco-editor/esm/vs/platform/commands/common/commands";
+import {app} from "@/Stores/AppStore";
 
 export const updateKeyBinding = (
 	editor: any,
@@ -157,9 +158,12 @@ export class EditorManager {
 			scrollBeyondLastLine : false,
 			overviewRulerLanes   : 0,
 			fontFamily           : "JetBrains Mono",
+			fontLigatures        : true,
+			fontSize             : app.$appConfig.preferences.editorFontSize,
 			renderLineHighlight  : "none",
 			lineDecorationsWidth : 12,
 			lineNumbersMinChars  : 1,
+			padding              : {top : 10, bottom : 10},
 			glyphMargin          : false,
 			theme                : "base",
 			automaticLayout      : true,
@@ -253,6 +257,13 @@ export class EditorManager {
 
 	public forceResize(): void {
 		this.current.layout();
+	}
+
+	public changeFontSize(size: number): void {
+		if (!this.current) return;
+		this.current.updateOptions({
+			fontSize : size,
+		});
 	}
 }
 

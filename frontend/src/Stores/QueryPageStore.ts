@@ -1,10 +1,14 @@
 import {Store} from "@idevelopthings/vue-class-stores/vue";
 import db from "../Services/Database/Database";
-import {Editor} from "../Services/Monaco/Editor";
+import {Editor} from "@/Services/Monaco/Editor";
 import {type Ref, nextTick} from "vue";
 import {LocalStorage} from "typesafe-local-storage";
 import {type EventSubscriptionContract, modal} from "vue-frontend-utils";
-import {QueryResult} from "../Services/Database/QueryResult";
+import {QueryResult} from "@/Services/Database/QueryResult";
+import {UpdatePreferences} from "../../wailsjs/go/backend/App";
+import {app} from "@/Stores/AppStore";
+
+export type PaneSize = { min: number, max: number, size: number };
 
 export type QueryRunResult = {
 	error?: string;
@@ -12,6 +16,8 @@ export type QueryRunResult = {
 
 	queryResult: QueryResult
 }
+
+export type PageLayout = "horizontal" | "vertical";
 
 interface IQueryPageStore {
 	running: boolean;
@@ -21,6 +27,9 @@ interface IQueryPageStore {
 	result: QueryRunResult;
 
 	viewRawResponse: boolean;
+
+	paneSizes: PaneSize[];
+	layout: PageLayout;
 }
 
 class QueryPageStore extends Store<QueryPageStore, IQueryPageStore>() {
@@ -39,7 +48,12 @@ class QueryPageStore extends Store<QueryPageStore, IQueryPageStore>() {
 				error       : undefined,
 				result      : undefined,
 				queryResult : undefined,
-			}
+			},
+			paneSizes         : [
+				{min : 10, max : 100, size : 90},
+				{min : 10, max : 100, size : 10},
+			],
+			layout            : "horizontal",
 		};
 	}
 
@@ -56,6 +70,10 @@ class QueryPageStore extends Store<QueryPageStore, IQueryPageStore>() {
 
 		this._onRun    = Editor.onRun.subscribe(this.onRunQuery.bind(this));
 		this._onChange = Editor.onChange.subscribe(this.onEditorChange.bind(this));
+
+		this.state.paneSizes = app.$appConfig.preferences.paneSizes;
+		this.state.layout    = app.$appConfig.preferences.panelLayout as PageLayout;
+
 	}
 
 	async onRunQuery({content}) {
@@ -149,6 +167,21 @@ class QueryPageStore extends Store<QueryPageStore, IQueryPageStore>() {
 		return this.state.result.result;
 	}
 
+	toggleLayout() {
+		this.$layout = this.$layout === "horizontal" ? "vertical" : "horizontal";
+
+		const current       = app.$appConfig.preferences;
+		current.panelLayout = this.$layout;
+		UpdatePreferences(JSON.parse(JSON.stringify(current))).catch(console.error);
+	}
+
+	onPaneResized(event: { min: number, max: number, size: number }[]) {
+		this.state.paneSizes = event;
+
+		const current     = app.$appConfig.preferences;
+		current.paneSizes = event;
+		UpdatePreferences(JSON.parse(JSON.stringify(current))).catch(console.error);
+	}
 }
 
 export const queryPage = new QueryPageStore();

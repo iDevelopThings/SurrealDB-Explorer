@@ -1,7 +1,7 @@
 import {Store, StoreManager, Computed, OnInit} from "@idevelopthings/vue-class-stores/vue";
 import {Config} from "../../wailsjs/go/models";
 import {Add, SetCurrent} from "../../wailsjs/go/Config/Connections";
-import {AsyncFunc} from "../Services/AsyncProcessor";
+import {AsyncFunc} from "@/Services/AsyncProcessor";
 import db, {onLostConnection, onDisconnect, onReconnected} from "../Services/Database/Database";
 import {schemaStore} from "./SchemaStore";
 import {SurrealSchema} from "surrealdb.schema";

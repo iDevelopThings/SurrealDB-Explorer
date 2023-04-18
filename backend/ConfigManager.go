@@ -10,4 +10,5 @@ type AllConfig struct {
 	Window      *Config.Window       `json:"window,omitempty"`
 	Connections *Config.Connections  `json:"connections,omitempty"`
 	Queries     *Config.QueriesList  `json:"queries,omitempty"`
+	Preferences *Config.Preferences  `json:"preferences,omitempty"`
 }

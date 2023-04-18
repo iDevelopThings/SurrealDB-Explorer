@@ -34,6 +34,7 @@ func BootApplication(
 	windowSettings *Config.Window,
 	connections *Config.Connections,
 	queriesList *Config.QueriesList,
+	preferences *Config.Preferences,
 	menuBuilder *ApplicationMenuBuilder,
 ) {
 
@@ -42,6 +43,7 @@ func BootApplication(
 		Window:      windowSettings,
 		Connections: connections,
 		Queries:     queriesList,
+		Preferences: preferences,
 	}
 
 	Logger = Util.NewFileLogger(FileStore.Stores.GetAppDirFilePath("log.txt"))
@@ -209,4 +211,8 @@ func (a *App) UpdateCheck() *Updater.UpdateInfo {
 	}
 
 	return nil
+}
+
+func (a *App) UpdatePreferences(preferences *Config.Preferences) {
+	a.Config.Preferences.Update(preferences)
 }

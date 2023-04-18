@@ -2,19 +2,20 @@ import {Store, OnInit} from "@idevelopthings/vue-class-stores/vue";
 import db from "../Services/Database/Database";
 import {backend} from "../../wailsjs/go/models";
 import {connectionStore} from "./ConnectionStore";
-import {Theme} from "../Services/Theme";
-import {GetAllConfig} from "../../wailsjs/go/backend/App";
-import {Editor, EditEntryEditor, CreateEntryEditor, EditorManager} from "../Services/Monaco/Editor";
-import {type Ref, watch, computed, type ComputedRef} from "vue";
+import {Theme} from "@/Services/Theme";
+import {GetAllConfig, UpdatePreferences} from "../../wailsjs/go/backend/App";
+import {Editor, EditEntryEditor, CreateEntryEditor, EditorManager} from "@/Services/Monaco/Editor";
+import {type Ref, computed, type ComputedRef} from "vue";
 import {useElementSize} from "@vueuse/core";
 import {type WatchStopHandle} from "@vue/runtime-core";
-import {Updater} from "../Services/Updater/Updater";
+import {Updater} from "@/Services/Updater/Updater";
 import StatusBar from "../Components/StatusBar/StatusBar.vue";
 
 
 interface IAppStore {
 	updater: Updater;
 	appConfig: backend.AllConfig;
+	sidebarExpanded: boolean;
 
 	pageWatcher: {
 		height: number,
@@ -31,6 +32,8 @@ class AppStore extends Store<AppStore, IAppStore>() {
 			appConfig : null,
 
 			updater : null,
+
+			sidebarExpanded : true,
 
 			pageWatcher : {
 				height  : 0,
@@ -92,6 +95,34 @@ class AppStore extends Store<AppStore, IAppStore>() {
 			return pageWrapperSize.height.value - statusBarSize.height.value;
 		});
 
+	}
+
+	public toggleSidebarExpanded() {
+		this.state.sidebarExpanded = !this.state.sidebarExpanded;
+	}
+
+	public onZoomIn() {
+		this.$appConfig.preferences.editorFontSize += 1;
+		this.$appConfig.preferences.queryResultFontSize += 1;
+		UpdatePreferences(this.$appConfig.preferences).catch(console.error);
+
+		Editor.changeFontSize(this.$appConfig.preferences.editorFontSize);
+	}
+
+	public onZoomOut() {
+		this.$appConfig.preferences.editorFontSize -= 1;
+		this.$appConfig.preferences.queryResultFontSize -= 1;
+		UpdatePreferences(this.$appConfig.preferences).catch(console.error);
+
+		Editor.changeFontSize(this.$appConfig.preferences.editorFontSize);
+	}
+
+	public onZoomReset() {
+		this.$appConfig.preferences.editorFontSize      = 16;
+		this.$appConfig.preferences.queryResultFontSize = 14;
+		UpdatePreferences(this.$appConfig.preferences).catch(console.error);
+
+		Editor.changeFontSize(this.$appConfig.preferences.editorFontSize);
 	}
 
 

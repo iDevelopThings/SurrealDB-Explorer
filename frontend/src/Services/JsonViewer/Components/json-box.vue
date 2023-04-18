@@ -90,7 +90,7 @@ export default defineComponent({
 		} else if (typeof value === "function") {
 			dataType = JsonFunction;
 		}
-		if (value.constructor === RegExp) {
+		if (value?.constructor === RegExp) {
 			// console.log("type", value.constructor === RegExp);
 			// value=value.toString()
 			dataType = JsonRegexp;

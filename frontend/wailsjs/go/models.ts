@@ -56,6 +56,58 @@ export namespace Config {
 		    return a;
 		}
 	}
+	export class PaneSize {
+	    min: number;
+	    max: number;
+	    size: number;
+	
+	    static createFrom(source: any = {}) {
+	        return new PaneSize(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.min = source["min"];
+	        this.max = source["max"];
+	        this.size = source["size"];
+	    }
+	}
+	export class Preferences {
+	    editorFontSize: number;
+	    queryResultFontSize: number;
+	    paneSizes: PaneSize[];
+	    panelLayout: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new Preferences(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.editorFontSize = source["editorFontSize"];
+	        this.queryResultFontSize = source["queryResultFontSize"];
+	        this.paneSizes = this.convertValues(source["paneSizes"], PaneSize);
+	        this.panelLayout = source["panelLayout"];
+	    }
+	
+		convertValues(a: any, classs: any, asMap: boolean = false): any {
+		    if (!a) {
+		        return a;
+		    }
+		    if (a.slice) {
+		        return (a as any[]).map(elem => this.convertValues(elem, classs));
+		    } else if ("object" === typeof a) {
+		        if (asMap) {
+		            for (const key of Object.keys(a)) {
+		                a[key] = new classs(a[key]);
+		            }
+		            return a;
+		        }
+		        return new classs(a);
+		    }
+		    return a;
+		}
+	}
 	export class QueriesList {
 	    queries: {[key: string]: Query[]};
 	
@@ -210,6 +262,7 @@ export namespace backend {
 	    window?: Config.Window;
 	    connections?: Config.Connections;
 	    queries?: Config.QueriesList;
+	    preferences?: Config.Preferences;
 	
 	    static createFrom(source: any = {}) {
 	        return new AllConfig(source);
@@ -221,6 +274,7 @@ export namespace backend {
 	        this.window = this.convertValues(source["window"], Config.Window);
 	        this.connections = this.convertValues(source["connections"], Config.Connections);
 	        this.queries = this.convertValues(source["queries"], Config.QueriesList);
+	        this.preferences = this.convertValues(source["preferences"], Config.Preferences);
 	    }
 	
 		convertValues(a: any, classs: any, asMap: boolean = false): any {

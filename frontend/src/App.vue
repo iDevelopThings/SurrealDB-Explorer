@@ -6,10 +6,10 @@
 
 		<div class="w-full flex flex-row h-full overflow-y-hidden">
 			<AppSidebar />
-
+<!--            border-l border-l-main-500-->
 			<div
 				ref="pageWrapper"
-				class="h-full border-l border-l-main-500 w-full overflow-y-hidden"
+				class="h-full w-full overflow-y-hidden"
 			>
 
 				<template v-if="$table.hasTables()">
@@ -22,13 +22,6 @@
 					<component :key="route.path" :is="Component" />
 				</router-view>
 
-				<!--				<router-view v-slot="{ Component }">
-									<transition>
-										<keep-alive>
-											<component :key="$route.fullPath" :is="Component" />
-										</keep-alive>
-									</transition>
-								</router-view>-->
 			</div>
 		</div>
 

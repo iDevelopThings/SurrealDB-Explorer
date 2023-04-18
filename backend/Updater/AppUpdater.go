@@ -7,7 +7,12 @@ import (
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 	"io"
 	"net/http"
+	"os"
 	"time"
+
+	ss "github.com/blang/semver"
+
+	"github.com/rhysd/go-github-selfupdate/selfupdate"
 )
 
 type AppUpdater struct {
@@ -102,6 +107,40 @@ func (a *AppUpdater) CheckForUpdate() {
 	} else {
 		runtime.LogDebugf(a.Ctx, "No update available")
 	}
+}
+
+func (a *AppUpdater) RunNew() {
+	selfupdate.EnableLog()
+
+	up, err := selfupdate.NewUpdater(selfupdate.Config{})
+	if err != nil {
+		panic(err)
+	}
+
+	cv := ss.MustParse("0.0.9")
+	r, err := up.UpdateCommand(
+		"/Users/sam/Code/Testing/SurrealDbExplorer/build/bin/SurrealDB Explorer.app/Contents/MacOS/SurrealDB Explorer",
+		cv,
+		"iDevelopThings/SurrealDB-Explorer",
+	)
+
+	if err != nil {
+		runtime.LogInfof(a.Ctx, "Error occurred while updating binary: %s", err.Error())
+		os.Exit(2)
+	}
+	runtime.LogInfof(a.Ctx, "Successfully updated to version %s", r.Version.String())
+	rr, err := runtime.MessageDialog(a.Ctx, runtime.MessageDialogOptions{
+		Title:   "Update",
+		Message: "Successfully updated to version " + r.Version.String(),
+		Type:    runtime.InfoDialog,
+	})
+	if err != nil {
+		runtime.LogInfof(a.Ctx, "Error occurred while updating binary: %s", err.Error())
+		os.Exit(2)
+	}
+
+	runtime.LogInfof(a.Ctx, rr)
+	os.Exit(1)
 }
 
 func (a *AppUpdater) IsUpdateAvailable() bool {

@@ -60,26 +60,33 @@ export default defineComponent({
 
   },
   render () {
-    let elements = []
 
-    if (!this.previewMode && !this.keyName) {
-      elements.push(h('span', {
-        class: {
-          'jv-toggle': true,
-          'open': !!this.expand,
-        },
-        onClick:this.toggle
-      }))
-    }
+	 /* if (!this.value?.length) {
+		  console.log(this.jsonValue, this.value, "prevent render");
+		  return;
+	  }*/
 
-    elements.push(h('span', {
-      class: {
-        'jv-item': true,
-        'jv-array': true,
-      },
-      innerText: '['
-    }))
-    if (this.expand) {
+	  let elements = [];
+
+	  if (!this.previewMode && !this.keyName) {
+		  elements.push(h("span", {
+			  class   : {
+				  "jv-toggle" : true,
+				  "open"      : !!this.expand,
+			  },
+			  onClick : this.toggle
+		  }));
+	  }
+
+	  elements.push(h("span", {
+		  class     : {
+			  "jv-item"  : true,
+			  "jv-array" : true,
+		  },
+		  innerText : "["
+	  }));
+
+	  if (this.expand) {
       this.value.forEach((value, key) => {
         elements.push(h(JsonBox, {
           key,

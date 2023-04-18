@@ -1,0 +1,73 @@
+
+
+.splitpanes.sdb-splitter-theme .splitpanes__pane {
+    @apply bg-main-900;
+}
+
+.splitpanes.sdb-splitter-theme .splitpanes__splitter {
+    @apply bg-main-700 select-none;
+    box-sizing: border-box;
+    position: relative;
+    flex-shrink: 0
+}
+
+.splitpanes.sdb-splitter-theme .splitpanes__splitter:before, .splitpanes.sdb-splitter-theme .splitpanes__splitter:after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    @apply bg-main-300;
+    transition: background-color .3s
+}
+
+.splitpanes.sdb-splitter-theme .splitpanes__splitter:hover:before, .splitpanes.sdb-splitter-theme .splitpanes__splitter:hover:after {
+    @apply bg-main-200;
+}
+
+.splitpanes.sdb-splitter-theme .splitpanes__splitter:first-child {
+    cursor: auto
+}
+
+.sdb-splitter-theme.splitpanes .splitpanes .splitpanes__splitter {
+    z-index: 1
+}
+
+.sdb-splitter-theme.splitpanes--vertical > .splitpanes__splitter, .sdb-splitter-theme .splitpanes--vertical > .splitpanes__splitter {
+    width: 7px;
+    @apply border-l border-main-500;
+    margin-left: -1px
+}
+
+.sdb-splitter-theme.splitpanes--vertical > .splitpanes__splitter:before, .sdb-splitter-theme.splitpanes--vertical > .splitpanes__splitter:after, .sdb-splitter-theme .splitpanes--vertical > .splitpanes__splitter:before, .sdb-splitter-theme .splitpanes--vertical > .splitpanes__splitter:after {
+    transform: translateY(-50%);
+    width: 1px;
+    height: 30px
+}
+
+.sdb-splitter-theme.splitpanes--vertical > .splitpanes__splitter:before, .sdb-splitter-theme .splitpanes--vertical > .splitpanes__splitter:before {
+    margin-left: -2px
+}
+
+.sdb-splitter-theme.splitpanes--vertical > .splitpanes__splitter:after, .sdb-splitter-theme .splitpanes--vertical > .splitpanes__splitter:after {
+    margin-left: 1px
+}
+
+.sdb-splitter-theme.splitpanes--horizontal > .splitpanes__splitter, .sdb-splitter-theme .splitpanes--horizontal > .splitpanes__splitter {
+    height: 7px;
+    @apply border-t border-main-500;
+    margin-top: -1px
+}
+
+.sdb-splitter-theme.splitpanes--horizontal > .splitpanes__splitter:before, .sdb-splitter-theme.splitpanes--horizontal > .splitpanes__splitter:after, .sdb-splitter-theme .splitpanes--horizontal > .splitpanes__splitter:before, .sdb-splitter-theme .splitpanes--horizontal > .splitpanes__splitter:after {
+    transform: translate(-50%);
+    width: 30px;
+    height: 1px
+}
+
+.sdb-splitter-theme.splitpanes--horizontal > .splitpanes__splitter:before, .sdb-splitter-theme .splitpanes--horizontal > .splitpanes__splitter:before {
+    margin-top: -2px
+}
+
+.sdb-splitter-theme.splitpanes--horizontal > .splitpanes__splitter:after, .sdb-splitter-theme .splitpanes--horizontal > .splitpanes__splitter:after {
+    margin-top: 1px
+}

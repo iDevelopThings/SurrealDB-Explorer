@@ -41,3 +41,7 @@ export function OpenLogFile() {
 export function UpdateCheck() {
   return window['go']['backend']['App']['UpdateCheck']();
 }
+
+export function UpdatePreferences(arg1) {
+  return window['go']['backend']['App']['UpdatePreferences'](arg1);
+}

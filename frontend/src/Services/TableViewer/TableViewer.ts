@@ -101,7 +101,7 @@ export class TableViewer {
 
 		const hasSchema = field === undefined || this.schema?.getFields()?.length === 0;
 
-		if (key === "id") {
+		if (key === "id" && Thing.looksLike(value)) {
 			return new Thing(value);
 		}
 
@@ -165,10 +165,11 @@ export class TableViewer {
 		this.loading     = true;
 
 		if (!this.loadedMeta) {
-			const result     = await db.query<{ total: number }>(`select count() as total from ${this.schema.name} group by id;`);
-			const totalItems = result.first?.total ?? 0;
-			this.totalRows   = totalItems;
-			this.totalPages  = Math.ceil(totalItems / options.perPageLimit);
+			const result     = await db.query<number>(
+				`select * from count((select id from ${this.schema.name}));`
+			);
+			this.totalRows   = result.first ?? 0;
+			this.totalPages  = Math.ceil(this.totalRows / options.perPageLimit);
 			this.loadedMeta  = true;
 		}
 
@@ -185,6 +186,7 @@ export class TableViewer {
 
 		const result = await db.query<any>(querySegments.join(" ") + ";");
 
+		console.log(result);
 		this.lastQueryResult = result;
 
 		if (result.failed) {

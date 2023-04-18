@@ -160,6 +160,15 @@ input {
     --jse-color-picker-border-box-shadow: #8c8c8c 0 0 0 1px;
 }
 
+.jse-theme-custom > .jse-main {
+    max-height: calc(100% - 41px);
+    height: 100%;
+}
+
+.jse-theme-custom .c1 .c1-lineNumbers .cm-gutterElement {
+    min-width: 10px !important;
+}
+
 /**
 TORCHLIGHT CSS START
  */
@@ -228,4 +237,8 @@ TORCHLIGHT CSS END
 .fade-in-element {
     animation: fadeIn 1s ease-in-out;
     animation-fill-mode: forwards;
+}
+
+.jv-toggle {
+    @apply select-none;
 }
