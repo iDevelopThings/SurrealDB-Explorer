@@ -1,5 +1,5 @@
 <template>
-	<div class="w-full max-w-[13em] bg-main-800 divide-y divide-slate-600">
+	<div class="w-full max-w-[13em] bg-main-800 divide-y divide-slate-600 overflow-y-scroll">
 		<div class="flex flex-col  justify-center">
 			<p class="py-3 px-6 text-lg">Tables</p>
 		</div>
