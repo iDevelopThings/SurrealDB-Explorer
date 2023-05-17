@@ -45,7 +45,8 @@ jobs:
       - name: Install Ubuntu Dependencies
         if: contains(matrix.os, 'ubuntu')
         run: |
-          sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.0-dev
+          sudo apt-get update -y -qq
+          sudo apt-get install -y --fix-broken libgtk-3-dev libwebkit2gtk-4.0-dev
 
       - name: Build Wails app
         run: |
