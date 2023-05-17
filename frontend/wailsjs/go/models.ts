@@ -180,11 +180,11 @@ export namespace Config {
 export namespace Updater {
 	
 	export class UpdateInfo {
-	    // Go type: semver.Version
+	    // Go type: semver
 	    version?: any;
 	    url: string;
 	    body: string;
-	    // Go type: time.Time
+	    // Go type: time
 	    publishedAt: any;
 	
 	    static createFrom(source: any = {}) {
@@ -225,7 +225,7 @@ export namespace backend {
 	export class ApplicationSettings {
 	    title: string;
 	    name: string;
-	    // Go type: semver.Version
+	    // Go type: semver
 	    version?: any;
 	
 	    static createFrom(source: any = {}) {
