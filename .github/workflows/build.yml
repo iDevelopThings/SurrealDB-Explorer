@@ -37,7 +37,7 @@ jobs:
       - name: setup node
         uses: actions/setup-node@v2
         with:
-          node-version: 14
+          node-version: 18
 
       - name: Get Wails
         run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
