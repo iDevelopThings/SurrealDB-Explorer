@@ -9,6 +9,8 @@ import {readFileSync} from "fs";
 //@ts-ignore
 import * as monacoEditorPlugin from "vite-plugin-monaco-editor";
 
+//import resolveConfig from "tailwindcss/resolveConfig";
+
 const {version} = JSON.parse(readFileSync("./package.json", "utf8"));
 
 export default defineConfig({
@@ -30,7 +32,7 @@ export default defineConfig({
 		{
 			name : "frontend-vite-plugin",
 			async configResolved(config) {
-				/*const conf = resolveConfig(await import("./tailwind.config.cjs"));
+				/*const conf = resolveConfig(await import("./tailwind.config"));
 
 				function flattenObject(ob) {
 					var toReturn = {};
@@ -52,7 +54,10 @@ export default defineConfig({
 					return toReturn;
 				}
 
-				const colors = flattenObject(conf.theme.colors);
+				const colors = {
+					...flattenObject(conf.theme.colors),
+					...flattenObject(conf.default.theme.extend.colors)
+				};
 
 				let file = `
 export type ColorKeys = ${Object.keys(colors).map(c => `'${c}'`).join(" | ")};

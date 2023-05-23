@@ -23,6 +23,8 @@ export class Updater {
 	public static async init() {
 		const inst = new Updater();
 
+		if (!window.runtime) return;
+
 		inst.state.current = new SemVer(await GetCurrentVersion());
 
 		const updateResult = await UpdateCheck();

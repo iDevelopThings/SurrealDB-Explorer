@@ -1,13 +1,19 @@
-import {editor, languages, type IDisposable} from "monaco-editor";
+import {editor, languages, type IDisposable, type Position, type CancellationToken} from "monaco-editor";
 import * as monaco from "monaco-editor";
-import {Theme} from "../Theme";
-import {schemaStore} from "../../Stores/SchemaStore";
-import {languageConfiguration, language} from "./LanguageConfiguration";
+import {schemaStore} from "@/Stores/SchemaStore";
+import {
+	languageConfiguration,
+	language,
+	languageTheme,
+	provideDocumentSemanticTokens,
+	legend
+} from "./LanguageConfiguration";
 import {defineEvent, type RegisteredEvent} from "vue-frontend-utils";
 import {ref} from "vue";
 
 import {CommandsRegistry} from "monaco-editor/esm/vs/platform/commands/common/commands";
 import {app} from "@/Stores/AppStore";
+import {GetDocs} from "../../../wailsjs/go/backend/App";
 
 export const updateKeyBinding = (
 	editor: any,
@@ -52,40 +58,30 @@ export class EditorManager {
 	}
 
 	public static async configureEditor() {
-		monaco.editor.defineTheme("base", {
-			base    : "vs-dark",
-			inherit : true,
-			rules   : [
-				{token : "string", foreground : Theme.get("emerald.400")},
-				{token : "keyword", foreground : Theme.get("violet.400")},
-				{token : "param", foreground : Theme.get("blue.200")},
-				{token : "comment", foreground : Theme.get("main.300")},
-				{token : "operator", foreground : Theme.get("main.200")},
-				{token : "predefined", foreground : Theme.get("blue.400")},
-			],
-			colors  : {
-				"editor.background"                 : Theme.get("main.900"),
-				"editorLineNumber.foreground"       : Theme.get("main.500"),
-				"editorLineNumber.activeForeground" : Theme.get("main.500")
-			}
-		});
+		monaco.editor.defineTheme("base", languageTheme);
 
-		monaco.languages.register({id : "surreal"});
+		monaco.languages.register({id: "surreal"});
 
 		monaco.languages.setLanguageConfiguration("surreal", languageConfiguration);
 		monaco.languages.setMonarchTokensProvider("surreal", language);
+		monaco.languages.registerDocumentSemanticTokensProvider("surreal", {
+			provideDocumentSemanticTokens: provideDocumentSemanticTokens,
+			getLegend: (): languages.SemanticTokensLegend => legend,
+			releaseDocumentSemanticTokens(resultId: string | undefined): void {
+			}
+		});
 
 		monaco.editor.setTheme("base");
 
 		monaco.languages.registerCompletionItemProvider("surreal", {
-			triggerCharacters      : [" "],
-			provideCompletionItems : (model, position) => {
+			triggerCharacters: [" "],
+			provideCompletionItems: (model, position) => {
 
 				const textUntilPosition = model.getValueInRange({
-					startLineNumber : position.lineNumber,
-					startColumn     : 1,
-					endLineNumber   : position.lineNumber,
-					endColumn       : position.column
+					startLineNumber: position.lineNumber,
+					startColumn: 1,
+					endLineNumber: position.lineNumber,
+					endColumn: position.column
 				});
 
 				const suggestions: languages.CompletionItem[] = [];
@@ -134,16 +130,63 @@ export class EditorManager {
 							startLineNumber : position.lineNumber,
 							startColumn     : position.column - matchValue.length,
 							endLineNumber   : position.lineNumber,
-							endColumn       : position.column
+							endColumn: position.column
 						}
 					})));
 				}
 
 				return {
-					suggestions : suggestions,
+					suggestions: suggestions,
 				};
 			}
 		});
+
+		let documentationInfo = await GetDocs();
+		const allCompletions = [];
+		if (documentationInfo) {
+			for (let [key, value] of Object.entries(documentationInfo.docs)) {
+				if (value.name?.endsWith('()')) {
+					value.name = value.name.slice(0, -2);
+				}
+				let insertParams = null;
+				if (value.params?.filter(param => param !== "").length > 0) {
+					insertParams = value.params.map((param, idx) => `\${${idx + 1}:${param}}`).join(", ")
+				}
+				allCompletions.push({
+					label: value.name,
+					kind: monaco.languages.CompletionItemKind.Function,
+					insertText: `${value.name}(${insertParams})`,
+					insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+					detail: value.summary,
+					documentation: {
+						value: value.documentation,
+						isTrusted: true,
+						supportHtml: true,
+						supportThemeIcons: true,
+					}
+				});
+			}
+		}
+
+		monaco.languages.registerCompletionItemProvider("surreal", {
+			provideCompletionItems: (model, position, context: languages.CompletionContext, token: CancellationToken) => {
+				const range = getWordRangeAtPosition(model, position);
+				const recentInput = getLastLineInputContent(model, position);
+
+				const filteredCompletions = allCompletions.filter(item => {
+					return item.label.toLowerCase().indexOf(recentInput.toLowerCase()) === 0;
+				})
+
+				return {
+					suggestions: filteredCompletions.map(item => ({...item, range})),
+				};
+			},
+			resolveCompletionItem(item: languages.CompletionItem, token: CancellationToken): languages.ProviderResult<languages.CompletionItem> {
+				return item;
+			}
+		});
+
+
 	}
 
 	public setup() {
@@ -153,23 +196,24 @@ export class EditorManager {
 
 	public get defaultOptions(): editor.IStandaloneEditorConstructionOptions {
 		return {
-			language             : "surreal",
-			contextmenu          : true,
-			scrollBeyondLastLine : false,
-			overviewRulerLanes   : 0,
-			fontFamily           : "JetBrains Mono",
-			fontLigatures        : true,
-			fontSize             : app.$appConfig.preferences.editorFontSize,
-			renderLineHighlight  : "none",
-			lineDecorationsWidth : 12,
-			lineNumbersMinChars  : 1,
-			padding              : {top : 10, bottom : 10},
-			glyphMargin          : false,
-			theme                : "base",
-			automaticLayout      : true,
-			quickSuggestions     : true,
-			minimap              : {
-				enabled : false
+			language: "surreal",
+			contextmenu: true,
+			scrollBeyondLastLine: false,
+			overviewRulerLanes: 0,
+			fontFamily: "JetBrains Mono",
+			fontLigatures: true,
+			fontSize: app.$appConfig.preferences.editorFontSize,
+			renderLineHighlight: "none",
+			lineDecorationsWidth: 12,
+			lineNumbersMinChars: 1,
+			padding: {top: 10, bottom: 10},
+			glyphMargin: false,
+			theme: "base",
+			automaticLayout: true,
+			quickSuggestions: true,
+			"semanticHighlighting.enabled": true,
+			minimap: {
+				enabled: false
 			}
 		};
 	}
@@ -192,8 +236,10 @@ export class EditorManager {
 		this.monacoEvents.onChange = this.current.getModel().onDidChangeContent((event) => {
 			this.content.value = this.current.getValue();
 
-			this.onChange.invoke({content : this.content.value});
+			this.onChange.invoke({content: this.content.value});
 		});
+
+//		this.current.getAction("editor.action.inspectTokens").run();
 
 		this.setActions();
 	}
@@ -272,3 +318,30 @@ export const Editor = new EditorManager("query");
 export const EditEntryEditor = new EditorManager("update-entry");
 
 export const CreateEntryEditor = new EditorManager("create-entry");
+
+function getWordRangeAtPosition(model, position) {
+	const word = model.getWordAtPosition(position);
+	if (word) {
+		const start = position.column - word.word.length - 1;
+		const end = position.column;
+		return new monaco.Range(position.lineNumber, start, position.lineNumber, end);
+	} else {
+		return null;
+	}
+}
+
+
+function getLastLineInputContent(model, position) {
+
+	const word = model.getWordAtPosition(position);
+	if (!word) return null;
+
+	let start = position.column - Math.max(word.word.length, 10) - 1;
+	if (start < 0) start = 0;
+
+	const end = position.column;
+
+	const range = new monaco.Range(position.lineNumber, start, position.lineNumber, end);
+
+	return model.getValueInRange(range);
+}

@@ -8,6 +8,8 @@ export function GetAllConfig():Promise<backend.AllConfig>;
 
 export function GetCurrentVersion():Promise<string>;
 
+export function GetDocs():Promise<backend.SurrealDocs>;
+
 export function IsLinux():Promise<boolean>;
 
 export function IsMac():Promise<boolean>;

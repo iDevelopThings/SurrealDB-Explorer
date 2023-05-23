@@ -18,6 +18,19 @@ import (
 	"wails_vue/backend/Util"
 )
 
+type SurrealDocs struct {
+	Docs map[string]SurrealDocObject `json:"docs"`
+}
+type SurrealDocObject struct {
+	Name          string   `json:"name"`
+	Summary       string   `json:"summary"`
+	Documentation string   `json:"documentation"`
+	Waypoint      string   `json:"waypoint"`
+	ApiDefinition string   `json:"api_definition"`
+	Params        []string `json:"params"`
+	ReturnType    string   `json:"return_type"`
+}
+
 type AppContext struct {
 	Ctx context.Context
 }
@@ -113,6 +126,8 @@ type App struct {
 	Config *AllConfig `json:"config"`
 
 	Updater *Updater.AppUpdater
+
+	Docs *SurrealDocs
 }
 
 func NewApp() *App {
@@ -215,4 +230,7 @@ func (a *App) UpdateCheck() *Updater.UpdateInfo {
 
 func (a *App) UpdatePreferences(preferences *Config.Preferences) {
 	a.Config.Preferences.Update(preferences)
+}
+func (a *App) GetDocs() *SurrealDocs {
+	return a.Docs
 }

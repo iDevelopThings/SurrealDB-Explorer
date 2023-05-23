@@ -26,26 +26,31 @@ class LoggerInstance {
 
 	public error(...data: any[]) {
 		this.originalMethods.error(...arguments);
+		if(!window.runtime) return;
 		LogError(data.join(" "));
 	}
 
 	public debug(...data: any[]) {
 		this.originalMethods.debug(...arguments);
+		if(!window.runtime) return;
 		LogDebug(data.join(" "));
 	}
 
 	public info(...data: any[]) {
 		this.originalMethods.info(...arguments);
+		if(!window.runtime) return;
 		LogInfo(data.join(" "));
 	}
 
 	public log(...data: any[]) {
 		this.originalMethods.log(...arguments);
+		if(!window.runtime) return;
 		LogDebug(data.join(" "));
 	}
 
 	public trace(...data: any[]) {
 		this.originalMethods.trace(...arguments);
+		if(!window.runtime) return;
 		LogTrace(data.join(" "));
 	}
 

@@ -8,6 +8,8 @@ export class Theme {
 	}
 
 	static get<K extends keyof typeof colors>(color: K): (typeof colors)[K] {
+		if (!Theme.colors) Theme.load();
+
 		return Theme.colors[color];
 	}
 

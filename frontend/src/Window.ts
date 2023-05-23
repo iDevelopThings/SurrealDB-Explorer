@@ -7,6 +7,7 @@ declare global {
 		zoomOut(): void;
 		resetZoom(): void;
 		app: App<Element>;
+		runtime: any;
 	}
 }
 

@@ -1,0 +1,1680 @@
+{
+  "array::add": {
+    "name": "array::add()",
+    "summary": "Adds an item to an array if it doesn't exist",
+    "documentation": "### array::add\n\nThe ``array::add`` function adds an item to an array only if it doesn't exist.\n\n##### Usage:\n```\n array::add(array, value) -> array\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM array::add([\"one\", \"two\"], \"three\");```\n##### Output:\n```[\"one\", \"two\", \"three\"]```\n\nIf the first argument is not an array, then an ``EMPTY`` value will be returned:\n\n##### Input:\n```SELECT * FROM array::add(3, true);```\n##### Output:\n```null```",
+    "waypoint": "add",
+    "api_definition": "array::add(array, value) -> array",
+    "params": [
+      "array",
+      "value"
+    ],
+    "return_type": "array"
+  },
+  "array::all": {
+    "name": "array::all()",
+    "summary": "Checks whether all array values are truthy",
+    "documentation": "### array::all\n\nThe ``array::all`` function checks whether all array values are truthy.\n\n##### Usage:\n```\n array::all(array) -> bool\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM array::all([1, 2, 3, NONE, 'SurrealDB', 5]);```\n##### Output:\n```false```\n\nIf the first argument is not an array, then a ``FALSE`` value will be returned:\n\n##### Input:\n```SELECT * FROM array::all(3);```\n##### Output:\n```false```",
+    "waypoint": "all",
+    "api_definition": "array::all(array) -> bool",
+    "params": [
+      "array"
+    ],
+    "return_type": "bool"
+  },
+  "array::any": {
+    "name": "array::any()",
+    "summary": "Checks whether any array value is truthy",
+    "documentation": "### array::any\n\nThe ``array::any`` function checks whether any array values are truthy.\n\n##### Usage:\n```\n array::any(array) -> bool\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM array::any([1, 2, 3, NONE, 'SurrealDB', 5]);```\n##### Output:\n```true```\n\nIf the first argument is not an array, then an ``FALSE`` value will be returned:\n\n##### Input:\n```SELECT * FROM array::any(3);```\n##### Output:\n```false```",
+    "waypoint": "any",
+    "api_definition": "array::any(array) -> bool",
+    "params": [
+      "array"
+    ],
+    "return_type": "bool"
+  },
+  "array::append": {
+    "name": "array::append()",
+    "summary": "Appends an item to the end of an array",
+    "documentation": "### array::append\n\nThe ``array::append`` function appends a value to the end of an array.\n\n##### Usage:\n```\n array::append(array, value) -> array\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM array::append([1,2,3,4], 5);```\n##### Output:\n```[1,2,3,4,5]```\n\nIf the first argument is not an array, then an ``EMPTY`` value will be returned:\n\n##### Input:\n```SELECT * FROM array::append(3, true);```\n##### Output:\n```null```",
+    "waypoint": "append",
+    "api_definition": "array::append(array, value) -> array",
+    "params": [
+      "array",
+      "value"
+    ],
+    "return_type": "array"
+  },
+  "array::combine": {
+    "name": "array::combine()",
+    "summary": "Combines all values from two arrays together",
+    "documentation": "### array::combine\n\nThe ``array::combine`` function combines all values from two arrays together, returning an array of arrays.\n\n##### Usage:\n```\n array::combine(array, array) -> array\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM array::combine([1,2], [2,3]);```\n##### Output:\n```[ [1,2], [1,3], [2,2], [2,3] ]```\n\nIf either of the two arguments do not evaluate to an array, then an ``EMPTY`` value will be returned:\n\n##### Input:\n```SELECT * FROM array::combine(3, true);```\n##### Output:\n```null```",
+    "waypoint": "combine",
+    "api_definition": "array::combine(array, array) -> array",
+    "params": [
+      "array",
+      "array"
+    ],
+    "return_type": "array"
+  },
+  "array::complement": {
+    "name": "array::complement()",
+    "summary": "Returns the complement of two arrays",
+    "documentation": "### array::complement\n\nThe ``array::complement`` function returns the complement of two arrays, returning a single array containing items which are not in the second array.\n\n##### Usage:\n```\n array::complement(array, array) -> array\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM array::complement([1,2,3,4], [3,4,5,6]);```\n##### Output:\n```[1,2]```\n\nIf either of the two arguments do not evaluate to an array, then an ``EMPTY`` value will be returned:\n\n##### Input:\n```SELECT * FROM array::complement(3, true);```\n##### Output:\n```null```",
+    "waypoint": "complement",
+    "api_definition": "array::complement(array, array) -> array",
+    "params": [
+      "array",
+      "array"
+    ],
+    "return_type": "array"
+  },
+  "array::concat": {
+    "name": "array::concat()",
+    "summary": "Returns the merged values from two arrays",
+    "documentation": "### array::concat\n\nThe ``array::concat`` function merges two arrays together, returning an array which may contain duplicate values. If you want to remove duplicate values from the resulting array, then use the ``array::union()`` function\n\n##### Usage:\n```\n array::concat(array, array) -> array\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```                SELECT * FROM array::concat([1,2,3,4], [3,4,5,6]);```\n##### Output:\n```[1,2,3,4,3,4,5,6]```\n\nIf either of the two arguments do not evaluate to an array, then an ``EMPTY`` value will be returned:\n\n##### Input:\n```SELECT * FROM array::concat(3, true);```\n##### Output:\n```null```",
+    "waypoint": "concat",
+    "api_definition": "array::concat(array, array) -> array",
+    "params": [
+      "array",
+      "array"
+    ],
+    "return_type": "array"
+  },
+  "array::difference": {
+    "name": "array::difference()",
+    "summary": "Returns the difference between two arrays",
+    "documentation": "### array::difference\n\nThe ``array::difference`` determines the difference between two arrays, returning a single array containing items which are not in both arrays.\n\n##### Usage:\n```\n array::difference(array, array) -> array\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM array::difference([1,2,3,4], [3,4,5,6]);```\n##### Output:\n```[1,2,5,6]```\n\nIf either of the two arguments do not evaluate to an array, then an ``EMPTY`` value will be returned:\n\n##### Input:\n```SELECT * FROM array::difference(3, true);```\n##### Output:\n```null```",
+    "waypoint": "difference",
+    "api_definition": "array::difference(array, array) -> array",
+    "params": [
+      "array",
+      "array"
+    ],
+    "return_type": "array"
+  },
+  "array::distinct": {
+    "name": "array::distinct()",
+    "summary": "Returns the unique items in an array",
+    "documentation": "### array::distinct\n\nThe ``array::distinct`` function calculates the unique values in an array, returning a single array.\n\n##### Usage:\n```\n array::distinct(array) -> array\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM array::distinct([1,2,1,3,3,4]);```\n##### Output:\n```[1,2,3,4]```\n\nIf the argument does not evaluate to an array, then an ``EMPTY`` value will be returned:\n\n##### Input:\n```SELECT * FROM array::distinct(\"some text\");```\n##### Output:\n```null```",
+    "waypoint": "distinct",
+    "api_definition": "array::distinct(array) -> array",
+    "params": [
+      "array"
+    ],
+    "return_type": "array"
+  },
+  "array::flatten": {
+    "name": "array::flatten()",
+    "summary": "Flattens multiple arrays into a single array",
+    "documentation": "### array::flatten\n\nThe ``array::flatten`` flattens an array of arrays, returning a new array with all sub-array elements concatenated into it.\n\n##### Usage:\n```\n array::flatten(array) -> array\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM array::flatten([ [1,2], [3, 4], 'SurrealDB', [5, 6, [7, 8]] ]);```\n##### Output:\n```[1, 2, 3, 4, 'SurrealDB', 5, 6, [7, 8]]```\n\nIf either of the two arguments do not evaluate to an array, then an ``EMPTY`` value will be returned:\n\n##### Input:\n```SELECT * FROM array::flatten(3);```\n##### Output:\n```null```",
+    "waypoint": "flatten",
+    "api_definition": "array::flatten(array) -> array",
+    "params": [
+      "array"
+    ],
+    "return_type": "array"
+  },
+  "array::group": {
+    "name": "array::group()",
+    "summary": "Flattens and returns the unique items in an array",
+    "documentation": "### array::group\n\nThe ``array::group`` function flattens and returns the unique items in an array.\n\n##### Usage:\n```\n array::group(array) -> array\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM array::group([1, 2, 3, 4, [3,5,6], [2,4,5,6], 7, 8, 8, 9]);```\n##### Output:\n```[1,2,3,4,5,6,7,8,9]```\n\nIf the first argument is not an array, then an ``EMPTY`` value will be returned:\n\n##### Input:\n```SELECT * FROM array::group(3, true);```\n##### Output:\n```null```",
+    "waypoint": "group",
+    "api_definition": "array::group(array) -> array",
+    "params": [
+      "array"
+    ],
+    "return_type": "array"
+  },
+  "array::insert": {
+    "name": "array::insert()",
+    "summary": "Inserts an item at the end of an array, or in a specific position",
+    "documentation": "### array::insert\n\nThe ``array::insert`` function inserts a value into an array at a specific position.\n\n##### Usage:\n```\n array::insert(array, value, number) -> array\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM array::insert([1,2,3,4], 5, 2);```\n##### Output:\n```[1,2,5,3,4]```\n\nIf either of the first two arguments do not evaluate to an array, then an ``EMPTY`` value will be returned:\n\n##### Input:\n```SELECT * FROM array::insert(3, true);```\n##### Output:\n```null```",
+    "waypoint": "insert",
+    "api_definition": "array::insert(array, value, number) -> array",
+    "params": [
+      "array",
+      "value",
+      "number"
+    ],
+    "return_type": "array"
+  },
+  "array::intersect": {
+    "name": "array::intersect()",
+    "summary": "Returns the values which intersect two arrays",
+    "documentation": "### array::intersect\n\nThe ``array::intersect`` function calculates the values which intersect two arrays, returning a single array containing the values which are in both arrays.\n\n##### Usage:\n```\n array::intersect(array, array) -> array\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM array::intersect([1,2,3,4], [3,4,5,6]);```\n##### Output:\n```[3,4]```\n\nIf either of the two arguments do not evaluate to an array, then an ``EMPTY`` value will be returned:\n\n##### Input:\n```SELECT * FROM array::intersect(3, true);```\n##### Output:\n```null```",
+    "waypoint": "intersect",
+    "api_definition": "array::intersect(array, array) -> array",
+    "params": [
+      "array",
+      "array"
+    ],
+    "return_type": "array"
+  },
+  "array::len": {
+    "name": "array::len()",
+    "summary": "Returns the length of an array",
+    "documentation": "### array::len\n\nThe ``array::len`` function calculates the length of an array, returning a number. This function includes all items when counting the number of items in the array. If you want to only count truthy values, then use the ``count()`` function.\n\n##### Usage:\n```\n array::len(array) -> number\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM array::len([1,2,1,null,\"something\",3,3,4,0]);```\n##### Output:\n```9```\n\nIf the argument does not evaluate to an array, then an ``EMPTY`` value will be returned:\n\n##### Input:\n```SELECT * FROM array::len(\"some text\");```\n##### Output:\n```null```",
+    "waypoint": "len",
+    "api_definition": "array::len(array) -> number",
+    "params": [
+      "array"
+    ],
+    "return_type": "number"
+  },
+  "array::max": {
+    "name": "array::max()",
+    "summary": "Returns the maximum item in an array",
+    "documentation": "",
+    "waypoint": "max",
+    "api_definition": ""
+  },
+  "array::min": {
+    "name": "array::min()",
+    "summary": "Returns the minimum item in an array",
+    "documentation": "",
+    "waypoint": "min",
+    "api_definition": ""
+  },
+  "array::pop": {
+    "name": "array::pop()",
+    "summary": "Returns the last item from an array",
+    "documentation": "### array::pop\n\nThe ``array::pop`` function removes a value from the end of an array and returns it.\n\n##### Usage:\n```\n array::pop(array) -> array\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM array::pop([1,2,3,4]);```\n##### Output:\n```4```\n\nIf the first argument is not an array, then an ``EMPTY`` value will be returned:\n\n##### Input:\n```SELECT * FROM array::pop(3);```\n##### Output:\n```null```",
+    "waypoint": "pop",
+    "api_definition": "array::pop(array) -> array",
+    "params": [
+      "array"
+    ],
+    "return_type": "array"
+  },
+  "array::prepend": {
+    "name": "array::prepend()",
+    "summary": "Prepends an item to the beginning of an array",
+    "documentation": "### array::prepend\n\nThe ``array::prepend`` function prepends a value to the end of an array.\n\n##### Usage:\n```\n array::prepend(array, value) -> array\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM array::prepend([1,2,3,4], 5);```\n##### Output:\n```[5,1,2,3,4]```\n\nIf either of the two arguments do not evaluate to an array, then an ``EMPTY`` value will be returned:\n\n##### Input:\n```SELECT * FROM array::prepend(3, true);```\n##### Output:\n```null```",
+    "waypoint": "prepend",
+    "api_definition": "array::prepend(array, value) -> array",
+    "params": [
+      "array",
+      "value"
+    ],
+    "return_type": "array"
+  },
+  "array::push": {
+    "name": "array::push()",
+    "summary": "Appends an item to the end of an array",
+    "documentation": "### array::push\n\nThe ``array::push`` function appends a value to the end of an array.\n\n##### Usage:\n```\n array::push(array, value) -> array\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM array::push([1,2,3,4], 5);```\n##### Output:\n```[1,2,3,4,5]```\n\nIf the first argument is not an array, then an ``EMPTY`` value will be returned:\n\n##### Input:\n```SELECT * FROM array::push(3, true);```\n##### Output:\n```null```",
+    "waypoint": "push",
+    "api_definition": "array::push(array, value) -> array",
+    "params": [
+      "array",
+      "value"
+    ],
+    "return_type": "array"
+  },
+  "array::remove": {
+    "name": "array::remove()",
+    "summary": "Removes an item at a specific position from an array",
+    "documentation": "### array::remove\n\nThe ``array::remove`` function removes an item from a specific position in an array.\n\n##### Usage:\n```\n array::remove(array, number) -> array\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM array::remove([1,2,3,4,5], 2);```\n##### Output:\n```[1,2,4,5]```\n\nIf the first argument is not an array, then an ``EMPTY`` value will be returned:\n\n##### Input:\n```SELECT * FROM array::remove(3, true);```\n##### Output:\n```null```",
+    "waypoint": "remove",
+    "api_definition": "array::remove(array, number) -> array",
+    "params": [
+      "array",
+      "number"
+    ],
+    "return_type": "array"
+  },
+  "array::reverse": {
+    "name": "array::reverse()",
+    "summary": "Reverses the sorting order of an array",
+    "documentation": "### array::reverse\n\nThe ``array::reverse`` function appends a value to the end of an array.\n\n##### Usage:\n```\n array::reverse(array) -> array\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM array::reverse([1,2,3,4,5]);```\n##### Output:\n```[5,4,3,2,1]```\n\nIf the first argument is not an array, then an ``EMPTY`` value will be returned:\n\n##### Input:\n```SELECT * FROM array::reverse(3);```\n##### Output:\n```null```",
+    "waypoint": "reverse",
+    "api_definition": "array::reverse(array) -> array",
+    "params": [
+      "array"
+    ],
+    "return_type": "array"
+  },
+  "array::sort": {
+    "name": "array::sort()",
+    "summary": "Sorts the values in an array in ascending or descending order",
+    "documentation": "### array::sort\n\nThe ``array::sort`` function calculates the length of an array, returning a number. This function includes all items when counting the number of items in the array. If you want to only count truthy values, then use the ``count()`` function.\n\n##### Usage:\n```\n array::sort(array) -> array\n ```\n\nThe function also accepts a second boolean parameter which determines the sorting direction. The second parameter can be  for ascending order, or  for descending order.\n\n##### Usage:\n```\n array::sort(array, bool) -> array\n ```\n\nThe function also accepts a second string parameter which determines the sorting direction. The second parameter can be  for ascending order, or  for descending order.\n\n##### Usage:\n```\n array::sort(array, string) -> array\n ```\n\nThe following examples show this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM array::sort([1,2,1,null,\"something\",3,3,4,0]);```\n##### Output:\n```[null,0,1,1,2,3,3,4,\"something\"]```##### Input:\n```SELECT * FROM array::sort([1,2,1,null,\"something\",3,3,4,0], false);```\n##### Output:\n```[\"something\",4,3,3,2,1,1,9,null]```##### Input:\n```SELECT * FROM array::sort([1,2,1,null,\"something\",3,3,4,0], \"asc\");```\n##### Output:\n```[null,0,1,1,2,3,3,4,\"something\"]```##### Input:\n```SELECT * FROM array::sort([1,2,1,null,\"something\",3,3,4,0], \"desc\");```\n##### Output:\n```[\"something\",4,3,3,2,1,1,9,null]```\n\nIf the first argument does not evaluate to an array, then the value will be returned without modification:\n\n##### Input:\n```SELECT * FROM array::sort(\"some text\");```\n##### Output:\n```\"some text\"```",
+    "waypoint": "sort",
+    "api_definition": "array::sort(array) -> arrayarray::sort(array, bool) -> arrayarray::sort(array, string) -> array",
+    "params": [
+      "array"
+    ]
+  },
+  "array::sort-asc": {
+    "name": "array::sort::asc()",
+    "summary": "Sorts the values in an array in ascending order",
+    "documentation": "### array::sort::asc\n\nThe ``array::sort::asc`` function is a shorthand convenience function for the ``array::sort`` function, to sort values in an array in ascending order.\n\n##### Usage:\n```\n array::sort::asc(array) -> array\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM array::sort::asc([1,2,1,null,\"something\",3,3,4,0]);```\n##### Output:\n```[null,0,1,1,2,3,3,4,\"something\"]```\n\nIf the argument does not evaluate to an array, then the value will be returned without modification:\n\n##### Input:\n```SELECT * FROM array::sort::asc(\"some text\");```\n##### Output:\n```\"some text\"```",
+    "waypoint": "sort-asc",
+    "api_definition": "array::sort::asc(array) -> array",
+    "params": [
+      "array"
+    ],
+    "return_type": "array"
+  },
+  "array::sort-desc": {
+    "name": "array::sort::desc()",
+    "summary": "Sorts the values in an array in descending order",
+    "documentation": "### array::sort::desc\n\nThe ``array::sort::desc`` function is a shorthand convenience function for the ``array::sort`` function, to sort values in an array in descending order.\n\n##### Usage:\n```\n array::sort::desc(array) -> array\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM array::sort::desc([1,2,1,null,\"something\",3,3,4,0]);```\n##### Output:\n```[\"something\",4,3,3,2,1,1,9,null]```\n\nIf the argument does not evaluate to an array, then the value will be returned without modification:\n\n##### Input:\n```SELECT * FROM array::sort::desc(\"some text\");```\n##### Output:\n```\"some text\"```",
+    "waypoint": "sort-desc",
+    "api_definition": "array::sort::desc(array) -> array",
+    "params": [
+      "array"
+    ],
+    "return_type": "array"
+  },
+  "array::union": {
+    "name": "array::union()",
+    "summary": "Returns the unique merged values from two arrays",
+    "documentation": "### array::union\n\nThe ``array::union`` function combines two arrays together, removing duplicate values, and returning a single array.\n\n##### Usage:\n```\n array::union(array, array) -> array\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM array::union([1,2,1,6], [1,3,4,5,6]);```\n##### Output:\n```[1,2,6,3,4,5]```\n\nIf either of the two arguments do not evaluate to an array, then an ``EMPTY`` value will be returned:\n\n##### Input:\n```SELECT * FROM array::union(3, true);```\n##### Output:\n```null```",
+    "waypoint": "union",
+    "api_definition": "array::union(array, array) -> array",
+    "params": [
+      "array",
+      "array"
+    ],
+    "return_type": "array"
+  },
+  "count::count": {
+    "name": "count()",
+    "summary": "Counts a row, or whether a given value is truthy",
+    "documentation": "### count\n\nThe ``count`` function counts the number of times that the function is called. This is useful for returning the total number of rows in a ``SELECT`` statement with a ``GROUP BY`` clause.\n\n##### Usage:\n```\n count() -> 1\n ```\n\nIf a value is given as the first argument, then this function checks whether a given value is truthy. This is useful for returning the total number of rows, which match a certain condition, in a ``SELECT`` statement, with a ``GROUP BY`` clause.\n\n##### Usage:\n```\n count(value) -> number\n ```\n\nIf an array is given, this function counts the number of items in the array which are truthy. If, instead, you want to count the total number of items in the given array, then use the ``array::len()`` function.\n\n##### Usage:\n```\n count(array) -> number\n ```\n\nThe following examples show this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM count();```\n##### Output:\n```1```##### Input:\n```SELECT * FROM count(true);```\n##### Output:\n```1```##### Input:\n```SELECT * FROM count(10 > 15);```\n##### Output:\n```0```##### Input:\n```SELECT * FROM count([1, 2, 3, null, 0, false, (15 > 10), rand::uuid()]);```\n##### Output:\n```4```\n\nThe following examples show this function being used in a ``SELECT`` statement with a ``GROUP`` clause:\n\n##### Input:\n```SELECT count() FROM [{ age: 33 }, { age: 45 }, { age: 39 }] GROUP ALL;```\n##### Output:\n```3```##### Input:\n```SELECT count(age > 35) FROM [{ age: 33 }, { age: 45 }, { age: 39 }] GROUP ALL;```\n##### Output:\n```2```\n\nAn advanced example of the count function can be seen below:\n\n##### Input:\n```SELECTcountry,count(age > 30) AS totalFROM [{ age: 33, country: 'GBR' },{ age: 45, country: 'GBR' },{ age: 39, country: 'USA' },{ age: 29, country: 'GBR' },{ age: 43, country: 'USA' }]GROUP BY country;```\n##### Output:\n```[{country: 'GBR',total: 2},{country: 'USA',total: 2}]```",
+    "waypoint": "count",
+    "api_definition": "count() -> 1count(value) -> numbercount(array) -> number",
+    "params": [
+      ""
+    ]
+  },
+  "crypto::argon2-compare": {
+    "name": "crypto::argon2::compare()",
+    "summary": "Compares an argon2 hash to a password",
+    "documentation": "### crypto::argon2::compare\n\nThe ``crypto::argon2::compare`` function compares a hashed-and-salted argon2 password value with an unhashed password value.\n\n##### Usage:\n```\n crypto::argon2::compare(value, value) -> boolean\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```LET $hash = \"$argon2id$v=19$m=4096,t=3,p=1$pbZ6yJ2rPJKk4pyEMVwslQ$jHzpsiB+3S/H+kwFXEcr10vmOiDkBkydVCSMfRxV7CA\";LET $pass = \"this is a strong password\";SELECT * FROM crypto::argon2::compare($hash, $pass);```\n##### Output:\n```true```",
+    "waypoint": "argon2-compare",
+    "api_definition": "crypto::argon2::compare(value, value) -> boolean",
+    "params": [
+      "value",
+      "value"
+    ],
+    "return_type": "boolean"
+  },
+  "crypto::argon2-generate": {
+    "name": "crypto::argon2::generate()",
+    "summary": "Generates a new argon2 hashed password",
+    "documentation": "### crypto::argon2::generate\n\nThe ``crypto::argon2::generate`` function hashes and salts a password using the argon2 hashing algorithm.\n\n##### Usage:\n```\n crypto::argon2::generate(value) -> string\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM crypto::argon2::generate(\"this is a strong password\");```\n##### Output:\n```\"$argon2id$v=19$m=4096,t=3,p=1$pbZ6yJ2rPJKk4pyEMVwslQ$jHzpsiB+3S/H+kwFXEcr10vmOiDkBkydVCSMfRxV7CA\"```",
+    "waypoint": "argon2-generate",
+    "api_definition": "crypto::argon2::generate(value) -> string",
+    "params": [
+      "value"
+    ],
+    "return_type": "string"
+  },
+  "crypto::bcrypt-compare": {
+    "name": "crypto::bcrypt::compare()",
+    "summary": "Compares an bcrypt hash to a password",
+    "documentation": "### crypto::bcrypt::compare\n\nThe ``crypto::bcrypt::compare`` function compares a hashed-and-salted bcrypt password value with an unhashed password value.\n\n##### Usage:\n```\n crypto::bcrypt::compare(value, value) -> boolean\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```LET $hash = \"$2b$12$OD7hrr1Hycyk8NUwOekYY.cogCICpUnwNvDZ9NiC1qCPHzpVAQ9BO\";LET $pass = \"this is a strong password\";SELECT * FROM crypto::bcrypt::compare($hash, $pass);```\n##### Output:\n```true```",
+    "waypoint": "bcrypt-compare",
+    "api_definition": "crypto::bcrypt::compare(value, value) -> boolean",
+    "params": [
+      "value",
+      "value"
+    ],
+    "return_type": "boolean"
+  },
+  "crypto::bcrypt-generate": {
+    "name": "crypto::bcrypt::generate()",
+    "summary": "Generates a new bcrypt hashed password",
+    "documentation": "### crypto::bcrypt::generate\n\nThe ``crypto::bcrypt::generate`` function hashes and salts a password using the bcrypt hashing algorithm.\n\n##### Usage:\n```\n crypto::bcrypt::generate(value) -> string\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM crypto::bcrypt::generate(\"this is a strong password\");```\n##### Output:\n```\"$2b$12$OD7hrr1Hycyk8NUwOekYY.cogCICpUnwNvDZ9NiC1qCPHzpVAQ9BO\"```",
+    "waypoint": "bcrypt-generate",
+    "api_definition": "crypto::bcrypt::generate(value) -> string",
+    "params": [
+      "value"
+    ],
+    "return_type": "string"
+  },
+  "crypto::md5": {
+    "name": "crypto::md5()",
+    "summary": "Returns the md5 hash of a value",
+    "documentation": "### crypto::md5\n\nThe ``crypto::md5`` function returns the md5 hash of the input value.\n\n##### Usage:\n```\n crypto::md5(value) -> string\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM crypto::md5(\"tobie\");```\n##### Output:\n```\"4768b3fc7ac751e03a614e2349abf3bf\"```\n\nIf the argument is not a string, then the value will be cast to a string before the value is hashed:\n\n##### Input:\n```SELECT * FROM crypto::md5(12345);```\n##### Output:\n```\"827ccb0eea8a706c4c34a16891f84e7b\"```",
+    "waypoint": "md5",
+    "api_definition": "crypto::md5(value) -> string",
+    "params": [
+      "value"
+    ],
+    "return_type": "string"
+  },
+  "crypto::pbkdf2-compare": {
+    "name": "crypto::pbkdf2::compare()",
+    "summary": "Compares an pbkdf2 hash to a password",
+    "documentation": "### crypto::pbkdf2::compare\n\nThe ``crypto::pbkdf2::compare`` function compares a hashed-and-salted pbkdf2 password value with an unhashed password value.\n\n##### Usage:\n```\n crypto::pbkdf2::compare(value, value) -> boolean\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```LET $hash = \"$pbkdf2-sha256$i=10000,l=32$DBURRPJODKEt0IId1Lqe+w$Ve8Z00mibHDSKLbyKTceEBBcDpGoK0AEUl7QzDTIec4\";LET $pass = \"this is a strong password\";SELECT * FROM crypto::pbkdf2::compare($hash, $pass);```\n##### Output:\n```true```",
+    "waypoint": "pbkdf2-compare",
+    "api_definition": "crypto::pbkdf2::compare(value, value) -> boolean",
+    "params": [
+      "value",
+      "value"
+    ],
+    "return_type": "boolean"
+  },
+  "crypto::pbkdf2-generate": {
+    "name": "crypto::pbkdf2::generate()",
+    "summary": "Generates a new pbkdf2 hashed password",
+    "documentation": "### crypto::pbkdf2::generate\n\nThe ``crypto::pbkdf2::generate`` function hashes and salts a password using the pbkdf2 hashing algorithm.\n\n##### Usage:\n```\n crypto::pbkdf2::generate(value) -> string\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM crypto::pbkdf2::generate(\"this is a strong password\");```\n##### Output:\n```\"$pbkdf2-sha256$i=10000,l=32$DBURRPJODKEt0IId1Lqe+w$Ve8Z00mibHDSKLbyKTceEBBcDpGoK0AEUl7QzDTIec4\"```",
+    "waypoint": "pbkdf2-generate",
+    "api_definition": "crypto::pbkdf2::generate(value) -> string",
+    "params": [
+      "value"
+    ],
+    "return_type": "string"
+  },
+  "crypto::scrypt-compare": {
+    "name": "crypto::scrypt::compare()",
+    "summary": "Compares an scrypt hash to a password",
+    "documentation": "### crypto::scrypt::compare\n\nThe ``crypto::scrypt::compare`` function compares a hashed-and-salted scrypt password value with an unhashed password value.\n\n##### Usage:\n```\n crypto::scrypt::compare(value, value) -> boolean\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```LET $hash = \"$scrypt$ln=15,r=8,p=1$8gl7bipl0FELTy46YJOBrw$eRcS1qR22GI8VHo58WOXn9JyfDivGo5yTJFvpDyivuw\";LET $pass = \"this is a strong password\";SELECT * FROM crypto::scrypt::compare($hash, $pass);```\n##### Output:\n```true```",
+    "waypoint": "scrypt-compare",
+    "api_definition": "crypto::scrypt::compare(value, value) -> boolean",
+    "params": [
+      "value",
+      "value"
+    ],
+    "return_type": "boolean"
+  },
+  "crypto::scrypt-generate": {
+    "name": "crypto::scrypt::generate()",
+    "summary": "Generates a new scrypt hashed password",
+    "documentation": "### crypto::scrypt::generate\n\nThe ``crypto::scrypt::generate`` function hashes and salts a password using the scrypt hashing algorithm.\n\n##### Usage:\n```\n crypto::scrypt::generate(value) -> string\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM crypto::scrypt::generate(\"this is a strong password\");```\n##### Output:\n```\"$scrypt$ln=15,r=8,p=1$8gl7bipl0FELTy46YJOBrw$eRcS1qR22GI8VHo58WOXn9JyfDivGo5yTJFvpDyivuw\"```",
+    "waypoint": "scrypt-generate",
+    "api_definition": "crypto::scrypt::generate(value) -> string",
+    "params": [
+      "value"
+    ],
+    "return_type": "string"
+  },
+  "crypto::sha1": {
+    "name": "crypto::sha1()",
+    "summary": "Returns the sha1 hash of a value",
+    "documentation": "### crypto::sha1\n\nThe ``crypto::sha1`` function returns the sha1 hash of the input value.\n\n##### Usage:\n```\n crypto::sha1(value) -> string\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM crypto::sha1(\"tobie\");```\n##### Output:\n```\"c6be709a1b6429472e0c5745b411f1693c4717be\"```\n\nIf the argument is not a string, then the value will be cast to a string before the value is hashed:\n\n##### Input:\n```SELECT * FROM crypto::sha1(12345);```\n##### Output:\n```\"8cb2237d0679ca88db6464eac60da96345513964\"```",
+    "waypoint": "sha1",
+    "api_definition": "crypto::sha1(value) -> string",
+    "params": [
+      "value"
+    ],
+    "return_type": "string"
+  },
+  "crypto::sha256": {
+    "name": "crypto::sha256()",
+    "summary": "Returns the sha256 hash of a value",
+    "documentation": "### crypto::sha256\n\nThe ``crypto::sha256`` function returns the sha256 hash of the input value.\n\n##### Usage:\n```\n crypto::sha256(value) -> string\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM crypto::sha256(\"tobie\");```\n##### Output:\n```\"33fe1859daba927ea5674813adc1cf34b9e2795f2b7e91602fae19c0d0c493af\"```\n\nIf the argument is not a string, then the value will be cast to a string before the value is hashed:\n\n##### Input:\n```SELECT * FROM crypto::sha256(12345);```\n##### Output:\n```\"5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5\"```",
+    "waypoint": "sha256",
+    "api_definition": "crypto::sha256(value) -> string",
+    "params": [
+      "value"
+    ],
+    "return_type": "string"
+  },
+  "crypto::sha512": {
+    "name": "crypto::sha512()",
+    "summary": "Returns the sha512 hash of a value",
+    "documentation": "### crypto::sha512\n\nThe ``crypto::sha512`` function returns the sha512 hash of the input value.\n\n##### Usage:\n```\n crypto::sha512(value) -> string\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM crypto::sha512(\"tobie\");```\n##### Output:\n```\"39f0160c946c4c53702112d6ef3eea7957ea8e1c78787a482a89f8b0a8860a20ecd543432e4a187d9fdcd1c415cf61008e51a7e8bf2f22ac77e458789c9cdccc\"```\n\nIf the argument is not a string, then the value will be cast to a string before the value is hashed:\n\n##### Input:\n```SELECT * FROM crypto::sha512(12345);```\n##### Output:\n```\"3627909a29c31381a071ec27f7c9ca97726182aed29a7ddd2e54353322cfb30abb9e3a6df2ac2c20fe23436311d678564d0c8d305930575f60e2d3d048184d79\"```",
+    "waypoint": "sha512",
+    "api_definition": "crypto::sha512(value) -> string",
+    "params": [
+      "value"
+    ],
+    "return_type": "string"
+  },
+  "geo::area": {
+    "name": "geo::area()",
+    "summary": "Calculates the area of a geometry",
+    "documentation": "### geo::area\n\nThe ``geo::area`` function calculates the area of a geometry.\n\n##### Usage:\n```\n geo::area(geometry) -> number\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM geo::area({type: \"Polygon\",coordinates: [[[-0.38314819, 51.37692386], [0.1785278, 51.37692386],[0.1785278, 51.61460570], [-0.38314819, 51.61460570],[-0.38314819, 51.37692386]]]});```\n##### Output:\n```0.13350018278702186```\n\nIf the argument is not a geometry type, then an ``EMPTY`` value will be returned:\n\n##### Input:\n```SELECT * FROM geo::area(12345);```\n##### Output:\n```null```",
+    "waypoint": "area",
+    "api_definition": "geo::area(geometry) -> number",
+    "params": [
+      "geometry"
+    ],
+    "return_type": "number"
+  },
+  "geo::bearing": {
+    "name": "geo::bearing()",
+    "summary": "Calculates the bearing between two geolocation points",
+    "documentation": "### geo::bearing\n\nThe ``geo::bearing`` function calculates the bearing between two geolocation points.\n\n##### Usage:\n```\n geo::bearing(point, point) -> number\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM geo::bearing( (51.509865, -0.118092), (-0.118092, 51.509865) );```\n##### Output:\n```-31.913259585079818```\n\nIf either argument is not a geolocation point, then an ``EMPTY`` value will be returned:\n\n##### Input:\n```SELECT * FROM geo::bearing(12345, true);```\n##### Output:\n```null```",
+    "waypoint": "bearing",
+    "api_definition": "geo::bearing(point, point) -> number",
+    "params": [
+      "point",
+      "point"
+    ],
+    "return_type": "number"
+  },
+  "geo::centroid": {
+    "name": "geo::centroid()",
+    "summary": "Calculates the centroid of a geometry",
+    "documentation": "### geo::centroid\n\nThe ``geo::centroid`` function calculates the centroid between two geolocation points.\n\n##### Usage:\n```\n geo::centroid(geometry) -> number\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM geo::centroid({type: \"Polygon\",coordinates: [[[-0.38314819, 51.37692386], [0.1785278, 51.37692386],[0.1785278, 51.61460570], [-0.38314819, 51.61460570],[-0.38314819, 51.37692386]]]});```\n##### Output:\n```{\"type\": \"Point\",\"coordinates\": [-0.10231019499999999,51.49576478]}```\n\nIf either argument is not a geometry type, then an ``EMPTY`` value will be returned:\n\n##### Input:\n```SELECT * FROM geo::centroid(12345);```\n##### Output:\n```null```",
+    "waypoint": "centroid",
+    "api_definition": "geo::centroid(geometry) -> number",
+    "params": [
+      "geometry"
+    ],
+    "return_type": "number"
+  },
+  "geo::distance": {
+    "name": "geo::distance()",
+    "summary": "Calculates the distance between two geolocation points",
+    "documentation": "### geo::distance\n\nThe ``geo::distance`` function calculates the haversine distance, in metres, between two geolocation points.\n\n##### Usage:\n```\n geo::distance(point, point) -> number\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM geo::distance( (51.509865, -0.118092), (-0.118092, 51.509865) );```\n##### Output:\n```7491494.807105545```\n\nIf either argument is not a geolocation point, then an ``EMPTY`` value will be returned:\n\n##### Input:\n```SELECT * FROM geo::distance(12345, true);```\n##### Output:\n```null```",
+    "waypoint": "distance",
+    "api_definition": "geo::distance(point, point) -> number",
+    "params": [
+      "point",
+      "point"
+    ],
+    "return_type": "number"
+  },
+  "geo::hash-decode": {
+    "name": "geo::hash::decode()",
+    "summary": "Decodes a geohash into a geometry point",
+    "documentation": "### geo::hash::decode\n\nThe ``geo::hash::decode`` function converts a geohash into a geolocation point.\n\n##### Usage:\n```\n geo::hash::decode(point) -> string\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM geo::hash::decode(\"mpuxk4s24f51\");```\n##### Output:\n```{\"type\": \"Point\",\"coordinates\": [51.50986494496465,-0.11809204705059528]}```\n\nIf the argument is not a geolocation point, then an ``EMPTY`` value will be returned:\n\n##### Input:\n```SELECT * FROM geo::hash::decode(12345);```\n##### Output:\n```null```",
+    "waypoint": "hash-decode",
+    "api_definition": "geo::hash::decode(point) -> string",
+    "params": [
+      "point"
+    ],
+    "return_type": "string"
+  },
+  "geo::hash-encode": {
+    "name": "geo::hash::encode()",
+    "summary": "Encodes a geometry point into a geohash",
+    "documentation": "### geo::hash::encode\n\nThe ``geo::hash::encode`` function converts a geolocation point into a geohash.\n\n##### Usage:\n```\n geo::hash::encode(point) -> string\n ```\n\nThe function accepts a second argument, which determines the accuracy and granularity of the geohash.\n\n##### Usage:\n```\n geo::hash::encode(point, number) -> string\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM geo::hash::encode( (51.509865, -0.118092) );```\n##### Output:\n```\"mpuxk4s24f51\"```\n\nThe following example shows this function with two arguments, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM geo::hash::encode( (51.509865, -0.118092), 5 );```\n##### Output:\n```\"mpuxk\"```\n\nIf the first argument is not a geolocation point, then an ``EMPTY`` value will be returned:\n\n##### Input:\n```SELECT * FROM geo::hash::encode(12345);```\n##### Output:\n```null```",
+    "waypoint": "hash-encode",
+    "api_definition": "geo::hash::encode(point) -> stringgeo::hash::encode(point, number) -> string",
+    "params": [
+      "point"
+    ]
+  },
+  "http::delete": {
+    "name": "http::delete()",
+    "summary": "Perform a remote HTTP DELETE request",
+    "documentation": "### `http::delete`\n\nThe ``http::delete`` function performs a remote HTTP ``DELETE`` request. The first parameter is the URL of the remote endpoint. If the response does not return a ``2XX`` status code, then the function will fail and return the error. If the remote endpoint returns an ``application/json`` content-type, then the response is parsed and returned as a value, otherwise the response is treated as text.\n\n##### Usage:\n```\n http::delete(string) -> value\n ```\n\nIf an object is given as the second argument, then this can be used to set the request headers.\n\n##### Usage:\n```\n http::delete(string, object) -> value\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM http::delete('https://dummyjson.com/comments/1');```\n##### Output:\n```null```\n\nTo specify custom headers with the HTTP request, pass an object as the second argument:\n\n##### Input:\n```SELECT * FROM http::delete('https://dummyjson.com/comments/1', {'x-my-header': 'some unique string'});```\n##### Output:\n```null```",
+    "waypoint": "delete",
+    "api_definition": "http::delete(string) -> valuehttp::delete(string, object) -> value",
+    "params": [
+      "string"
+    ]
+  },
+  "http::get": {
+    "name": "http::get()",
+    "summary": "Perform a remote HTTP GET request",
+    "documentation": "### `http::get`\n\nThe ``http::get`` function performs a remote HTTP ``GET`` request. The first parameter is the URL of the remote endpoint. If the response does not return a ``2XX`` status code, then the function will fail and return the error. If the remote endpoint returns an ``application/json`` content-type, then the response is parsed and returned as a value, otherwise the response is treated as text.\n\n##### Usage:\n```\n http::get(string) -> value\n ```\n\nIf an object is given as the second argument, then this can be used to set the request headers.\n\n##### Usage:\n```\n http::get(string, object) -> value\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM http::get('https://surrealdb.com');```\n##### Output:\n```-- The HTML code is returned```\n\nTo specify custom headers with the HTTP request, pass an object as the second argument:\n\n##### Input:\n```SELECT * FROM http::get('https://surrealdb.com', {'x-my-header': 'some unique string'});```\n##### Output:\n```-- The HTML code is returned```",
+    "waypoint": "get",
+    "api_definition": "http::get(string) -> valuehttp::get(string, object) -> value",
+    "params": [
+      "string"
+    ]
+  },
+  "http::head": {
+    "name": "http::head()",
+    "summary": "Perform a remote HTTP HEAD request",
+    "documentation": "### `http::head`\n\nThe ``http::head`` function performs a remote HTTP ``HEAD`` request. The first parameter is the URL of the remote endpoint. If the response does not return a ``2XX`` status code, then the function will fail and return the error.\n\n##### Usage:\n```\n http::head(string) -> null\n ```\n\nIf an object is given as the second argument, then this can be used to set the request headers.\n\n##### Usage:\n```\n http::head(string, object) -> null\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM http::head('https://surrealdb.com');```\n##### Output:\n```null```\n\nTo specify custom headers with the HTTP request, pass an object as the second argument:\n\n##### Input:\n```SELECT * FROM http::head('https://surrealdb.com', {'x-my-header': 'some unique string'});```\n##### Output:\n```null```",
+    "waypoint": "head",
+    "api_definition": "http::head(string) -> nullhttp::head(string, object) -> null",
+    "params": [
+      "string"
+    ]
+  },
+  "http::patch": {
+    "name": "http::patch()",
+    "summary": "Perform a remote HTTP PATCH request",
+    "documentation": "### `http::patch`\n\nThe ``http::patch`` function performs a remote HTTP ``PATCH`` request. The first parameter is the URL of the remote endpoint, and the second parameter is the value to use as the request body, which will be converted to JSON. If the response does not return a ``2XX`` status code, then the function will fail and return the error. If the remote endpoint returns an ``application/json`` content-type, then the response is parsed and returned as a value, otherwise the response is treated as text.\n\n##### Usage:\n```\n http::patch(string, object) -> value\n ```\n\nIf an object is given as the third argument, then this can be used to set the request headers.\n\n##### Usage:\n```\n http::patch(string, object, object) -> value\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM http::patch('https://dummyjson.com/comments/1', {  \"id\": 1,  \"body\": \"This is some awesome thinking!\",  \"postId\": 100,  \"user\": {    \"id\": 63,    \"username\": \"eburras1q\"  }});```\n##### Output:\n```{  \"id\": 1,  \"body\": \"This is some awesome thinking!\",  \"postId\": 100,  \"user\": {    \"id\": 63,    \"username\": \"eburras1q\"  }}```",
+    "waypoint": "patch",
+    "api_definition": "http::patch(string, object) -> valuehttp::patch(string, object, object) -> value",
+    "params": [
+      "string",
+      "object"
+    ]
+  },
+  "http::post": {
+    "name": "http::post()",
+    "summary": "Perform a remote HTTP POST request",
+    "documentation": "### `http::post`\n\nThe ``http::post`` function performs a remote HTTP ``POST`` request. The first parameter is the URL of the remote endpoint, and the second parameter is the value to use as the request body, which will be converted to JSON. If the response does not return a ``2XX`` status code, then the function will fail and return the error. If the remote endpoint returns an ``application/json`` content-type, then the response is parsed and returned as a value, otherwise the response is treated as text.\n\n##### Usage:\n```\n http::post(string, object) -> value\n ```\n\nIf an object is given as the third argument, then this can be used to set the request headers.\n\n##### Usage:\n```\n http::post(string, object, object) -> value\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM http::post('https://dummyjson.com/comments/1', {  \"id\": 1,  \"body\": \"This is some awesome thinking!\",  \"postId\": 100,  \"user\": {    \"id\": 63,    \"username\": \"eburras1q\"  }});```\n##### Output:\n```{  \"id\": 1,  \"body\": \"This is some awesome thinking!\",  \"postId\": 100,  \"user\": {    \"id\": 63,    \"username\": \"eburras1q\"  }}```",
+    "waypoint": "post",
+    "api_definition": "http::post(string, object) -> valuehttp::post(string, object, object) -> value",
+    "params": [
+      "string",
+      "object"
+    ]
+  },
+  "http::put": {
+    "name": "http::put()",
+    "summary": "Perform a remote HTTP PUT request",
+    "documentation": "### `http::put`\n\nThe ``http::put`` function performs a remote HTTP ``PUT`` request. The first parameter is the URL of the remote endpoint, and the second parameter is the value to use as the request body, which will be converted to JSON. If the response does not return a ``2XX`` status code, then the function will fail and return the error. If the remote endpoint returns an ``application/json`` content-type, then the response is parsed and returned as a value, otherwise the response is treated as text.\n\n##### Usage:\n```\n http::put(string, object) -> value\n ```\n\nIf an object is given as the third argument, then this can be used to set the request headers.\n\n##### Usage:\n```\n http::put(string, object, object) -> value\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM http::put('https://dummyjson.com/comments', {  \"id\": 1,  \"body\": \"This is some awesome thinking!\",  \"postId\": 100,  \"user\": {    \"id\": 63,    \"username\": \"eburras1q\"  }});```\n##### Output:\n```{  \"id\": 1,  \"body\": \"This is some awesome thinking!\",  \"postId\": 100,  \"user\": {    \"id\": 63,    \"username\": \"eburras1q\"  }}```",
+    "waypoint": "put",
+    "api_definition": "http::put(string, object) -> valuehttp::put(string, object, object) -> value",
+    "params": [
+      "string",
+      "object"
+    ]
+  },
+  "math::abs": {
+    "name": "math::abs()",
+    "summary": "Returns the absolute value of a number",
+    "documentation": "### math::abs\n\nThe ``math::abs`` function returns the absolute value of a number.\n\n##### Usage:\n```\n math::abs(number) -> number\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM math::abs(13.746189);```\n##### Output:\n```13```\n\nIf the argument is not a number, then it will be cast to a number before the function is run:\n\n##### Input:\n```SELECT * FROM math::abs(\"13.746189\");```\n##### Output:\n```13```",
+    "waypoint": "abs",
+    "api_definition": "math::abs(number) -> number",
+    "params": [
+      "number"
+    ],
+    "return_type": "number"
+  },
+  "math::bottom": {
+    "name": "math::bottom()",
+    "summary": "Returns the bottom X set of numbers in a set of numbers",
+    "documentation": "",
+    "waypoint": "bottom",
+    "api_definition": ""
+  },
+  "math::ceil": {
+    "name": "math::ceil()",
+    "summary": "Rounds a number up to the next largest integer",
+    "documentation": "### math::ceil\n\nThe ``math::ceil`` function rounds a number up to the next largest integer.\n\n##### Usage:\n```\n math::ceil(number) -> number\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM math::ceil(13.146572);```\n##### Output:\n```14```\n\nIf the argument is not a number, then it will be cast to a number before the function is run:\n\n##### Input:\n```SELECT * FROM math::ceil(\"13.146572\");```\n##### Output:\n```14```",
+    "waypoint": "ceil",
+    "api_definition": "math::ceil(number) -> number",
+    "params": [
+      "number"
+    ],
+    "return_type": "number"
+  },
+  "math::fixed": {
+    "name": "math::fixed()",
+    "summary": "Returns a number with the specified number of decimal places",
+    "documentation": "### math::fixed\n\nThe ``math::fixed`` function returns a number with the specified number of decimal places.\n\n##### Usage:\n```\n math::fixed(number, number) -> number\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM math::fixed(13.146572, 2);```\n##### Output:\n```13.15```\n\nIf the argument is not a number, then it will be cast to a number before the function is run:\n\n##### Input:\n```SELECT * FROM math::fixed(\"13.146572\", 2);```\n##### Output:\n```13.15```",
+    "waypoint": "fixed",
+    "api_definition": "math::fixed(number, number) -> number",
+    "params": [
+      "number",
+      "number"
+    ],
+    "return_type": "number"
+  },
+  "math::floor": {
+    "name": "math::floor()",
+    "summary": "Rounds a number down to the next largest integer",
+    "documentation": "### math::floor\n\nThe ``math::floor`` function rounds a number down to the next largest integer.\n\n##### Usage:\n```\n math::floor(number) -> number\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM math::floor(13.746189);```\n##### Output:\n```13```\n\nIf the argument is not a number, then it will be cast to a number before the function is run:\n\n##### Input:\n```SELECT * FROM math::floor(\"13.746189\");```\n##### Output:\n```13```",
+    "waypoint": "floor",
+    "api_definition": "math::floor(number) -> number",
+    "params": [
+      "number"
+    ],
+    "return_type": "number"
+  },
+  "math::max": {
+    "name": "math::max()",
+    "summary": "Returns the maximum number in a set of numbers",
+    "documentation": "### math::max\n\nThe ``math::max`` function returns the maximum number in a set of numbers.\n\n##### Usage:\n```\n math::max(number) -> number\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM math::max([26.164, 13.746189, 23, 16.4, 41.42]);```\n##### Output:\n```41.42```\n\nIf any value in the array is not a number, then it will be cast to a number before the function is run:\n\n##### Input:\n```SELECT * FROM math::max([\"26.164\", 13.746189, '23', 16.4, \"41.42\"]);```\n##### Output:\n```41.42```\n\nIf the argument is not an array, then an ``EMPTY`` value will be returned:\n\n##### Input:\n```SELECT * FROM math::max(\"some invalid argument\");```\n##### Output:\n```null```",
+    "waypoint": "max",
+    "api_definition": "math::max(number) -> number",
+    "params": [
+      "number"
+    ],
+    "return_type": "number"
+  },
+  "math::mean": {
+    "name": "math::mean()",
+    "summary": "Returns the mean of a set of numbers",
+    "documentation": "### math::mean\n\nThe ``math::mean`` function returns the mean of a set of numbers.\n\n##### Usage:\n```\n math::mean(array) -> number\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM math::mean([26.164, 13.746189, 23, 16.4, 41.42]);```\n##### Output:\n```24.1460378```\n\nIf any value in the array is not a number, then it will be cast to a number before the function is run:\n\n##### Input:\n```SELECT * FROM math::mean([\"26.164\", 13.746189, '23', 16.4, \"41.42\"]);```\n##### Output:\n```24.1460378```\n\nIf the argument is not an array, then an ``EMPTY`` value will be returned:\n\n##### Input:\n```SELECT * FROM math::mean(\"some invalid argument\");```\n##### Output:\n```null```",
+    "waypoint": "mean",
+    "api_definition": "math::mean(array) -> number",
+    "params": [
+      "array"
+    ],
+    "return_type": "number"
+  },
+  "math::median": {
+    "name": "math::median()",
+    "summary": "Returns the median of a set of numbers",
+    "documentation": "### math::median\n\nThe ``math::median`` function returns the median of a set of numbers.\n\n##### Usage:\n```\n math::median(array) -> number\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM math::median([26.164, 13.746189, 23, 16.4, 41.42]);```\n##### Output:\n```23```\n\nIf any value in the array is not a number, then it will be cast to a number before the function is run:\n\n##### Input:\n```SELECT * FROM math::median([\"26.164\", 13.746189, '23', 16.4, \"41.42\"]);```\n##### Output:\n```23```\n\nIf the argument is not an array, then an ``EMPTY`` value will be returned:\n\n##### Input:\n```SELECT * FROM math::median(\"some invalid argument\");```\n##### Output:\n```null```",
+    "waypoint": "median",
+    "api_definition": "math::median(array) -> number",
+    "params": [
+      "array"
+    ],
+    "return_type": "number"
+  },
+  "math::midhinge": {
+    "name": "math::midhinge()",
+    "summary": "Returns the midhinge of a set of numbers",
+    "documentation": "",
+    "waypoint": "midhinge",
+    "api_definition": ""
+  },
+  "math::min": {
+    "name": "math::min()",
+    "summary": "Returns the minimum number in a set of numbers",
+    "documentation": "### math::min\n\nThe ``math::min`` function returns the minimum number in a set of numbers.\n\n##### Usage:\n```\n math::min(array) -> number\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM math::min([26.164, 13.746189, 23, 16.4, 41.42]);```\n##### Output:\n```13.746189```\n\nIf any value in the array is not a number, then it will be cast to a number before the function is run:\n\n##### Input:\n```SELECT * FROM math::min([\"26.164\", 13.746189, '23', 16.4, \"41.42\"]);```\n##### Output:\n```13.746189```\n\nIf the argument is not an array, then an ``EMPTY`` value will be returned:\n\n##### Input:\n```SELECT * FROM math::min(\"some invalid argument\");```\n##### Output:\n```null```",
+    "waypoint": "min",
+    "api_definition": "math::min(array) -> number",
+    "params": [
+      "array"
+    ],
+    "return_type": "number"
+  },
+  "math::mode": {
+    "name": "math::mode()",
+    "summary": "Returns the value that occurs most often in a set of numbers",
+    "documentation": "",
+    "waypoint": "mode",
+    "api_definition": ""
+  },
+  "math::percentile": {
+    "name": "math::percentile()",
+    "summary": "Returns the value below which a percentage of data falls",
+    "documentation": "",
+    "waypoint": "percentile",
+    "api_definition": ""
+  },
+  "math::product": {
+    "name": "math::product()",
+    "summary": "Returns the product of a set of numbers",
+    "documentation": "### math::product\n\nThe ``math::product`` function returns the product of a set of numbers.\n\n##### Usage:\n```\n math::product(array) -> number\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM math::product([26.164, 13.746189, 23, 16.4, 41.42]);```\n##### Output:\n```5619119.004884841504```\n\nIf any value in the array is not a number, then it will be cast to a number before the function is run:\n\n##### Input:\n```SELECT * FROM math::product([\"26.164\", 13.746189, '23', 16.4, \"41.42\"]);```\n##### Output:\n```5619119.004884841504```\n\nIf the argument is not an array, then an ``EMPTY`` value will be returned:\n\n##### Input:\n```SELECT * FROM math::product(\"some invalid argument\");```\n##### Output:\n```null```",
+    "waypoint": "product",
+    "api_definition": "math::product(array) -> number",
+    "params": [
+      "array"
+    ],
+    "return_type": "number"
+  },
+  "math::round": {
+    "name": "math::round()",
+    "summary": "Rounds a number up or down to the nearest integer",
+    "documentation": "### math::round\n\nThe ``math::round`` function rounds a number up or down to the nearest integer.\n\n##### Usage:\n```\n math::round(number) -> number\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM math::round(13.53124);```\n##### Output:\n```14```\n\nIf the argument is not a number, then it will be cast to a number before the function is run:\n\n##### Input:\n```SELECT * FROM math::round(\"13.53124\");```\n##### Output:\n```14```",
+    "waypoint": "round",
+    "api_definition": "math::round(number) -> number",
+    "params": [
+      "number"
+    ],
+    "return_type": "number"
+  },
+  "math::sqrt": {
+    "name": "math::sqrt()",
+    "summary": "Returns the square root of a number",
+    "documentation": "### math::sqrt\n\nThe ``math::sqrt`` function returns the square root of a number.\n\n##### Usage:\n```\n math::sqrt(number) -> number\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM math::sqrt(15);```\n##### Output:\n```3.872983346207417```\n\nIf the argument is not a number, then it will be cast to a number before the function is run:\n\n##### Input:\n```SELECT * FROM math::sqrt(\"15\");```\n##### Output:\n```3.872983346207417```",
+    "waypoint": "sqrt",
+    "api_definition": "math::sqrt(number) -> number",
+    "params": [
+      "number"
+    ],
+    "return_type": "number"
+  },
+  "math::stddev": {
+    "name": "math::stddev()",
+    "summary": "Calculates how far a set of numbers are away from the mean",
+    "documentation": "",
+    "waypoint": "stddev",
+    "api_definition": ""
+  },
+  "math::sum": {
+    "name": "math::sum()",
+    "summary": "Returns the total sum of a set of numbers",
+    "documentation": "### math::sum\n\nThe ``math::sum`` function returns the total sum of a set of numbers.\n\n##### Usage:\n```\n math::sum(array) -> number\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM math::sum([26.164, 13.746189, 23, 16.4, 41.42]);```\n##### Output:\n```120.730189```\n\nIf any value in the array is not a number, then it will be cast to a number before the function is run:\n\n##### Input:\n```SELECT * FROM math::sum([\"26.164\", 13.746189, '23', 16.4, \"41.42\"]);```\n##### Output:\n```120.730189```\n\nIf the argument is not an array, then an ``EMPTY`` value will be returned:\n\n##### Input:\n```SELECT * FROM math::sum(\"some invalid argument\");```\n##### Output:\n```null```",
+    "waypoint": "sum",
+    "api_definition": "math::sum(array) -> number",
+    "params": [
+      "array"
+    ],
+    "return_type": "number"
+  },
+  "math::top": {
+    "name": "math::top()",
+    "summary": "Returns the top X set of numbers in a set of numbers",
+    "documentation": "",
+    "waypoint": "top",
+    "api_definition": ""
+  },
+  "math::trimean": {
+    "name": "math::trimean()",
+    "summary": "The weighted average of the median and the two quartiles",
+    "documentation": "",
+    "waypoint": "trimean",
+    "api_definition": ""
+  },
+  "math::variance": {
+    "name": "math::variance()",
+    "summary": "Calculates how far a set of numbers are spread out from the mean",
+    "documentation": "",
+    "waypoint": "variance",
+    "api_definition": ""
+  },
+  "meta::id": {
+    "name": "meta::id()",
+    "summary": "Extracts and returns the table id from a SurrealDB Record ID",
+    "documentation": "### `meta::id`\n\nThe ``meta::id`` function extracts and returns the table id from a SurrealDB Record ID.\n\n##### Usage:\n```\n meta::id() -> value\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM meta::id(person:tobie);```\n##### Output:\n```\"tobie\"```",
+    "waypoint": "id",
+    "api_definition": "meta::id() -> value",
+    "params": [
+      ""
+    ],
+    "return_type": "value"
+  },
+  "meta::tb": {
+    "name": "meta::tb()",
+    "summary": "Extracts and returns the table name from a SurrelDB Record ID",
+    "documentation": "### `meta::tb`\n\nThe ``meta::tb`` function extracts and returns the table name from a SurrelDB Record ID.\n\n##### Usage:\n```\n meta::tb() -> string\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM meta::tb(person:tobie);```\n##### Output:\n```\"person\"```",
+    "waypoint": "tb",
+    "api_definition": "meta::tb() -> string",
+    "params": [
+      ""
+    ],
+    "return_type": "string"
+  },
+  "parse::parse-email-host": {
+    "name": "parse::email::host()",
+    "summary": "Parses and returns an email host from an email address",
+    "documentation": "### parse::email::host\n\nThe ``parse::email::host`` function parses and returns and email host from a valid email address.\n\n##### Usage:\n```\n parse::email::host(string) -> value\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM parse::email::host(\"info@surrealdb.com\");```\n##### Output:\n```\"surrealdb.com\"```\n\nIf the argument is not a string, then the value will be cast to a string before the function is run:\n\n##### Input:\n```SELECT * FROM parse::email::host(12345);```\n##### Output:\n```null```",
+    "waypoint": "parse-email-host",
+    "api_definition": "parse::email::host(string) -> value",
+    "params": [
+      "string"
+    ],
+    "return_type": "value"
+  },
+  "parse::parse-email-user": {
+    "name": "parse::email::user()",
+    "summary": "Parses and returns an email username from an email address",
+    "documentation": "### parse::email::user\n\nThe ``parse::email::user`` function parses and returns and email username from a valid email address.\n\n##### Usage:\n```\n parse::email::user(string) -> value\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM parse::email::user(\"info@surrealdb.com\");```\n##### Output:\n```\"info\"```\n\nIf the argument is not a string, then the value will be cast to a string before the function is run:\n\n##### Input:\n```SELECT * FROM parse::email::user(12345);```\n##### Output:\n```null```",
+    "waypoint": "parse-email-user",
+    "api_definition": "parse::email::user(string) -> value",
+    "params": [
+      "string"
+    ],
+    "return_type": "value"
+  },
+  "parse::parse-url-domain": {
+    "name": "parse::url::domain()",
+    "summary": "Parses and returns the domain from a URL",
+    "documentation": "### parse::url::domain\n\nThe ``parse::url::domain`` function parses and returns the domain from a valid URL.\n\n##### Usage:\n```\n parse::url::domain(string) -> value\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM parse::url::domain(\"https://surrealdb.com:80/features?some=option#fragment\");```\n##### Output:\n```\"surrealdb.com\"```\n\nIf the argument is not a string, then the value will be cast to a string before the function is run:\n\n##### Input:\n```SELECT * FROM parse::url::domain(12345);```\n##### Output:\n```null```",
+    "waypoint": "parse-url-domain",
+    "api_definition": "parse::url::domain(string) -> value",
+    "params": [
+      "string"
+    ],
+    "return_type": "value"
+  },
+  "parse::parse-url-fragment": {
+    "name": "parse::url::fragment()",
+    "summary": "Parses and returns the fragment from a URL",
+    "documentation": "### parse::url::fragment\n\nThe ``parse::url::fragment`` function parses and returns the fragment from a valid URL.\n\n##### Usage:\n```\n parse::url::fragment(string) -> value\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM parse::url::fragment(\"https://surrealdb.com:80/features?some=option#fragment\");```\n##### Output:\n```\"fragment\"```\n\nIf the argument is not a string, then the value will be cast to a string before the function is run:\n\n##### Input:\n```SELECT * FROM parse::url::fragment(12345);```\n##### Output:\n```null```",
+    "waypoint": "parse-url-fragment",
+    "api_definition": "parse::url::fragment(string) -> value",
+    "params": [
+      "string"
+    ],
+    "return_type": "value"
+  },
+  "parse::parse-url-host": {
+    "name": "parse::url::host()",
+    "summary": "Parses and returns the hostname from a URL",
+    "documentation": "### parse::url::host\n\nThe ``parse::url::host`` function parses and returns the hostname from a valid URL.\n\n##### Usage:\n```\n parse::url::host(string) -> value\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM parse::url::host(\"https://surrealdb.com:80/features?some=option#fragment\");```\n##### Output:\n```\"surrealdb.com\"```\n\nIf the argument is not a string, then the value will be cast to a string before the function is run:\n\n##### Input:\n```SELECT * FROM parse::url::host(12345);```\n##### Output:\n```null```",
+    "waypoint": "parse-url-host",
+    "api_definition": "parse::url::host(string) -> value",
+    "params": [
+      "string"
+    ],
+    "return_type": "value"
+  },
+  "parse::parse-url-path": {
+    "name": "parse::url::path()",
+    "summary": "Parses and returns the path from a URL",
+    "documentation": "### parse::url::path\n\nThe ``parse::url::path`` function parses and returns the path from a valid URL.\n\n##### Usage:\n```\n parse::url::path(string) -> value\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM parse::url::path(\"https://surrealdb.com:80/features?some=option#fragment\");```\n##### Output:\n```\"/features\"```\n\nIf the argument is not a string, then the value will be cast to a string before the function is run:\n\n##### Input:\n```SELECT * FROM parse::url::path(12345);```\n##### Output:\n```null```",
+    "waypoint": "parse-url-path",
+    "api_definition": "parse::url::path(string) -> value",
+    "params": [
+      "string"
+    ],
+    "return_type": "value"
+  },
+  "parse::parse-url-port": {
+    "name": "parse::url::port()",
+    "summary": "Parses and returns the port number from a URL",
+    "documentation": "### parse::url::port\n\nThe ``parse::url::port`` function parses and returns the port from a valid URL.\n\n##### Usage:\n```\n parse::url::port(string) -> value\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM parse::url::port(\"https://surrealdb.com:80/features?some=option#fragment\");```\n##### Output:\n```80```\n\nIf the argument is not a string, then the value will be cast to a string before the function is run:\n\n##### Input:\n```SELECT * FROM parse::url::port(12345);```\n##### Output:\n```null```",
+    "waypoint": "parse-url-port",
+    "api_definition": "parse::url::port(string) -> value",
+    "params": [
+      "string"
+    ],
+    "return_type": "value"
+  },
+  "parse::parse-url-query": {
+    "name": "parse::url::query()",
+    "summary": "Parses and returns the query string from a URL",
+    "documentation": "### parse::url::query\n\nThe ``parse::url::query`` function parses and returns the query from a valid URL.\n\n##### Usage:\n```\n parse::url::query(string) -> value\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM parse::url::query(\"https://surrealdb.com:80/features?some=option#fragment\");```\n##### Output:\n```\"some=option\"```\n\nIf the argument is not a string, then the value will be cast to a string before the function is run:\n\n##### Input:\n```SELECT * FROM parse::url::query(12345);```\n##### Output:\n```null```",
+    "waypoint": "parse-url-query",
+    "api_definition": "parse::url::query(string) -> value",
+    "params": [
+      "string"
+    ],
+    "return_type": "value"
+  },
+  "rand::rand": {
+    "name": "rand()",
+    "summary": "Generates and returns a random floating point number",
+    "documentation": "### rand\n\nThe ``rand`` function generates a random ``float``, between ``0`` and ``1``.\n\n##### Usage:\n```\n rand() -> number\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM rand();```\n##### Output:\n```0.7062321084863658```\n\nThe following example shows this function being used in a ``SELECT`` statement with an ``ORDER BY`` clause:\n\n##### Input:\n```SELECT * FROM [{ age: 33 }, { age: 45 }, { age: 39 }] ORDER BY rand();```\n##### Output:\n```[{age: 45},{age: 39},{age: 33}]```",
+    "waypoint": "rand",
+    "api_definition": "rand() -> number",
+    "params": [
+      ""
+    ],
+    "return_type": "number"
+  },
+  "rand::rand-bool": {
+    "name": "rand::bool()",
+    "summary": "Generates and returns a random boolean",
+    "documentation": "### rand::bool\n\nThe ``rand::bool`` function generates a random ``boolean`` value.\n\n##### Usage:\n```\n rand::bool() -> boolean\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM rand::bool();```\n##### Output:\n```true```",
+    "waypoint": "rand-bool",
+    "api_definition": "rand::bool() -> boolean",
+    "params": [
+      ""
+    ],
+    "return_type": "boolean"
+  },
+  "rand::rand-enum": {
+    "name": "rand::enum()",
+    "summary": "Randomly picks a value from the specified values",
+    "documentation": "### rand::enum\n\nThe ``rand::enum`` function generates a random value, from a multitude of values.\n\n##### Usage:\n```\n rand::enum(value...) -> boolean\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM rand::enum('one', 'two', 3, 4.15385, 'five', true);```\n##### Output:\n```\"five\"```",
+    "waypoint": "rand-enum",
+    "api_definition": "rand::enum(value...) -> boolean",
+    "params": [
+      "value..."
+    ],
+    "return_type": "boolean"
+  },
+  "rand::rand-float": {
+    "name": "rand::float()",
+    "summary": "Generates and returns a random floating point number",
+    "documentation": "### rand::float\n\nThe ``rand::float`` function generates a random ``float``, between ``0`` and ``1``.\n\n##### Usage:\n```\n rand::float() -> float\n ```\n\nIf two numbers are provided, then the function generates a random ``float``, between two numbers.\n\n##### Usage:\n```\n rand::float(number, number) -> float\n ```\n\nThe following examples show this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM rand::float();```\n##### Output:\n```0.7812733136200293```##### Input:\n```SELECT * FROM rand::float(10, 15);```\n##### Output:\n```11.305355983514927```",
+    "waypoint": "rand-float",
+    "api_definition": "rand::float() -> floatrand::float(number, number) -> float",
+    "params": [
+      ""
+    ]
+  },
+  "rand::rand-guid": {
+    "name": "rand::guid()",
+    "summary": "Generates and returns a random guid",
+    "documentation": "### rand::guid\n\nThe ``rand::guid`` function generates a 20-character random guid.\n\n##### Usage:\n```\n rand::guid() -> string\n ```\n\nIf a number is provided, then the function generates a random guid, with a specific length.\n\n##### Usage:\n```\n rand::guid(number) -> string\n ```\n\nThe following examples show this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM rand::guid();```\n##### Output:\n```\"4uqmrmtjhtjeg77et0dl\"```##### Input:\n```SELECT * FROM rand::guid(10);```\n##### Output:\n```\"f3b6cjh0nt\"```",
+    "waypoint": "rand-guid",
+    "api_definition": "rand::guid() -> stringrand::guid(number) -> string",
+    "params": [
+      ""
+    ]
+  },
+  "rand::rand-int": {
+    "name": "rand::int()",
+    "summary": "Generates and returns a random integer",
+    "documentation": "### rand::int\n\nThe ``rand::int`` function generates a random ``int``.\n\n##### Usage:\n```\n rand::int() -> int\n ```\n\nIf two numbers are provided, then the function generates a random ``int``, between two numbers.\n\n##### Usage:\n```\n rand::int(number, number) -> int\n ```\n\nThe following examples show this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM rand::int();```\n##### Output:\n```6841551695902514727```##### Input:\n```SELECT * FROM rand::int(10, 15);```\n##### Output:\n```13```",
+    "waypoint": "rand-int",
+    "api_definition": "rand::int() -> intrand::int(number, number) -> int",
+    "params": [
+      ""
+    ]
+  },
+  "rand::rand-string": {
+    "name": "rand::string()",
+    "summary": "Generates and returns a random string",
+    "documentation": "### rand::string\n\nThe ``rand::string`` function generates a random ``string``, with 32 characters.\n\n##### Usage:\n```\n rand::string() -> string\n ```\n\nThe ``rand::string`` function generates a random ``string``, with a specific length.\n\n##### Usage:\n```\n rand::string(number) -> string\n ```\n\nIf two numbers are provided, then the function generates a random ``string``, with a length between two numbers.\n\n##### Usage:\n```\n rand::string(number, number) -> string\n ```\n\nThe following examples show this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM rand::string();```\n##### Output:\n```\"N8Q86mklN6U7kv0A2XCRh5UlpQMSvdoT\"```##### Input:\n```SELECT * FROM rand::string(15);```\n##### Output:\n```\"aSCtrfJj4pSJ7Xq\"```##### Input:\n```SELECT * FROM rand::string(10, 15);```\n##### Output:\n```\"rEUWFUMcx0YH\"```",
+    "waypoint": "rand-string",
+    "api_definition": "rand::string() -> stringrand::string(number) -> stringrand::string(number, number) -> string",
+    "params": [
+      ""
+    ]
+  },
+  "rand::rand-time": {
+    "name": "rand::time()",
+    "summary": "Generates and returns a random datetime",
+    "documentation": "### rand::time\n\nThe ``rand::time`` function generates a random ``datetime``.\n\n##### Usage:\n```\n rand::time() -> datetime\n ```\n\nThe ``rand::time`` function generates a random ``datetime``, between two unix timestamps.\n\n##### Usage:\n```\n rand::time(number, number) -> datetime\n ```\n\nThe following examples show this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM rand::time();```\n##### Output:\n```\"2026-09-07T04:27:53Z\"```##### Input:\n```SELECT * FROM rand::time(198371, 1223138713);```\n##### Output:\n```\"1991-01-13T23:27:17Z\"```",
+    "waypoint": "rand-time",
+    "api_definition": "rand::time() -> datetimerand::time(number, number) -> datetime",
+    "params": [
+      ""
+    ]
+  },
+  "rand::rand-uuid": {
+    "name": "rand::uuid()",
+    "summary": "Generates and returns a random UUID",
+    "documentation": "### rand::uuid\n\nThe ``rand::uuid`` function generates a random UUID.\n\n##### Usage:\n```\n rand::uuid() -> uuid\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM rand::uuid();```\n##### Output:\n```\"e20b2836-e689-4643-998d-b17a16800323\"```",
+    "waypoint": "rand-uuid",
+    "api_definition": "rand::uuid() -> uuid",
+    "params": [
+      ""
+    ],
+    "return_type": "uuid"
+  },
+  "rand::rand-uuid-v4": {
+    "name": "rand::uuid::v4()",
+    "summary": "Generates and returns a random Version 4 UUID",
+    "documentation": "### rand::uuid::v4\n\nThe ``rand::uuid::v4`` function generates a random Version 4 UUID.\n\n##### Usage:\n```\n rand::uuid::v4() -> uuid\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM rand::uuid::v4();```\n##### Output:\n```\"4def23a5-a847-4934-8dad-c64ccc48921b\"```",
+    "waypoint": "rand-uuid-v4",
+    "api_definition": "rand::uuid::v4() -> uuid",
+    "params": [
+      ""
+    ],
+    "return_type": "uuid"
+  },
+  "rand::rand-uuid-v7": {
+    "name": "rand::uuid::v7()",
+    "summary": "Generates and returns a random Version 7 UUID",
+    "documentation": "### rand::uuid::v7\n\nThe ``rand::uuid::v7`` function generates a random Version 7 UUID.\n\n##### Usage:\n```\n rand::uuid::v7() -> uuid\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM rand::uuid::v7();```\n##### Output:\n```\"01843a54-32e1-71eb-af07-5901fc190877\"```",
+    "waypoint": "rand-uuid-v7",
+    "api_definition": "rand::uuid::v7() -> uuid",
+    "params": [
+      ""
+    ],
+    "return_type": "uuid"
+  },
+  "session::db": {
+    "name": "session::db()",
+    "summary": "Returns the currently selected database",
+    "documentation": "### `session::db`\n\nThe ``session::db`` function returns the currently selected database.\n\n##### Usage:\n```\n session::db() -> string\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM session::db();```\n##### Output:\n```\"my_db\"```",
+    "waypoint": "db",
+    "api_definition": "session::db() -> string",
+    "params": [
+      ""
+    ],
+    "return_type": "string"
+  },
+  "session::id": {
+    "name": "session::id()",
+    "summary": "Returns the current user's session ID",
+    "documentation": "### `session::id`\n\nThe ``session::id`` function returns the current user's session ID.\n\n##### Usage:\n```\n session::id() -> string\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM session::id();```\n##### Output:\n```\"I895rKuixHwCNIduyBIYH2M0Pga7oUmWnng5exEE4a7EB942GVElGrnRhE5scF5d\"```",
+    "waypoint": "id",
+    "api_definition": "session::id() -> string",
+    "params": [
+      ""
+    ],
+    "return_type": "string"
+  },
+  "session::ip": {
+    "name": "session::ip()",
+    "summary": "Returns the current user's session IP address",
+    "documentation": "### `session::ip`\n\nThe ``session::ip`` function returns the current user's session IP address.\n\n##### Usage:\n```\n session::ip() -> string\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM session::ip();```\n##### Output:\n```\"2001:db8:3333:4444:CCCC:DDDD:EEEE:FFFF\"```",
+    "waypoint": "ip",
+    "api_definition": "session::ip() -> string",
+    "params": [
+      ""
+    ],
+    "return_type": "string"
+  },
+  "session::ns": {
+    "name": "session::ns()",
+    "summary": "Returns the currently selected namespace",
+    "documentation": "### `session::ns`\n\nThe ``session::ns`` function returns the currently selected namespace.\n\n##### Usage:\n```\n session::ns() -> string\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM session::ns();```\n##### Output:\n```\"my_ns\"```",
+    "waypoint": "ns",
+    "api_definition": "session::ns() -> string",
+    "params": [
+      ""
+    ],
+    "return_type": "string"
+  },
+  "session::origin": {
+    "name": "session::origin()",
+    "summary": "Returns the current user's HTTP origin",
+    "documentation": "### `session::origin`\n\nThe ``session::origin`` function returns the current user's HTTP origin.\n\n##### Usage:\n```\n session::origin() -> string\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM session::origin();```\n##### Output:\n```\"http://localhost:3000\"```",
+    "waypoint": "origin",
+    "api_definition": "session::origin() -> string",
+    "params": [
+      ""
+    ],
+    "return_type": "string"
+  },
+  "session::sc": {
+    "name": "session::sc()",
+    "summary": "Returns the current user's authentication scope",
+    "documentation": "### `session::sc`\n\nThe ``session::sc`` function returns the current user's authentication scope.\n\n##### Usage:\n```\n session::sc() -> string\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM session::sc();```\n##### Output:\n```\"user\"```",
+    "waypoint": "sc",
+    "api_definition": "session::sc() -> string",
+    "params": [
+      ""
+    ],
+    "return_type": "string"
+  },
+  "sleep::sleep": {
+    "name": "sleep()",
+    "summary": "Delays or pauses in the execution of a query or a batch of queries.",
+    "documentation": "### `sleep`\n\nThe ``sleep`` function delays or pauses the execution of a query or a set of statements.\n\n##### Usage:\n```\n sleep(duration) -> none\n ```\n\nThe following examples show this function when used in a select statement:\n\n##### Input:\n```SELECT * FROM sleep(1s);```\n##### Output:\n```SELECT * FROM sleep(500ms);```",
+    "waypoint": "sleep",
+    "api_definition": "sleep(duration) -> none",
+    "params": [
+      "duration"
+    ],
+    "return_type": "none"
+  },
+  "string::concat": {
+    "name": "string::concat()",
+    "summary": "Concatenates strings together",
+    "documentation": "### `string::concat`\n\nThe ``string::concat`` function concatenates strings together.\n\n##### Usage:\n```\n string::concat(string...) -> string\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM string::concat('this', ' ', 'is', ' ', 'a', ' ', 'test');```\n##### Output:\n```\"this is a test\"```\n\nIf any argument is not a string, then it will be cast to a string before the function is run:\n\n##### Input:\n```SELECT * FROM string::concat(1, 2, 3, 4, 5);```\n##### Output:\n```\"12345\"```",
+    "waypoint": "concat",
+    "api_definition": "string::concat(string...) -> string",
+    "params": [
+      "string..."
+    ],
+    "return_type": "string"
+  },
+  "string::endsWith": {
+    "name": "string::endsWith()",
+    "summary": "Checks whether a string ends with another string",
+    "documentation": "",
+    "waypoint": "endsWith",
+    "api_definition": ""
+  },
+  "string::join": {
+    "name": "string::join()",
+    "summary": "Joins strings together with a delimiter",
+    "documentation": "### `string::join`\n\nThe ``string::join`` function joins strings together with a delimiter.\n\n##### Usage:\n```\n string::join(string, string...) -> string\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM string::join(', ', 'a', 'list', 'of', 'items');```\n##### Output:\n```\"a, list, of, items\"```\n\nIf any argument is not a string, then it will be cast to a string before the function is run:\n\n##### Input:\n```SELECT * FROM string::join(', ', 1, 2, 3, 4, 5);```\n##### Output:\n```\"1, 2, 3, 4, 5\"```",
+    "waypoint": "join",
+    "api_definition": "string::join(string, string...) -> string",
+    "params": [
+      "string",
+      "string..."
+    ],
+    "return_type": "string"
+  },
+  "string::len": {
+    "name": "string::len()",
+    "summary": "Returns the length of a string",
+    "documentation": "### `string::len`\n\nThe ``string::len`` function returns the length of a given string.\n\n##### Usage:\n```\n string::len(string) -> number\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM string::len('this is a test');```\n##### Output:\n```14```\n\nIf the argument is not a string, then the value will be cast to a string before the function is run:\n\n##### Input:\n```SELECT * FROM string::len(12345);```\n##### Output:\n```5```",
+    "waypoint": "len",
+    "api_definition": "string::len(string) -> number",
+    "params": [
+      "string"
+    ],
+    "return_type": "number"
+  },
+  "string::lowercase": {
+    "name": "string::lowercase()",
+    "summary": "Converts a string to lowercase",
+    "documentation": "### `string::lowercase`\n\nThe ``string::lowercase`` function converts a string to lowercase.\n\n##### Usage:\n```\n string::lowercase(string) -> string\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM string::lowercase('THIS IS A TEST');```\n##### Output:\n```\"this is a test\"```\n\nIf the argument is not a string, then the value will be cast to a string before the function is run:\n\n##### Input:\n```SELECT * FROM string::lowercase(12345);```\n##### Output:\n```\"12345\"```",
+    "waypoint": "lowercase",
+    "api_definition": "string::lowercase(string) -> string",
+    "params": [
+      "string"
+    ],
+    "return_type": "string"
+  },
+  "string::repeat": {
+    "name": "string::repeat()",
+    "summary": "Repeats a string a number of times",
+    "documentation": "### `string::repeat`\n\nThe ``string::repeat`` function repeats a string a number of times.\n\n##### Usage:\n```\n string::repeat(string, number) -> string\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM string::repeat('test', 3);```\n##### Output:\n```\"testtesttest\"```\n\nIf the first argument is not a string, then the value will be cast to a string before the function is run:\n\n##### Input:\n```SELECT * FROM string::repeat(123, 3);```\n##### Output:\n```\"123123123\"```",
+    "waypoint": "repeat",
+    "api_definition": "string::repeat(string, number) -> string",
+    "params": [
+      "string",
+      "number"
+    ],
+    "return_type": "string"
+  },
+  "string::replace": {
+    "name": "string::replace()",
+    "summary": "Replaces an occurence of a string with another string",
+    "documentation": "### `string::replace`\n\nThe ``string::replace`` function replaces an occurence of a string with another string.\n\n##### Usage:\n```\n string::replace(string, string, string) -> string\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM string::replace('this is a test', 'a test', 'awesome');```\n##### Output:\n```\"this is awesome\"```\n\nIf any argument is not a string, then it will be cast to a string before the function is run:\n\n##### Input:\n```SELECT * FROM string::replace(12345, '12', '54');```\n##### Output:\n```\"54345\"```",
+    "waypoint": "replace",
+    "api_definition": "string::replace(string, string, string) -> string",
+    "params": [
+      "string",
+      "string",
+      "string"
+    ],
+    "return_type": "string"
+  },
+  "string::reverse": {
+    "name": "string::reverse()",
+    "summary": "Reverses a string",
+    "documentation": "### `string::reverse`\n\nThe ``string::reverse`` function reverses a string.\n\n##### Usage:\n```\n string::reverse(string) -> string\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM string::reverse('this is a test');```\n##### Output:\n```\"test a is this\"```\n\nIf the argument is not a string, then the value will be cast to a string before the function is run:\n\n##### Input:\n```SELECT * FROM string::reverse(12345);```\n##### Output:\n```\"54321\"```",
+    "waypoint": "reverse",
+    "api_definition": "string::reverse(string) -> string",
+    "params": [
+      "string"
+    ],
+    "return_type": "string"
+  },
+  "string::slice": {
+    "name": "string::slice()",
+    "summary": "Extracts and returns a section of a string",
+    "documentation": "### `string::slice`\n\nThe ``string::slice`` function extracts and returns a section of a string.\n\n##### Usage:\n```\n string::slice(string, number, number) -> string\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM string::slice('this is a test', 10, 4);```\n##### Output:\n```\"test\"```\n\nIf the first argument is not a string, then the value will be cast to a string before the function is run:\n\n##### Input:\n```SELECT * FROM string::slice(12345.00, 0, 5);```\n##### Output:\n```\"12345\"```",
+    "waypoint": "slice",
+    "api_definition": "string::slice(string, number, number) -> string",
+    "params": [
+      "string",
+      "number",
+      "number"
+    ],
+    "return_type": "string"
+  },
+  "string::slug": {
+    "name": "string::slug()",
+    "summary": "Converts a string into human and URL-friendly string",
+    "documentation": "### `string::slug`\n\nThe ``string::slug`` function converts a string into a human and URL-friendly string.\n\n##### Usage:\n```\n string::slug(string) -> string\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM string::slug('SurrealDB has launched #database #awesome');```\n##### Output:\n```\"surrealdb-has-launched-database-awesome\"```\n\nIf the argument is not a string, then the value will be cast to a string before the function is run:\n\n##### Input:\n```SELECT * FROM string::slug(12345.00);```\n##### Output:\n```\"12345-00\"```",
+    "waypoint": "slug",
+    "api_definition": "string::slug(string) -> string",
+    "params": [
+      "string"
+    ],
+    "return_type": "string"
+  },
+  "string::split": {
+    "name": "string::split()",
+    "summary": "Divides a string into an ordered list of substrings",
+    "documentation": "### `string::split`\n\nThe ``string::split`` function splits a string by a given delimiter.\n\n##### Usage:\n```\n string::split(string, string) -> array\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM string::split('this, is, a, list', ', ');```\n##### Output:\n```[\"this\", \"is\", \"a\", \"list\"]```\n\nIf any argument is not a string, then it will be cast to a string before the function is run:\n\n##### Input:\n```SELECT * FROM string::split(12345.00, '.');```\n##### Output:\n```[\"12345\", \"00\"]```",
+    "waypoint": "split",
+    "api_definition": "string::split(string, string) -> array",
+    "params": [
+      "string",
+      "string"
+    ],
+    "return_type": "array"
+  },
+  "string::startsWith": {
+    "name": "string::startsWith()",
+    "summary": "Checks whether a string starts with another string",
+    "documentation": "",
+    "waypoint": "startsWith",
+    "api_definition": ""
+  },
+  "string::trim": {
+    "name": "string::trim()",
+    "summary": "Removes whitespace from the start and end of a string",
+    "documentation": "### `string::trim`\n\nThe ``string::trim`` function removes whitespace from the start and end of a string.\n\n##### Usage:\n```\n string::trim(string) -> string\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM string::trim('    this is a test    ');```\n##### Output:\n```\"this is a test\"```\n\nIf the argument is not a string, then the value will be cast to a string before the function is run:\n\n##### Input:\n```SELECT * FROM string::trim(12345);```\n##### Output:\n```[\"12345\"]```",
+    "waypoint": "trim",
+    "api_definition": "string::trim(string) -> string",
+    "params": [
+      "string"
+    ],
+    "return_type": "string"
+  },
+  "string::uppercase": {
+    "name": "string::uppercase()",
+    "summary": "Converts a string to uppercase",
+    "documentation": "### `string::uppercase`\n\nThe ``string::uppercase`` function converts a string to uppercase.\n\n##### Usage:\n```\n string::uppercase(string) -> string\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM string::uppercase('this is a test');```\n##### Output:\n```\"THIS IS A TEST\"```\n\nIf the argument is not a string, then the value will be cast to a string before the function is run:\n\n##### Input:\n```SELECT * FROM string::uppercase(12345);```\n##### Output:\n```\"12345\"```",
+    "waypoint": "uppercase",
+    "api_definition": "string::uppercase(string) -> string",
+    "params": [
+      "string"
+    ],
+    "return_type": "string"
+  },
+  "string::words": {
+    "name": "string::words()",
+    "summary": "Splits a string into an array of separate words",
+    "documentation": "### `string::words`\n\nThe ``string::words`` function splits a string into an array of separate words.\n\n##### Usage:\n```\n string::words(string) -> array\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM string::words('this is a test');```\n##### Output:\n```[\"this\", \"is\", \"a\", \"test\"]```\n\nIf the argument is not a string, then the value will be cast to a string before the function is run:\n\n##### Input:\n```SELECT * FROM string::words(12345);```\n##### Output:\n```[\"12345\"]```",
+    "waypoint": "words",
+    "api_definition": "string::words(string) -> array",
+    "params": [
+      "string"
+    ],
+    "return_type": "array"
+  },
+  "time::day": {
+    "name": "time::day()",
+    "summary": "Extracts the day as a number from a datetime",
+    "documentation": "### time::day\n\nThe ``time::day`` function extracts the day as a number from a datetime.\n\n##### Usage:\n```\n time::day(datetime) -> number\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM time::day(\"2021-11-01T08:30:17+00:00\");```\n##### Output:\n```1```\n\nIf the argument is not a datetime, then an ``EMPTY`` value will be returned:\n\n##### Input:\n```SELECT * FROM time::day(12345);```\n##### Output:\n```null```",
+    "waypoint": "day",
+    "api_definition": "time::day(datetime) -> number",
+    "params": [
+      "datetime"
+    ],
+    "return_type": "number"
+  },
+  "time::floor": {
+    "name": "time::floor()",
+    "summary": "Rounds a datetime down by a specific duration",
+    "documentation": "### time::floor\n\nThe ``time::floor`` function rounds a datetime down by a specific duration.\n\n##### Usage:\n```\n time::floor(datetime, duration) -> datetime\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM time::floor(\"2021-11-01T08:30:17+00:00\", 1w);```\n##### Output:\n```\"2021-10-28T00:00:00Z\"```\n\nIf the first argument is not a datetime, then an ``EMPTY`` value will be returned:\n\n##### Input:\n```SELECT * FROM time::floor(12345, 1w);```\n##### Output:\n```null```",
+    "waypoint": "floor",
+    "api_definition": "time::floor(datetime, duration) -> datetime",
+    "params": [
+      "datetime",
+      "duration"
+    ],
+    "return_type": "datetime"
+  },
+  "time::format": {
+    "name": "time::format()",
+    "summary": "Outputs a datetime according to a specific format",
+    "documentation": "### time::format\n\nThe ``time::format`` function outputs a datetime according to a specific format.\n\n##### Usage:\n```\n time::format(datetime, string) -> string\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM time::format(\"2021-11-01T08:30:17+00:00\", \"%Y-%m-%d\");```\n##### Output:\n```\"2021-11-01\"```\n\nIf the first argument is not a datetime, then an ``EMPTY`` value will be returned:\n\n##### Input:\n```SELECT * FROM time::format(12345, \"%Y-%m-%d\");```\n##### Output:\n```null```",
+    "waypoint": "format",
+    "api_definition": "time::format(datetime, string) -> string",
+    "params": [
+      "datetime",
+      "string"
+    ],
+    "return_type": "string"
+  },
+  "time::group": {
+    "name": "time::group()",
+    "summary": "Groups a datetime by a particular time interval",
+    "documentation": "### time::group\n\nThe ``time::group`` function reduces and rounds a datetime down to a particular time interval. The second argument must be a string, and can be one of the following values: ``year``, ``month``, ``day``, ``hour``, ``minute``, ``second``.\n\n##### Usage:\n```\n time::group(datetime, string) -> datetime\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM time::group(\"2021-11-01T08:30:17+00:00\", \"year\");```\n##### Output:\n```\"2021-01-01T00:00:00Z\"```\n\nIf the first argument is not a datetime, then an ``EMPTY`` value will be returned:\n\n##### Input:\n```SELECT * FROM time::group(12345, \"week\");```\n##### Output:\n```null```",
+    "waypoint": "group",
+    "api_definition": "time::group(datetime, string) -> datetime",
+    "params": [
+      "datetime",
+      "string"
+    ],
+    "return_type": "datetime"
+  },
+  "time::hour": {
+    "name": "time::hour()",
+    "summary": "Extracts the hour as a number from a datetime",
+    "documentation": "### time::hour\n\nThe ``time::hour`` function extracts the hour as a number from a datetime.\n\n##### Usage:\n```\n time::hour(datetime) -> number\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM time::hour(\"2021-11-01T08:30:17+00:00\");```\n##### Output:\n```8```\n\nIf the argument is not a datetime, then an ``EMPTY`` value will be returned:\n\n##### Input:\n```SELECT * FROM time::hour(12345);```\n##### Output:\n```null```",
+    "waypoint": "hour",
+    "api_definition": "time::hour(datetime) -> number",
+    "params": [
+      "datetime"
+    ],
+    "return_type": "number"
+  },
+  "time::minute": {
+    "name": "time::minute()",
+    "summary": "Extracts the minutes as a number from a datetime",
+    "documentation": "### time::minute\n\nThe ``time::minute`` function extracts the minutes as a number from a datetime.\n\n##### Usage:\n```\n time::minute(datetime) -> number\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM time::minute(\"2021-11-01T08:30:17+00:00\");```\n##### Output:\n```30```\n\nIf the argument is not a datetime, then an ``EMPTY`` value will be returned:\n\n##### Input:\n```SELECT * FROM time::minute(12345);```\n##### Output:\n```null```",
+    "waypoint": "minute",
+    "api_definition": "time::minute(datetime) -> number",
+    "params": [
+      "datetime"
+    ],
+    "return_type": "number"
+  },
+  "time::month": {
+    "name": "time::month()",
+    "summary": "Extracts the month as a number from a datetime",
+    "documentation": "### time::month\n\nThe ``time::month`` function extracts the month as a number from a datetime.\n\n##### Usage:\n```\n time::month(datetime) -> number\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM time::month(\"2021-11-01T08:30:17+00:00\");```\n##### Output:\n```11```\n\nIf the argument is not a datetime, then an ``EMPTY`` value will be returned:\n\n##### Input:\n```SELECT * FROM time::month(12345);```\n##### Output:\n```null```",
+    "waypoint": "month",
+    "api_definition": "time::month(datetime) -> number",
+    "params": [
+      "datetime"
+    ],
+    "return_type": "number"
+  },
+  "time::nano": {
+    "name": "time::nano()",
+    "summary": "Returns the number of nanoseconds since the UNIX epoch",
+    "documentation": "### time::nano\n\nThe ``time::nano`` function returns a datetime as an integer representing the number of nanoseconds since the UNIX epoch.\n\n##### Usage:\n```\n time::nano(datetime) -> number\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM time::nano(\"2021-11-01T08:30:17+00:00\");```\n##### Output:\n```1635755417000000000```\n\nIf the argument is not a datetime, then an ``EMPTY`` value will be returned:\n\n##### Input:\n```SELECT * FROM time::nano(12345);```\n##### Output:\n```null```",
+    "waypoint": "nano",
+    "api_definition": "time::nano(datetime) -> number",
+    "params": [
+      "datetime"
+    ],
+    "return_type": "number"
+  },
+  "time::now": {
+    "name": "time::now()",
+    "summary": "Returns the current datetime",
+    "documentation": "### time::now\n\nThe ``time::now`` function returns the current datetime as an ISO8601 timestamp.\n\n##### Usage:\n```\n time::now() -> datetime\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM time::now();```\n##### Output:\n```\"2022-04-27T19:27:09.232928Z\"```",
+    "waypoint": "now",
+    "api_definition": "time::now() -> datetime",
+    "params": [
+      ""
+    ],
+    "return_type": "datetime"
+  },
+  "time::round": {
+    "name": "time::round()",
+    "summary": "Rounds a datetime to the nearest multiple of a specific duration",
+    "documentation": "### time::round\n\nThe ``time::round`` function rounds a datetime up by a specific duration.\n\n##### Usage:\n```\n time::round(datetime, duration) -> datetime\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM time::round(\"2021-11-01T08:30:17+00:00\", 1w);```\n##### Output:\n```\"2021-11-04T00:00:00Z\"```\n\nIf the first argument is not a datetime, then an ``EMPTY`` value will be returned:\n\n##### Input:\n```SELECT * FROM time::round(12345, 1w);```\n##### Output:\n```null```",
+    "waypoint": "round",
+    "api_definition": "time::round(datetime, duration) -> datetime",
+    "params": [
+      "datetime",
+      "duration"
+    ],
+    "return_type": "datetime"
+  },
+  "time::second": {
+    "name": "time::second()",
+    "summary": "Extracts the second as a number from a datetime",
+    "documentation": "### time::second\n\nThe ``time::second`` function extracts the second as a number from a datetime.\n\n##### Usage:\n```\n time::second(datetime) -> number\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM time::second(\"2021-11-01T08:30:17+00:00\");```\n##### Output:\n```17```\n\nIf the argument is not a datetime, then an ``EMPTY`` value will be returned:\n\n##### Input:\n```SELECT * FROM time::second(12345);```\n##### Output:\n```null```",
+    "waypoint": "second",
+    "api_definition": "time::second(datetime) -> number",
+    "params": [
+      "datetime"
+    ],
+    "return_type": "number"
+  },
+  "time::timezone": {
+    "name": "time::timezone()",
+    "summary": "Returns the current local timezone offset in hours",
+    "documentation": "### time::timezone\n\nThe ``time::timezone`` function returns the current local timezone offset in hours.\n\n##### Usage:\n```\n time::timezone() -> string\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM time::timezone();```\n##### Output:\n```\"+05:30\"```",
+    "waypoint": "timezone",
+    "api_definition": "time::timezone() -> string",
+    "params": [
+      ""
+    ],
+    "return_type": "string"
+  },
+  "time::unix": {
+    "name": "time::unix()",
+    "summary": "Returns the number of seconds since the UNIX epoch",
+    "documentation": "### time::unix\n\nThe ``time::unix`` function returns a datetime as an integer representing the number of seconds since the UNIX epoch.\n\n##### Usage:\n```\n time::unix(datetime) -> number\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM time::unix(\"2021-11-01T08:30:17+00:00\");```\n##### Output:\n```1635755417```\n\nIf the argument is not a datetime, then an ``EMPTY`` value will be returned:\n\n##### Input:\n```SELECT * FROM time::unix(12345);```\n##### Output:\n```null```",
+    "waypoint": "unix",
+    "api_definition": "time::unix(datetime) -> number",
+    "params": [
+      "datetime"
+    ],
+    "return_type": "number"
+  },
+  "time::wday": {
+    "name": "time::wday()",
+    "summary": "Extracts the week day as a number from a datetime",
+    "documentation": "### time::wday\n\nThe ``time::wday`` function extracts the week day as a number from a datetime.\n\n##### Usage:\n```\n time::wday(datetime) -> number\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM time::wday(\"2021-11-01T08:30:17+00:00\");```\n##### Output:\n```1```\n\nIf the argument is not a datetime, then an ``EMPTY`` value will be returned:\n\n##### Input:\n```SELECT * FROM time::wday(12345);```\n##### Output:\n```null```",
+    "waypoint": "wday",
+    "api_definition": "time::wday(datetime) -> number",
+    "params": [
+      "datetime"
+    ],
+    "return_type": "number"
+  },
+  "time::week": {
+    "name": "time::week()",
+    "summary": "Extracts the week as a number from a datetime",
+    "documentation": "### time::week\n\nThe ``time::week`` function extracts the week as a number from a datetime.\n\n##### Usage:\n```\n time::week(datetime) -> number\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM time::week(\"2021-11-01T08:30:17+00:00\");```\n##### Output:\n```44```\n\nIf the argument is not a datetime, then an ``EMPTY`` value will be returned:\n\n##### Input:\n```SELECT * FROM time::week(12345);```\n##### Output:\n```null```",
+    "waypoint": "week",
+    "api_definition": "time::week(datetime) -> number",
+    "params": [
+      "datetime"
+    ],
+    "return_type": "number"
+  },
+  "time::yday": {
+    "name": "time::yday()",
+    "summary": "Extracts the yday as a number from a datetime",
+    "documentation": "### time::yday\n\nThe ``time::yday`` function extracts the yday as a number from a datetime.\n\n##### Usage:\n```\n time::yday(datetime) -> number\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM time::yday(\"2021-11-01T08:30:17+00:00\");```\n##### Output:\n```305```\n\nIf the argument is not a datetime, then an ``EMPTY`` value will be returned:\n\n##### Input:\n```SELECT * FROM time::yday(12345);```\n##### Output:\n```null```",
+    "waypoint": "yday",
+    "api_definition": "time::yday(datetime) -> number",
+    "params": [
+      "datetime"
+    ],
+    "return_type": "number"
+  },
+  "time::year": {
+    "name": "time::year()",
+    "summary": "Extracts the year as a number from a datetime",
+    "documentation": "### time::year\n\nThe ``time::year`` function extracts the year as a number from a datetime.\n\n##### Usage:\n```\n time::year(datetime) -> number\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM time::year(\"2021-11-01T08:30:17+00:00\");```\n##### Output:\n```2021```\n\nIf the argument is not a datetime, then an ``EMPTY`` value will be returned:\n\n##### Input:\n```SELECT * FROM time::year(12345);```\n##### Output:\n```null```",
+    "waypoint": "year",
+    "api_definition": "time::year(datetime) -> number",
+    "params": [
+      "datetime"
+    ],
+    "return_type": "number"
+  },
+  "type::bool": {
+    "name": "type::bool()",
+    "summary": "Converts a value into a boolean",
+    "documentation": "### type::bool\n\nThe ``type::bool`` function converts a value into a bool, if the value is truthy.\n\n##### Usage:\n```\n type::bool(value) -> boolean\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM type::bool(12345);```\n##### Output:\n```true```\n\nThis is the equivalent of using ``<bool>`` to cast a value to a boolean.",
+    "waypoint": "bool",
+    "api_definition": "type::bool(value) -> boolean",
+    "params": [
+      "value"
+    ],
+    "return_type": "boolean"
+  },
+  "type::datetime": {
+    "name": "type::datetime()",
+    "summary": "Converts a value into a datetime",
+    "documentation": "### type::datetime\n\nThe ``type::datetime`` function converts a value into a datetime.\n\n##### Usage:\n```\n type::datetime(value) -> datetime\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM type::datetime(\"2022-04-27T18:12:27+00:00\");```\n##### Output:\n```\"2022-04-27T18:12:27Z\"```\n\nThis is the equivalent of using ``<datetime>`` to cast a value to a datetime.",
+    "waypoint": "datetime",
+    "api_definition": "type::datetime(value) -> datetime",
+    "params": [
+      "value"
+    ],
+    "return_type": "datetime"
+  },
+  "type::decimal": {
+    "name": "type::decimal()",
+    "summary": "Converts a value into a decimal",
+    "documentation": "### type::decimal\n\nThe ``type::decimal`` function converts a value into a decimal.\n\n##### Usage:\n```\n type::decimal(value) -> decimal\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM type::decimal(\"12345\");```\n##### Output:\n```\"12345\"```\n\nThis is the equivalent of using ``<decimal>`` to cast a value to a decimal.",
+    "waypoint": "decimal",
+    "api_definition": "type::decimal(value) -> decimal",
+    "params": [
+      "value"
+    ],
+    "return_type": "decimal"
+  },
+  "type::duration": {
+    "name": "type::duration()",
+    "summary": "Converts a value into a duration",
+    "documentation": "### type::duration\n\nThe ``type::duration`` function converts a value into a duration.\n\n##### Usage:\n```\n type::duration(value) -> duration\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM type::duration(\"4h\");```\n##### Output:\n```\"4h\"```\n\nThis is the equivalent of using ``<duration>`` to cast a value to a duration.",
+    "waypoint": "duration",
+    "api_definition": "type::duration(value) -> duration",
+    "params": [
+      "value"
+    ],
+    "return_type": "duration"
+  },
+  "type::float": {
+    "name": "type::float()",
+    "summary": "Converts a value into a floating point number",
+    "documentation": "### type::float\n\nThe ``type::float`` function converts a value into a float.\n\n##### Usage:\n```\n type::float(value) -> float\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM type::float(\"12345\");```\n##### Output:\n```12345.0```\n\nThis is the equivalent of using ``<float>`` to cast a value to a float.",
+    "waypoint": "float",
+    "api_definition": "type::float(value) -> float",
+    "params": [
+      "value"
+    ],
+    "return_type": "float"
+  },
+  "type::int": {
+    "name": "type::int()",
+    "summary": "Converts a value into an integer",
+    "documentation": "### type::int\n\nThe ``type::int`` function converts a value into an integer.\n\n##### Usage:\n```\n type::int(value) -> int\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM type::int(\"12345\");```\n##### Output:\n```12345```\n\nThis is the equivalent of using ``<int>`` to cast a value to a int.",
+    "waypoint": "int",
+    "api_definition": "type::int(value) -> int",
+    "params": [
+      "value"
+    ],
+    "return_type": "int"
+  },
+  "type::number": {
+    "name": "type::number()",
+    "summary": "Converts a value into a number",
+    "documentation": "### type::number\n\nThe ``type::number`` function converts a value into a number.\n\n##### Usage:\n```\n type::number(value) -> number\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM type::number(\"12345\");```\n##### Output:\n```\"12345\"```\n\nThis is the equivalent of using ``<number>`` to cast a value to a number.",
+    "waypoint": "number",
+    "api_definition": "type::number(value) -> number",
+    "params": [
+      "value"
+    ],
+    "return_type": "number"
+  },
+  "type::point": {
+    "name": "type::point()",
+    "summary": "Converts a value into a geometry point",
+    "documentation": "### type::point\n\nThe ``type::point`` function converts a value into a geometry point.\n\n##### Usage:\n```\n type::point(value) -> point\n ```\n\nThis function also accepts two arguments (longitude and latitude values).\n\n##### Usage:\n```\n type::point(number, number) -> point\n ```\n\nThe following examples show this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM type::point(51.509865, -0.118092);```\n##### Output:\n```{\"type\": \"Point\",\"coordinates\": [-0.10231019499999999,51.49576478]}```##### Input:\n```SELECT * FROM type::point([51.509865, -0.118092]);```\n##### Output:\n```{\"type\": \"Point\",\"coordinates\": [-0.10231019499999999,51.49576478]}```",
+    "waypoint": "point",
+    "api_definition": "type::point(value) -> pointtype::point(number, number) -> point",
+    "params": [
+      "value"
+    ]
+  },
+  "type::regex": {
+    "name": "type::regex()",
+    "summary": "Converts a value into a regular expression",
+    "documentation": "### type::regex\n\nThe ``type::regex`` function converts a value into a regex.\n\n##### Usage:\n```\n type::regex(value) -> regex\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM type::regex(\"/[A-Z]{3}/\");```\n##### Output:\n```FIXME```",
+    "waypoint": "regex",
+    "api_definition": "type::regex(value) -> regex",
+    "params": [
+      "value"
+    ],
+    "return_type": "regex"
+  },
+  "type::string": {
+    "name": "type::string()",
+    "summary": "Converts a value into a string",
+    "documentation": "### type::string\n\nThe ``type::string`` function converts a value into a string.\n\n##### Usage:\n```\n type::string(value) -> string\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM type::string(12345);```\n##### Output:\n```\"12345\"```\n\nThis is the equivalent of using ``<string>`` to cast a value to a string.",
+    "waypoint": "string",
+    "api_definition": "type::string(value) -> string",
+    "params": [
+      "value"
+    ],
+    "return_type": "string"
+  },
+  "type::table": {
+    "name": "type::table()",
+    "summary": "Converts a value into a table",
+    "documentation": "### type::table\n\nThe ``type::table`` function converts a value into a table definition.\n\n##### Usage:\n```\n type::table(value) -> table\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```LET $table = \"person\";SELECT * FROM type::table($table);```\n##### Output:\n```LET $table = \"person\";SELECT * FROM type::table($table);```",
+    "waypoint": "table",
+    "api_definition": "type::table(value) -> table",
+    "params": [
+      "value"
+    ],
+    "return_type": "table"
+  },
+  "type::thing": {
+    "name": "type::thing()",
+    "summary": "Converts a value into a record pointer",
+    "documentation": "### type::thing\n\nThe ``type::thing`` function converts a value into a record pointer definition.\n\n##### Usage:\n```\n type::thing(value, value) -> thing\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```LET $tb = \"person\";LET $id = \"tobie\";SELECT * FROM type::thing($tb, $id);```\n##### Output:\n```LET $tb = \"person\";LET $id = \"tobie\";SELECT * FROM type::thing($tb, $id);```",
+    "waypoint": "thing",
+    "api_definition": "type::thing(value, value) -> thing",
+    "params": [
+      "value",
+      "value"
+    ],
+    "return_type": "thing"
+  },
+  "validation::alpha": {
+    "name": "is::alpha()",
+    "summary": "Checks whether a value has only alpha characters",
+    "documentation": "### is::alpha\n\nThe ``is::alpha`` function checks whether a value has only alpha characters.\n\n##### Usage:\n```\n is::alpha(string) -> boolean\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM is::alpha(\"ABCDEF\");```\n##### Output:\n```true```\n\nIf the argument is not a string, then the value will be cast to a string before the function is run:\n\n##### Input:\n```SELECT * FROM is::alpha(12345);```\n##### Output:\n```false```",
+    "waypoint": "alpha",
+    "api_definition": "is::alpha(string) -> boolean",
+    "params": [
+      "string"
+    ],
+    "return_type": "boolean"
+  },
+  "validation::alphanum": {
+    "name": "is::alphanum()",
+    "summary": "Checks whether a value has only alphanumeric characters",
+    "documentation": "### is::alphanum\n\nThe ``is::alphanum`` function checks whether a value has only alphanumeric characters.\n\n##### Usage:\n```\n is::alphanum(string) -> boolean\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM is::alphanum(\"ABC123\");```\n##### Output:\n```true```\n\nIf the argument is not a string, then the value will be cast to a string before the function is run:\n\n##### Input:\n```SELECT * FROM is::alphanum(12345);```\n##### Output:\n```true```",
+    "waypoint": "alphanum",
+    "api_definition": "is::alphanum(string) -> boolean",
+    "params": [
+      "string"
+    ],
+    "return_type": "boolean"
+  },
+  "validation::ascii": {
+    "name": "is::ascii()",
+    "summary": "Checks whether a value has only ascii characters",
+    "documentation": "### is::ascii\n\nThe ``is::ascii`` function checks whether a value has only ascii characters.\n\n##### Usage:\n```\n is::ascii(string) -> boolean\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM is::ascii(\"ABC123\");```\n##### Output:\n```true```\n\nIf the argument is not a string, then the value will be cast to a string before the function is run:\n\n##### Input:\n```SELECT * FROM is::ascii(12345);```\n##### Output:\n```true```",
+    "waypoint": "ascii",
+    "api_definition": "is::ascii(string) -> boolean",
+    "params": [
+      "string"
+    ],
+    "return_type": "boolean"
+  },
+  "validation::datetime": {
+    "name": "is::datetime()",
+    "summary": "Checks whether a value matches a datetime format",
+    "documentation": "### is::datetime\n\nThe ``is::datetime`` function checks whether a value matches a datetime format.\n\n##### Usage:\n```\n is::datetime(string, string) -> boolean\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM is::datetime(\"2015-09-05 23:56:04\", \"%Y-%m-%d %H:%M:%S\");```\n##### Output:\n```true```\n\nIf either of the two arguments are not strings, then an ``EMPTY`` value will be returned:\n\n##### Input:\n```SELECT * FROM is::datetime(12345, 67890);```\n##### Output:\n```null```",
+    "waypoint": "datetime",
+    "api_definition": "is::datetime(string, string) -> boolean",
+    "params": [
+      "string",
+      "string"
+    ],
+    "return_type": "boolean"
+  },
+  "validation::domain": {
+    "name": "is::domain()",
+    "summary": "Checks whether a value is a domain",
+    "documentation": "### is::domain\n\nThe ``is::domain`` function checks whether a value is a domain.\n\n##### Usage:\n```\n is::domain(string) -> boolean\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM is::domain(\"surrealdb.com\");```\n##### Output:\n```true```\n\nIf the argument is not a string, then the value will be cast to a string before the function is run:\n\n##### Input:\n```SELECT * FROM is::domain(12345);```\n##### Output:\n```false```",
+    "waypoint": "domain",
+    "api_definition": "is::domain(string) -> boolean",
+    "params": [
+      "string"
+    ],
+    "return_type": "boolean"
+  },
+  "validation::email": {
+    "name": "is::email()",
+    "summary": "Checks whether a value is an email",
+    "documentation": "### is::email\n\nThe ``is::email`` function checks whether a value is an email.\n\n##### Usage:\n```\n is::email(string) -> boolean\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM is::email(\"info@surrealdb.com\");```\n##### Output:\n```true```\n\nIf the argument is not a string, then the value will be cast to a string before the function is run:\n\n##### Input:\n```SELECT * FROM is::email(12345);```\n##### Output:\n```false```",
+    "waypoint": "email",
+    "api_definition": "is::email(string) -> boolean",
+    "params": [
+      "string"
+    ],
+    "return_type": "boolean"
+  },
+  "validation::hexadecimal": {
+    "name": "is::hexadecimal()",
+    "summary": "Checks whether a value is hexadecimal",
+    "documentation": "### is::hexadecimal\n\nThe ``is::hexadecimal`` function checks whether a value is hexadecimal.\n\n##### Usage:\n```\n is::hexadecimal(string) -> boolean\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM is::hexadecimal(\"ff009e\");```\n##### Output:\n```true```\n\nIf the argument is not a string, then the value will be cast to a string before the function is run:\n\n##### Input:\n```SELECT * FROM is::hexadecimal(12345);```\n##### Output:\n```true```",
+    "waypoint": "hexadecimal",
+    "api_definition": "is::hexadecimal(string) -> boolean",
+    "params": [
+      "string"
+    ],
+    "return_type": "boolean"
+  },
+  "validation::latitude": {
+    "name": "is::latitude()",
+    "summary": "Checks whether a value is a latitude value",
+    "documentation": "### is::latitude\n\nThe ``is::latitude`` function checks whether a value is a latitude value.\n\n##### Usage:\n```\n is::latitude(string) -> boolean\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM is::latitude(\"-0.118092\");```\n##### Output:\n```true```\n\nIf the argument is not a string, then the value will be cast to a string before the function is run:\n\n##### Input:\n```SELECT * FROM is::latitude(12345);```\n##### Output:\n```false```",
+    "waypoint": "latitude",
+    "api_definition": "is::latitude(string) -> boolean",
+    "params": [
+      "string"
+    ],
+    "return_type": "boolean"
+  },
+  "validation::longitude": {
+    "name": "is::longitude()",
+    "summary": "Checks whether a value is a longitude value",
+    "documentation": "### is::longitude\n\nThe ``is::longitude`` function checks whether a value is a longitude value.\n\n##### Usage:\n```\n is::longitude(string) -> boolean\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM is::longitude(\"51.509865\");```\n##### Output:\n```true```\n\nIf the argument is not a string, then the value will be cast to a string before the function is run:\n\n##### Input:\n```SELECT * FROM is::longitude(12345);```\n##### Output:\n```true```",
+    "waypoint": "longitude",
+    "api_definition": "is::longitude(string) -> boolean",
+    "params": [
+      "string"
+    ],
+    "return_type": "boolean"
+  },
+  "validation::numeric": {
+    "name": "is::numeric()",
+    "summary": "Checks whether a value has only numeric characters",
+    "documentation": "### is::numeric\n\nThe ``is::numeric`` function checks whether a value has only numeric characters.\n\n##### Usage:\n```\n is::numeric(string) -> boolean\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM is::numeric(\"1484091748\");```\n##### Output:\n```true```\n\nIf the argument is not a string, then the value will be cast to a string before the function is run:\n\n##### Input:\n```SELECT * FROM is::numeric(12345);```\n##### Output:\n```true```",
+    "waypoint": "numeric",
+    "api_definition": "is::numeric(string) -> boolean",
+    "params": [
+      "string"
+    ],
+    "return_type": "boolean"
+  },
+  "validation::semver": {
+    "name": "is::semver()",
+    "summary": "Checks whether a value matches a semver version",
+    "documentation": "### is::semver\n\nThe ``is::semver`` function checks whether a value matches a semver version.\n\n##### Usage:\n```\n is::semver(string) -> boolean\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM is::semver(\"1.0.0\");```\n##### Output:\n```true```\n\nIf the argument is not a string, then the value will be cast to a string before the function is run:\n\n##### Input:\n```SELECT * FROM is::semver(12345);```\n##### Output:\n```false```",
+    "waypoint": "semver",
+    "api_definition": "is::semver(string) -> boolean",
+    "params": [
+      "string"
+    ],
+    "return_type": "boolean"
+  },
+  "validation::url": {
+    "name": "is::url()",
+    "summary": "Checks whether a value is a valid URL",
+    "documentation": "### is::url\n\nThe ``is::url`` function checks whether a value is a valid URL.\n\n##### Usage:\n```\n is::url(string) -> boolean\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM is::url(\"https://surrealdb.com\");```\n##### Output:\n```true```\n\nIf the argument is not a string, then the value will be cast to a string before the function is run:\n\n##### Input:\n```SELECT * FROM is::url(12345);```\n##### Output:\n```false```",
+    "waypoint": "url",
+    "api_definition": "is::url(string) -> boolean",
+    "params": [
+      "string"
+    ],
+    "return_type": "boolean"
+  },
+  "validation::uuid": {
+    "name": "is::uuid()",
+    "summary": "Checks whether a value is a UUID",
+    "documentation": "### is::uuid\n\nThe ``is::uuid`` function checks whether a value is a UUID.\n\n##### Usage:\n```\n is::uuid(string) -> boolean\n ```\n\nThe following example shows this function, and its output, when used in a select statement:\n\n##### Input:\n```SELECT * FROM is::uuid(\"ad55cae8-cf02-47ee-92a7-e137fb644a84\");```\n##### Output:\n```true```\n\nIf the argument is not a string, then the value will be cast to a string before the function is run:\n\n##### Input:\n```SELECT * FROM is::uuid(12345);```\n##### Output:\n```false```",
+    "waypoint": "uuid",
+    "api_definition": "is::uuid(string) -> boolean",
+    "params": [
+      "string"
+    ],
+    "return_type": "boolean"
+  }
+}

@@ -295,6 +295,61 @@ export namespace backend {
 		    return a;
 		}
 	}
+	
+	export class SurrealDocObject {
+	    name: string;
+	    summary: string;
+	    documentation: string;
+	    waypoint: string;
+	    api_definition: string;
+	    params: string[];
+	    return_type: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new SurrealDocObject(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.name = source["name"];
+	        this.summary = source["summary"];
+	        this.documentation = source["documentation"];
+	        this.waypoint = source["waypoint"];
+	        this.api_definition = source["api_definition"];
+	        this.params = source["params"];
+	        this.return_type = source["return_type"];
+	    }
+	}
+	export class SurrealDocs {
+	    docs: {[key: string]: SurrealDocObject};
+	
+	    static createFrom(source: any = {}) {
+	        return new SurrealDocs(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.docs = this.convertValues(source["docs"], SurrealDocObject, true);
+	    }
+	
+		convertValues(a: any, classs: any, asMap: boolean = false): any {
+		    if (!a) {
+		        return a;
+		    }
+		    if (a.slice) {
+		        return (a as any[]).map(elem => this.convertValues(elem, classs));
+		    } else if ("object" === typeof a) {
+		        if (asMap) {
+		            for (const key of Object.keys(a)) {
+		                a[key] = new classs(a[key]);
+		            }
+		            return a;
+		        }
+		        return new classs(a);
+		    }
+		    return a;
+		}
+	}
 
 }
 

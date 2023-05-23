@@ -10,6 +10,10 @@ export function GetCurrentVersion() {
   return window['go']['backend']['App']['GetCurrentVersion']();
 }
 
+export function GetDocs() {
+  return window['go']['backend']['App']['GetDocs']();
+}
+
 export function IsLinux() {
   return window['go']['backend']['App']['IsLinux']();
 }
